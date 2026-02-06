@@ -74,6 +74,7 @@ server.use('/api/users', require('./server_api/routes/users'));
 server.use('/api/cart', require('./server_api/routes/cart'));
 server.use('/api/wallet', require('./server_api/routes/wallet'));
 server.use('/api/payment', require('./server_api/routes/payment'));
+server.use('/api/card', require('./server_api/routes/card')); // Scratch Card Routes
 
 // Database Connection
 const connectDB = async () => {

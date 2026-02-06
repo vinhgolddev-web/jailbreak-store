@@ -32,8 +32,8 @@ export default function Login() {
             <div className="w-full max-w-md p-8 rounded-3xl bg-[#141414] border border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none" />
 
-                <h2 className="text-3xl font-display font-bold mb-2">Chào mừng trở lại</h2>
-                <p className="text-gray-400 mb-8 text-sm">Nhập thông tin đăng nhập để vào khu vực VIP.</p>
+                <h2 className="text-3xl font-display font-bold mb-2">Đăng Nhập Tài Khoản</h2>
+                <p className="text-gray-400 mb-8 text-sm">Nhập thông tin đăng nhập.</p>
 
                 {error && <p className="mb-4 text-red-400 bg-red-500/10 p-3 rounded-lg text-sm">{error}</p>}
 

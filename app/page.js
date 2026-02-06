@@ -43,12 +43,12 @@ export default function Home() {
           >
             <Link href="/shop">
               <Button className="md:px-12 md:text-lg">
-                Xem Kho Hàng <ArrowRight size={20} />
+                Bắt Đầu <ArrowRight size={20} />
               </Button>
             </Link>
             <Link href="/register">
               <Button variant="secondary" className="md:px-12 md:text-lg">
-                Đăng Ký VIP
+                Đăng Ký
               </Button>
             </Link>
           </motion.div>

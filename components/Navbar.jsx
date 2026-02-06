@@ -64,7 +64,7 @@ export default function Navbar() {
                                             <p className="text-sm font-medium text-white truncate">{user.username}</p>
                                         </div>
                                         <Link href="/dashboard" className="block px-3 py-2 rounded-lg text-xs text-gray-400 hover:text-white hover:bg-white/5 transition">
-                                            Bảng Điều Khiển
+                                            Dashboard
                                         </Link>
                                         <button
                                             onClick={logout}
@@ -110,7 +110,7 @@ export default function Navbar() {
                             {user ? (
                                 <>
                                     <div className="h-px bg-white/10 my-2" />
-                                    <Link href="/dashboard" className="text-sm font-medium p-2 text-white">Bảng Điều Khiển</Link>
+                                    <Link href="/dashboard" className="text-sm font-medium p-2 text-white">Dashboard</Link>
                                     <button onClick={() => { logout(); setMenuOpen(false) }} className="text-sm font-medium p-2 text-red-500 text-left">Đăng Xuất</button>
                                 </>
                             ) : (

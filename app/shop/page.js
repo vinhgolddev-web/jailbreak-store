@@ -53,7 +53,7 @@ export default function Shop() {
             <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-10 pb-6 border-b border-white/10">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight mb-2 text-white">Cửa Hàng</h1>
-                    <p className="text-sm text-gray-400">An toàn. Tự động. Tức thì.</p>
+                    <p className="text-sm text-gray-400">An toàn-Tự động-Tức thì</p>
                 </div>
 
                 <div className="flex gap-2 bg-[#111] p-1 rounded-lg border border-white/5 overflow-x-auto">

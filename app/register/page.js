@@ -31,8 +31,8 @@ export default function Register() {
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-4">
             <div className="w-full max-w-md p-8 rounded-3xl bg-[#141414] border border-white/5 relative overflow-hidden">
-                <h2 className="text-3xl font-display font-bold mb-2">Gia Nhập Giới Tinh Hoa</h2>
-                <p className="text-gray-400 mb-8 text-sm">Tạo tài khoản VIP của bạn ngay hôm nay.</p>
+                <h2 className="text-3xl font-display font-bold mb-2">Đăng ký tài khoản</h2>
+                <p className="text-gray-400 mb-8 text-sm">Tạo tài khoản của bạn ngay hôm nay.</p>
 
                 {error && <p className="mb-4 text-red-400 bg-red-500/10 p-3 rounded-lg text-sm">{error}</p>}
 
@@ -68,7 +68,7 @@ export default function Register() {
                         />
                     </div>
                     <button className="w-full bg-primary text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-transform active:scale-95 shadow-[0_0_20px_rgba(251,191,36,0.3)]">
-                        Tạo Tài Khoản
+                        Đăng Ký
                     </button>
                 </form>
 
