@@ -13,7 +13,7 @@ exports.createOrder = async (req, res) => {
         const orderItems = items || (req.body.productId ? [{ productId: req.body.productId, quantity: 1 }] : []);
 
         if (!orderItems || orderItems.length === 0) {
-            return res.status(400).json({ message: 'No items in order' });
+            return res.status(400).json({ message: 'Giỏ hàng trống' });
         }
 
         // 1. Fetch products
@@ -22,7 +22,7 @@ exports.createOrder = async (req, res) => {
 
         if (products.length !== orderItems.length) {
             await session.abortTransaction();
-            return res.status(404).json({ message: 'One or more products not found' });
+            return res.status(404).json({ message: 'Một hoặc nhiều sản phẩm không tìm thấy' });
         }
 
         let totalAmount = 0;
@@ -34,7 +34,7 @@ exports.createOrder = async (req, res) => {
 
             if (product.stock < item.quantity) {
                 await session.abortTransaction();
-                return res.status(400).json({ message: `Insufficient stock for ${product.name}` });
+                return res.status(400).json({ message: `Sản phẩm ${product.name} không đủ số lượng` });
             }
 
             totalAmount += product.price * item.quantity;
@@ -54,7 +54,7 @@ exports.createOrder = async (req, res) => {
 
         if (!user) {
             await session.abortTransaction();
-            return res.status(400).json({ message: 'Insufficient balance' });
+            return res.status(400).json({ message: 'Số dư không đủ. Vui lòng nạp thêm tiền!' });
         }
 
         // 4. Atomic Stock Deduction (With Session)

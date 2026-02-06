@@ -6,7 +6,6 @@ import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Trash2, ShoppingBag } from "lucide-react";
-import Image from "next/image";
 import api from "@/lib/axios";
 
 export default function CartDrawer() {
@@ -137,11 +136,10 @@ export default function CartDrawer() {
                                         cart.map(item => (
                                             <div key={item._id} className="flex gap-4">
                                                 <div className="relative w-24 h-24 bg-surface rounded-lg border border-white/5 overflow-hidden flex-shrink-0">
-                                                    <Image
+                                                    <img
                                                         src={item.image}
                                                         alt={item.name}
-                                                        fill
-                                                        className="object-contain p-2"
+                                                        className="w-full h-full object-contain p-2"
                                                     />
                                                 </div>
                                                 <div className="flex-1 flex flex-col justify-between py-1">

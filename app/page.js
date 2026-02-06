@@ -11,7 +11,8 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden py-20 lg:py-0">
         {/* Background Elements */}
-        <div className="absolute inset-0 bg-[url('https://wallpapers.com/images/hd/roblox-jailbreak-background-1920-x-1080-3szdq5q5q5q5q5q5.jpg')] bg-cover bg-center opacity-20" />
+        {/* User can replace 'banner.jpg' in public/images folder to update banner */}
+        <div className="absolute inset-0 bg-[url('/images/banner.jpg')] bg-cover bg-center opacity-40 hover:opacity-50 transition-opacity duration-700" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] max-w-[600px] h-[80vw] max-h-[600px] bg-primary/20 blur-[100px] sm:blur-[150px] rounded-full animate-pulse-slow" />
 

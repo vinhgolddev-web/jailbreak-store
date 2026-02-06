@@ -18,10 +18,10 @@ export default function Navbar() {
                 {/* Logo - Minimalist Text */}
                 <Link href="/" className="flex items-center gap-2 group">
                     <span className="text-lg font-bold tracking-tight text-white">
-                        Jailbreak<span className="text-gray-500">Store</span>
+                        Jailbreak <span className="text-gray-500">Store</span>
                     </span>
                     <div className="px-2 py-0.5 rounded-full bg-white/10 border border-white/5 text-[10px] font-medium text-gray-400">
-                        VG
+                        Vinh Gold
                     </div>
                 </Link>
 
