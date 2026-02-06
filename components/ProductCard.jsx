@@ -42,7 +42,7 @@ export default function ProductCard({ product, disabled }) {
 
                 {/* Stock Tag */}
                 <div className="absolute top-3 right-3 text-[10px] font-medium tracking-wide text-gray-400 bg-black/80 backdrop-blur px-2 py-1 rounded border border-white/10">
-                    {product.stock} LEFT
+                    {product.stock} CÒN LẠI
                 </div>
             </div>
 
@@ -63,11 +63,11 @@ export default function ProductCard({ product, disabled }) {
                         onClick={() => addToCart(product)}
                         disabled={disabled || product.stock < 1}
                         className={`h-8 px-4 text-xs font-medium rounded-md transition-all ${product.stock < 1
-                                ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-                                : 'bg-white text-black hover:bg-gray-200'
+                            ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
+                            : 'bg-white text-black hover:bg-gray-200'
                             }`}
                     >
-                        {product.stock > 0 ? 'Add to Cart' : 'Sold Out'}
+                        {product.stock > 0 ? 'Thêm vào Giỏ' : 'Hết Hàng'}
                     </Button>
                 </div>
             </div>

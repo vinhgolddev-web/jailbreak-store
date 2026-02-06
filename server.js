@@ -18,26 +18,43 @@ const server = express();
 const rateLimit = require('express-rate-limit');
 
 // Middleware
-server.use(express.json());
-server.use(cors());
-server.use(helmet({ contentSecurityPolicy: false }));
+server.use(express.json({ limit: '10kb' })); // Body limit prevents DOS
+server.use(cors({
+    origin: process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+server.use(helmet()); // Enable standard security headers
 server.use(morgan('dev'));
 
 // Rate Limiting
-const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // Limit each IP to 100 requests per windowMs
+// 1. Global API Limiter
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
     standardHeaders: true,
     legacyHeaders: false,
+    message: { message: 'Too many requests, please try again later.' }
 });
-server.use('/api', limiter); // Apply to all API routes
+
+// 2. Strict Auth Limiter (Brute Force Protection)
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10, // Max 10 attempts per 15 min
+    message: { message: 'Too many login attempts. Please try again in 15 minutes.' }
+});
+
+server.use('/api', apiLimiter);
+server.use('/api/auth/login', authLimiter); // Apply stricter limit to login
+server.use('/api/auth/register', authLimiter);
 
 // --- API Routes ---
 server.use('/api/auth', require('./server_api/routes/auth'));
 server.use('/api/products', require('./server_api/routes/products'));
 server.use('/api/orders', require('./server_api/routes/orders'));
 server.use('/api/users', require('./server_api/routes/users'));
-server.use('/api/cart', require('./server_api/routes/cart')); // Added Cart Route
+server.use('/api/cart', require('./server_api/routes/cart'));
 server.use('/api/wallet', require('./server_api/routes/wallet'));
 server.use('/api/payment', require('./server_api/routes/payment'));
 

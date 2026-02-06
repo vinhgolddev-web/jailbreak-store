@@ -31,29 +31,29 @@ export default function Shop() {
     };
 
     const handleBuy = async (productId) => {
-        if (!user) return addToast('Login required to purchase.', 'error');
+        if (!user) return addToast('Vui lòng đăng nhập để mua hàng.', 'error');
 
         try {
             await api.post('/orders', { productId });
-            addToast('Purchase Successful! Item added to your account.', 'success');
+            addToast('Mua thành công! Vật phẩm đã được thêm vào tài khoản.', 'success');
             // Refresh User Balance & Product Stock without reloading
             await refreshUser();
             fetchProducts();
         } catch (err) {
-            addToast(err.response?.data?.message || 'Purchase Failed', 'error');
+            addToast(err.response?.data?.message || 'Mua thất bại', 'error');
         }
     };
 
     const filteredProducts = filter === 'All' ? products : products.filter(p => p.category === filter);
-    const categories = ['All', 'Vehicle', 'Skin', 'Safe'];
+    const categories = ['All', 'Vehicle', 'Skin', 'Gamepass'];
 
     return (
         <div className="container mx-auto px-4 py-12">
             {/* Header & Filter */}
             <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-10 pb-6 border-b border-white/10">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight mb-2 text-white">Marketplace</h1>
-                    <p className="text-sm text-gray-400">Secure. Automated. Instant.</p>
+                    <h1 className="text-3xl font-bold tracking-tight mb-2 text-white">Cửa Hàng</h1>
+                    <p className="text-sm text-gray-400">An toàn. Tự động. Tức thì.</p>
                 </div>
 
                 <div className="flex gap-2 bg-[#111] p-1 rounded-lg border border-white/5 overflow-x-auto">
@@ -62,8 +62,8 @@ export default function Shop() {
                             key={cat}
                             onClick={() => setFilter(cat)}
                             className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap ${filter === cat
-                                    ? 'bg-white text-black shadow-sm'
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                ? 'bg-white text-black shadow-sm'
+                                : 'text-gray-400 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             {cat}

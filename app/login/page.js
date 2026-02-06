@@ -32,8 +32,8 @@ export default function Login() {
             <div className="w-full max-w-md p-8 rounded-3xl bg-[#141414] border border-white/5 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 blur-[50px] rounded-full pointer-events-none" />
 
-                <h2 className="text-3xl font-display font-bold mb-2">Welcome Back</h2>
-                <p className="text-gray-400 mb-8 text-sm">Enter your credentials to access the VIP lounge.</p>
+                <h2 className="text-3xl font-display font-bold mb-2">Chào mừng trở lại</h2>
+                <p className="text-gray-400 mb-8 text-sm">Nhập thông tin đăng nhập để vào khu vực VIP.</p>
 
                 {error && <p className="mb-4 text-red-400 bg-red-500/10 p-3 rounded-lg text-sm">{error}</p>}
 
@@ -41,7 +41,7 @@ export default function Login() {
                     <div>
                         <input
                             className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                            placeholder="Email Address"
+                            placeholder="Email"
                             type="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
@@ -51,7 +51,7 @@ export default function Login() {
                     <div>
                         <input
                             className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                            placeholder="Password"
+                            placeholder="Mật khẩu"
                             type="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
@@ -59,12 +59,12 @@ export default function Login() {
                         />
                     </div>
                     <button className="w-full bg-white text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-transform active:scale-95">
-                        Sign In
+                        Đăng Nhập
                     </button>
                 </form>
 
                 <p className="mt-6 text-center text-sm text-gray-500">
-                    No access? <Link href="/register" className="text-primary hover:underline">Apply for membership</Link>
+                    Chưa có tài khoản? <Link href="/register" className="text-primary hover:underline">Đăng ký thành viên</Link>
                 </p>
             </div>
         </div>

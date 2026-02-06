@@ -22,16 +22,16 @@ export default function Home() {
             transition={{ duration: 0.8 }}
           >
             <span className="inline-block py-1 px-3 rounded-full bg-white/5 border border-white/10 text-primary text-sm font-bold tracking-widest mb-6">
-              EST. 2026 • PREMIUM MARKETPLACE
+              EST. 2026 • THỊ TRƯỜNG CAO CẤP
             </span>
             <h1 className="text-6xl md:text-8xl font-display font-black tracking-tighter leading-tight mb-6">
-              DOMINATE <br />
+              THỐNG TRỊ <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primaryGlow to-accent animate-gradient-x">
                 JAILBREAK
               </span>
             </h1>
             <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-              Acquire the rarest <span className="text-white font-bold">Torpedoes</span>, <span className="text-white font-bold">Beam Hybrids</span>, and <span className="text-white font-bold">Hyperchromes</span> instantly. The #1 trusted source for high-tier Jailbreak assets.
+              Sở hữu ngay các item hiếm nhất: <span className="text-white font-bold">Torpedo</span>, <span className="text-white font-bold">Beam Hybrid</span>, và <span className="text-white font-bold">Hyperchrome</span>. Nguồn cung cấp uy tín số #1 cho game thủ Jailbreak.
             </p>
           </motion.div>
 
@@ -43,12 +43,12 @@ export default function Home() {
           >
             <Link href="/shop">
               <Button className="md:px-12 md:text-lg">
-                Browse Inventory <ArrowRight size={20} />
+                Xem Kho Hàng <ArrowRight size={20} />
               </Button>
             </Link>
             <Link href="/register">
               <Button variant="secondary" className="md:px-12 md:text-lg">
-                Become VIP Member
+                Đăng Ký VIP
               </Button>
             </Link>
           </motion.div>
@@ -60,18 +60,18 @@ export default function Home() {
         <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
           <Feature
             icon={<Zap className="text-primary" size={32} />}
-            title="Instant Delivery"
-            desc="Our automated bot network delivers your vehicle or item within 60 seconds of purchase."
+            title="Giao Hàng Tốc Độ"
+            desc="Hệ thống bot tự động của chúng tôi sẽ gửi vật phẩm cho bạn trong vòng 60 giây sau khi thanh toán."
           />
           <Feature
             icon={<ShieldCheck className="text-accent" size={32} />}
-            title="Ban-Proof Safety"
-            desc="Proprietary transfer methods ensure 100% account safety and zero detection risk."
+            title="An Toàn Tuyệt Đối"
+            desc="Phương thức chuyển đồ độc quyền đảm bảo an toàn 100% cho tài khoản của bạn, không lo bị ban."
           />
           <Feature
             icon={<Star className="text-purple-500" size={32} />}
-            title="Verified Rarity"
-            desc="Every item is verified authentic. We only stock the highest duplicate-free tiers."
+            title="Độ Hiếm Được Kiểm Định"
+            desc="Mọi vật phẩm đều được xác thực chính hãng. Chúng tôi chỉ cung cấp các item sạch, không trùng lặp."
           />
         </div>
       </section>

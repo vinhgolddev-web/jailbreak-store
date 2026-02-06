@@ -86,25 +86,36 @@ exports.handleWebhook = async (req, res) => {
     }
 };
 
-// Verify Payment Status (Called from frontend after return from PayOS)
+// Verify Payment Status (Atomic & Secure)
 exports.verifyPayment = async (req, res) => {
     try {
         const { orderCode } = req.params;
 
-        // Get payment info from PayOS
+        // 1. Get payment info from PayOS (External Verification)
         const paymentInfo = await payos.getPaymentLinkInformation(Number(orderCode));
 
         if (!paymentInfo) {
             return res.status(404).json({ message: 'Payment not found on PayOS' });
         }
 
-        // Find transaction
+        // 2. Atomic Database Update
+        // We look for a transaction that matches OrderCode AND is explicitly NOT 'completed' (or check status field)
+        // If 'description' contains 'Success', we assume it's processed. Better: rely on 'balanceAfter' or add a 'status' field.
+        // Since Schema didn't have 'status', we'll rely on a check + atomic lock. 
+        // Ideally we migrate to add 'status' to Transaction model. For now, we use the constraint.
+
         const transaction = await Transaction.findOne({ orderCode: Number(orderCode), type: 'deposit' });
+
         if (!transaction) {
-            return res.status(404).json({ message: 'Transaction not found in database' });
+            return res.status(404).json({ message: 'Transaction not found or invalid' });
         }
 
-        // Check if already processed
+        // SECURITY: Transaction Owner Check
+        if (transaction.userId.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Unauthorized transaction' });
+        }
+
+        // Idempotency: If already success, return immediately
         if (transaction.description.includes('Success')) {
             return res.json({
                 message: 'Already processed',
@@ -113,44 +124,64 @@ exports.verifyPayment = async (req, res) => {
             });
         }
 
-        // SECURITY CHECK: Ensure the user verifying is the owner of transaction
-        if (transaction.userId.toString() !== req.user.id) {
-            return res.status(403).json({ message: 'Unauthorized: Transaction belongs to another user' });
-        }
-
-        // SECURITY CHECK: Verify amount matches
+        // 3. Verify Amount Match
         if (paymentInfo.amount !== transaction.amount) {
-            return res.status(400).json({ message: 'Amount mismatch: Potential integrity issue' });
+            return res.status(400).json({ message: 'Amount integrity violation' });
         }
 
-        // Check payment status from PayOS
+        // 4. Process Payment (Atomic)
         if (paymentInfo.status === 'PAID') {
-            // Update user balance
-            const user = await User.findById(transaction.userId);
-            const newBalance = user.balance + transaction.amount;
 
-            await User.findByIdAndUpdate(user._id, { balance: newBalance });
+            // Start Session for Atomicity (Optional if Mongo Replica Set enabled, else use Atomic conditions)
+            // Here we use atomic findOneAndUpdate on User validation.
 
-            // Update transaction
-            transaction.balanceAfter = newBalance;
-            transaction.description = `PayOS Deposit Success #${orderCode}`;
-            await transaction.save();
+            // To prevent race: We first mark transaction as 'processing' or check condition again in update.
+            // Best approach without modifying Schema significantly:
+            // Use findOneAndUpdate with condition filter.
+
+            const updatedTransaction = await Transaction.findOneAndUpdate(
+                {
+                    _id: transaction._id,
+                    description: { $not: /Success/ } // Only update if NOT already success
+                },
+                {
+                    $set: { description: `PayOS Deposit Success #${orderCode}` }
+                },
+                { new: true }
+            );
+
+            if (!updatedTransaction) {
+                // Determine why: Was it race condition?
+                const check = await Transaction.findById(transaction._id);
+                if (check.description.includes('Success')) {
+                    return res.json({ message: 'Already processed (Race)', status: 'success', balance: check.balanceAfter });
+                }
+                throw new Error("Transaction update failed unexpectedly");
+            }
+
+            // Now Credit User (Safe to do because we own the Transaction Lock via the atomic update above)
+            const user = await User.findByIdAndUpdate(
+                transaction.userId,
+                { $inc: { balance: transaction.amount } },
+                { new: true }
+            );
+
+            // Backfill balance log
+            updatedTransaction.balanceAfter = user.balance;
+            await updatedTransaction.save();
 
             return res.json({
                 message: 'Payment verified and credited',
                 status: 'success',
                 amount: transaction.amount,
-                newBalance: newBalance
-            });
-        } else {
-            return res.json({
-                message: 'Payment not completed yet',
-                status: paymentInfo.status
+                newBalance: user.balance
             });
         }
 
+        return res.json({ message: 'Payment pending', status: paymentInfo.status });
+
     } catch (error) {
         console.error('Verify Payment Error:', error);
-        res.status(500).json({ message: 'Error verifying payment', error: error.message });
+        res.status(500).json({ message: 'Internal verification error' });
     }
 };

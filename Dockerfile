@@ -10,8 +10,10 @@ RUN npm install
 COPY . .
 
 # Build Next.js
-# Build Next.js
 RUN npm run build
+
+# Security: Run as non-root user
+USER node
 
 # Expose Port
 EXPOSE 3000

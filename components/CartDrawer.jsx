@@ -19,7 +19,7 @@ export default function CartDrawer() {
 
     const handleCheckoutClick = () => {
         if (!user) {
-            addToast("Please login to checkout", "error");
+            addToast("Vui lòng đăng nhập để thanh toán", "error");
             return;
         }
         if (cart.length === 0) return;
@@ -36,13 +36,13 @@ export default function CartDrawer() {
                 }))
             });
 
-            addToast("Purchase Successful!", "success");
+            addToast("Mua hàng thành công!", "success");
             clearCart();
             refreshUser();
             setIsConfirming(false);
             setPurchaseSuccess(res.data.order);
         } catch (error) {
-            addToast(error.response?.data?.message || "Checkout Failed", "error");
+            addToast(error.response?.data?.message || "Thanh toán thất bại", "error");
             setIsConfirming(false);
         }
     };
@@ -71,7 +71,7 @@ export default function CartDrawer() {
                         {/* Header */}
                         <div className="flex items-center justify-between p-6 border-b border-white/10">
                             <h2 className="text-xl font-bold flex items-center gap-2">
-                                <ShoppingBag size={20} /> Your Cart
+                                <ShoppingBag size={20} /> Giỏ Hàng
                             </h2>
                             <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/5 rounded-full transition">
                                 <X size={20} />
@@ -84,18 +84,18 @@ export default function CartDrawer() {
                                 <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-4">
                                     <ShoppingBag size={40} />
                                 </div>
-                                <h3 className="text-2xl font-bold text-white">Purchase Successful!</h3>
-                                <p className="text-gray-400">Thank you for your order. Here is your digital delivery code:</p>
+                                <h3 className="text-2xl font-bold text-white">Mua Hàng Thành Công!</h3>
+                                <p className="text-gray-400">Cảm ơn bạn đã mua sắm. Đây là mã nhận hàng số (Digital Code) của bạn:</p>
 
                                 <div className="bg-white/10 p-6 rounded-xl border border-white/20 w-full">
-                                    <p className="text-sm text-gray-500 mb-2 uppercase tracking-wider">Secret Code</p>
+                                    <p className="text-sm text-gray-500 mb-2 uppercase tracking-wider">Mã bí mật</p>
                                     <div className="text-3xl font-mono font-black text-primary tracking-widest select-all cursor-pointer" onClick={() => {
                                         navigator.clipboard.writeText(purchaseSuccess.secretCode);
-                                        addToast("Copied to clipboard!", "success");
+                                        addToast("Đã sao chép vào bộ nhớ đệm!", "success");
                                     }}>
                                         {purchaseSuccess.secretCode}
                                     </div>
-                                    <p className="text-xs text-gray-500 mt-2">(Click to copy)</p>
+                                    <p className="text-xs text-gray-500 mt-2">(Bấm để sao chép)</p>
                                 </div>
 
                                 <button
@@ -105,7 +105,7 @@ export default function CartDrawer() {
                                     }}
                                     className="w-full py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition"
                                 >
-                                    Close
+                                    Đóng
                                 </button>
                             </div>
                         ) : (
@@ -115,7 +115,7 @@ export default function CartDrawer() {
                                     {cart.length === 0 ? (
                                         <div className="h-full flex flex-col items-center justify-center text-gray-500 space-y-4">
                                             <ShoppingBag size={64} className="opacity-20" />
-                                            <p>Your cart is empty</p>
+                                            <p>Giỏ hàng trống</p>
                                         </div>
                                     ) : (
                                         cart.map(item => (
@@ -167,14 +167,14 @@ export default function CartDrawer() {
                                 {cart.length > 0 && (
                                     <div className="p-6 border-t border-white/10 bg-surface/50 backdrop-blur-md">
                                         <div className="flex justify-between items-end mb-4">
-                                            <span className="text-gray-400 text-sm">Total</span>
+                                            <span className="text-gray-400 text-sm">Tổng cộng</span>
                                             <span className="text-2xl font-bold">${totalAmount.toLocaleString()}</span>
                                         </div>
                                         <button
                                             onClick={handleCheckoutClick}
                                             className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition active:scale-95"
                                         >
-                                            Checkout Now
+                                            Thanh Toán Ngay
                                         </button>
                                     </div>
                                 )}
@@ -185,22 +185,22 @@ export default function CartDrawer() {
                         {isConfirming && (
                             <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-6 z-[80] backdrop-blur-sm">
                                 <div className="bg-[#1a1a1a] border border-white/20 p-6 rounded-2xl w-full max-w-sm shadow-2xl transform scale-100 animate-in fade-in zoom-in duration-200">
-                                    <h3 className="text-xl font-bold text-white mb-2">Confirm Purchase?</h3>
+                                    <h3 className="text-xl font-bold text-white mb-2">Xác Nhận Mua?</h3>
                                     <p className="text-gray-400 mb-6">
-                                        You are about to pay <span className="text-white font-bold">${totalAmount.toLocaleString()}</span> for {cart.length} items.
+                                        Bạn sắp thanh toán <span className="text-white font-bold">${totalAmount.toLocaleString()}</span> cho {cart.length} món.
                                     </p>
                                     <div className="flex gap-3">
                                         <button
                                             onClick={() => setIsConfirming(false)}
                                             className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition"
                                         >
-                                            Cancel
+                                            Hủy
                                         </button>
                                         <button
                                             onClick={processCheckout}
                                             className="flex-1 py-3 bg-primary hover:bg-primaryGlow text-black rounded-xl font-bold transition shadow-[0_0_15px_rgba(251,191,36,0.2)]"
                                         >
-                                            Confirm Pay
+                                            Xác Nhận
                                         </button>
                                     </div>
                                 </div>
