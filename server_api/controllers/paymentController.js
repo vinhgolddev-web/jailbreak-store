@@ -55,27 +55,36 @@ exports.handleWebhook = async (req, res) => {
         if (webhookData.desc === 'success' || webhookData.code == '00') {
             const { orderCode, amount } = webhookData;
 
-            // Find Transaction
-            const transaction = await Transaction.findOne({ orderCode: orderCode, type: 'deposit' });
+            // Atomic Update to prevent race condition with verifyPayment
+            const transaction = await Transaction.findOneAndUpdate(
+                {
+                    orderCode: orderCode,
+                    type: 'deposit',
+                    description: { $not: /Success/ } // Only proceed if NOT already success
+                },
+                {
+                    $set: { description: `PayOS Deposit Success #${orderCode}` }
+                },
+                { new: true }
+            );
+
             if (!transaction) {
                 return res.json({ message: 'Transaction not found or already processed' });
             }
 
-            // Check if already processed
-            if (transaction.description.includes('Success')) {
-                return res.json({ message: 'Already processed' });
-            }
-
             // Update User Balance
-            const user = await User.findById(transaction.userId);
-            const newBalance = user.balance + amount;
+            // Calculate new balance based on current + amount
+            const user = await User.findByIdAndUpdate(
+                transaction.userId,
+                { $inc: { balance: amount } },
+                { new: true }
+            );
 
-            await User.findByIdAndUpdate(user._id, { balance: newBalance });
-
-            // Update Transaction
-            transaction.balanceAfter = newBalance;
-            transaction.description = `PayOS Deposit Success #${orderCode}`;
-            await transaction.save();
+            // Backfill balance after (Optional, for record)
+            if (user) {
+                transaction.balanceAfter = user.balance;
+                await transaction.save();
+            }
         }
 
         res.json({ message: 'Webhook received' });

@@ -77,7 +77,7 @@ export default function LiveSalesNotification() {
                             <p className="text-xs text-gray-400 font-bold mb-0.5">Vừa có khách hàng mới!</p>
                             <p className="text-sm text-white font-medium">
                                 <span className="text-primary font-bold">{notification.user}</span> đã mua <br />
-                                <span className="text-green-400 font-bold">"{notification.product}"</span>
+                                <span className="text-green-400 font-bold">&quot;{notification.product}&quot;</span>
                             </p>
                             <p className="text-[10px] text-gray-500 mt-1">
                                 {getTimeAgo(notification.time)}

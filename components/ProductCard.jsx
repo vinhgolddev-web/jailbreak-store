@@ -1,4 +1,5 @@
 import Button from './ui/Button';
+import Image from 'next/image';
 import { ShoppingBag, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 // Import useCart
@@ -31,14 +32,16 @@ export default function ProductCard({ product, disabled }) {
         >
             {/* Image Container */}
             <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-6 group-hover:bg-black/80 transition-colors">
-                <img
+                <Image
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-contain grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                    fill
+                    className="object-contain grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 
                 {/* Stock Tag */}
-                <div className="absolute top-3 right-3 text-[10px] font-medium tracking-wide text-gray-400 bg-black/80 backdrop-blur px-2 py-1 rounded border border-white/10">
+                <div className="absolute top-3 right-3 text-[10px] font-medium tracking-wide text-gray-400 bg-black/80 backdrop-blur px-2 py-1 rounded border border-white/10 z-10">
                     {product.stock} CÒN LẠI
                 </div>
             </div>

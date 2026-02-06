@@ -50,12 +50,14 @@ export function CartProvider({ children }) {
     }, [user]);
 
     // Clear cart when user logs out (optional, but good for security)
+    // Clear cart when user logs out
     useEffect(() => {
-        if (!user) {
+        if (!user && cart.length > 0) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setCart([]);
             localStorage.removeItem('jb_cart');
         }
-    }, [user]);
+    }, [user, cart.length]);
 
     // Save cart
     useEffect(() => {

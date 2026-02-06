@@ -33,7 +33,7 @@ exports.sendOrderNotification = async (order) => {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log(`Email notification sent for Order ${order._id}`);
+
     } catch (error) {
         console.error("Error sending email:", error);
     }

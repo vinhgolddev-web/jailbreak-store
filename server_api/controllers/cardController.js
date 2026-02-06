@@ -66,14 +66,14 @@ exports.submitCard = async (req, res) => {
             request_id: requestId
         };
 
-        console.log('Sending to TSR:', payload);
+
 
         const response = await axios.post('https://thesieure.com/chargingws/v2', payload, {
             headers: { 'Content-Type': 'application/json' }
         });
 
         const data = response.data;
-        console.log('TSR Response:', data);
+
 
         // 6. Handle Response
         // Status 99: Pending (Good)

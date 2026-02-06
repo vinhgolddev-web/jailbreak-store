@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
@@ -136,10 +137,12 @@ export default function CartDrawer() {
                                         cart.map(item => (
                                             <div key={item._id} className="flex gap-4">
                                                 <div className="relative w-24 h-24 bg-surface rounded-lg border border-white/5 overflow-hidden flex-shrink-0">
-                                                    <img
+                                                    <Image
                                                         src={item.image}
                                                         alt={item.name}
-                                                        className="w-full h-full object-contain p-2"
+                                                        fill
+                                                        className="object-contain p-2"
+                                                        sizes="96px"
                                                     />
                                                 </div>
                                                 <div className="flex-1 flex flex-col justify-between py-1">

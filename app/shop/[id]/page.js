@@ -9,6 +9,7 @@ import { ShoppingCart, Shield, Truck, Zap, AlertCircle } from 'lucide-react';
 
 // Import useCart
 import { useCart } from '@/context/CartContext';
+import Image from 'next/image';
 
 export default function ProductDetail({ params }) {
     const [product, setProduct] = useState(null);
@@ -54,10 +55,11 @@ export default function ProductDetail({ params }) {
 
                 {/* Image Side */}
                 <div className="relative rounded-xl overflow-hidden bg-surface border border-white/10 aspect-[4/3] flex items-center justify-center p-8 bg-black/50">
-                    <img
+                    <Image
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full object-contain drop-shadow-2xl"
+                        fill
+                        className="object-contain drop-shadow-2xl"
                     />
                 </div>
 

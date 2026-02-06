@@ -3,7 +3,7 @@ const Product = require('../models/Product');
 // Get all products
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().lean();
         res.json(products);
     } catch (_err) {
         res.status(500).json({ message: 'Server error' });
@@ -13,7 +13,7 @@ exports.getProducts = async (req, res) => {
 // Get single product
 exports.getProductById = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const product = await Product.findById(req.params.id).lean();
         if (!product) return res.status(404).json({ message: 'Product not found' });
         res.json(product);
     } catch (_err) {

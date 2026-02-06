@@ -2,9 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
-import Navbar from '../../components/Navbar';
-import axios from '../../lib/axios';
+import { useAuth } from '@/context/AuthContext';
+import Navbar from '@/components/Navbar';
+import axios from '@/lib/axios';
 
 function DepositContent() {
     const { user, loading, refreshUser } = useAuth();
@@ -31,6 +31,20 @@ function DepositContent() {
     }, [user, loading, router]);
 
     useEffect(() => {
+        const verifyPayment = async (orderCode) => {
+            try {
+                const res = await axios.get(`/payment/verify/${orderCode}`);
+                if (res.data.status === 'success') {
+                    setStatus('success');
+                    refreshUser();
+                    router.replace('/deposit');
+                }
+            } catch (error) {
+                console.error('Verification error:', error);
+                setStatus('cancelled');
+            }
+        };
+
         const statusParam = searchParams.get('status');
         const codeParam = searchParams.get('code');
         const orderCodeParam = searchParams.get('orderCode');
@@ -40,21 +54,7 @@ function DepositContent() {
         } else if (statusParam === 'cancelled' || statusParam === 'CANCELLED') {
             setStatus('cancelled');
         }
-    }, [searchParams]);
-
-    const verifyPayment = async (orderCode) => {
-        try {
-            const res = await axios.get(`/payment/verify/${orderCode}`);
-            if (res.data.status === 'success') {
-                setStatus('success');
-                refreshUser();
-                router.replace('/deposit');
-            }
-        } catch (error) {
-            console.error('Verification error:', error);
-            setStatus('cancelled');
-        }
-    };
+    }, [searchParams, refreshUser, router]);
 
     const handleDeposit = async () => {
         if (amount < 2000) {
