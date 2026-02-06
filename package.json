@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon server.js",
     "build": "next build",
-    "start": "cross-env NODE_ENV=production node server.js",
-    "lint": "eslint ."
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "lint": "eslint .",
+    "start": "cross-env NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@payos/node": "^1.0.10",
