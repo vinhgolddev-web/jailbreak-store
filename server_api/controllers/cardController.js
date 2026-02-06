@@ -24,7 +24,8 @@ exports.submitCard = async (req, res) => {
 
         // 2. Prepare Data
         const command = 'charging';
-        const requestId = `${Date.now()}_${Math.floor(Math.random() * 1000)}`; // Unique ID
+        // Generate numeric ID: Timestamp (13 chars) + Random (3 chars) -> 16 chars (Safe for JS Number)
+        const requestId = parseInt(`${Date.now()}${Math.floor(Math.random() * 1000)}`);
 
         // Ensure Telco is uppercase
         const normalizedTelco = telco.toUpperCase();
