@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
@@ -13,17 +14,22 @@ export default function CartDrawer() {
     const { user, refreshUser } = useAuth();
     const { addToast } = useToast();
 
-    const handleCheckout = async () => {
+    const [isConfirming, setIsConfirming] = useState(false);
+    const [purchaseSuccess, setPurchaseSuccess] = useState(null); // stores order data including secretCode
+
+    const handleCheckoutClick = () => {
         if (!user) {
             addToast("Please login to checkout", "error");
             return;
         }
-
         if (cart.length === 0) return;
+        setIsConfirming(true);
+    };
 
+    const processCheckout = async () => {
         try {
             // Bulk checkout API call
-            await api.post('/orders', {
+            const res = await api.post('/orders', {
                 items: cart.map(item => ({
                     productId: item._id,
                     quantity: item.quantity
@@ -33,9 +39,11 @@ export default function CartDrawer() {
             addToast("Purchase Successful!", "success");
             clearCart();
             refreshUser();
-            setIsOpen(false);
+            setIsConfirming(false);
+            setPurchaseSuccess(res.data.order);
         } catch (error) {
             addToast(error.response?.data?.message || "Checkout Failed", "error");
+            setIsConfirming(false);
         }
     };
 
@@ -70,75 +78,135 @@ export default function CartDrawer() {
                             </button>
                         </div>
 
-                        {/* Items */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                            {cart.length === 0 ? (
-                                <div className="h-full flex flex-col items-center justify-center text-gray-500 space-y-4">
-                                    <ShoppingBag size={64} className="opacity-20" />
-                                    <p>Your cart is empty</p>
+                        {/* Success Screen */}
+                        {purchaseSuccess ? (
+                            <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-6 text-center">
+                                <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-4">
+                                    <ShoppingBag size={40} />
                                 </div>
-                            ) : (
-                                cart.map(item => (
-                                    <div key={item._id} className="flex gap-4">
-                                        <div className="relative w-20 h-20 bg-surface rounded-lg border border-white/5 overflow-hidden flex-shrink-0">
-                                            <Image
-                                                src={item.image}
-                                                alt={item.name}
-                                                fill
-                                                className="object-contain p-2"
-                                            />
-                                        </div>
-                                        <div className="flex-1 flex flex-col justify-between">
-                                            <div>
-                                                <h3 className="font-medium text-sm line-clamp-1">{item.name}</h3>
-                                                <p className="text-xs text-gray-400">{item.category}</p>
-                                            </div>
-                                            <div className="flex items-center justify-between mt-2">
-                                                <div className="flex items-center rounded-md border border-white/10 bg-white/5">
-                                                    <button
-                                                        onClick={() => updateQuantity(item._id, -1)}
-                                                        className="px-2 py-1 hover:bg-white/10 text-xs transition disabled:opacity-50"
-                                                        disabled={item.quantity <= 1}
-                                                    >
-                                                        -
-                                                    </button>
-                                                    <span className="px-2 text-xs font-mono">{item.quantity}</span>
-                                                    <button
-                                                        onClick={() => updateQuantity(item._id, 1)}
-                                                        className="px-2 py-1 hover:bg-white/10 text-xs transition"
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div>
-                                                <p className="text-sm font-bold">${(item.price * item.quantity).toLocaleString()}</p>
-                                            </div>
-                                        </div>
-                                        <button
-                                            onClick={() => removeFromCart(item._id)}
-                                            className="text-gray-500 hover:text-red-500 transition self-start"
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
-                                    </div>
-                                ))
-                            )}
-                        </div>
+                                <h3 className="text-2xl font-bold text-white">Purchase Successful!</h3>
+                                <p className="text-gray-400">Thank you for your order. Here is your digital delivery code:</p>
 
-                        {/* Footer */}
-                        {cart.length > 0 && (
-                            <div className="p-6 border-t border-white/10 bg-surface/50 backdrop-blur-md">
-                                <div className="flex justify-between items-end mb-4">
-                                    <span className="text-gray-400 text-sm">Total</span>
-                                    <span className="text-2xl font-bold">${totalAmount.toLocaleString()}</span>
+                                <div className="bg-white/10 p-6 rounded-xl border border-white/20 w-full">
+                                    <p className="text-sm text-gray-500 mb-2 uppercase tracking-wider">Secret Code</p>
+                                    <div className="text-3xl font-mono font-black text-primary tracking-widest select-all cursor-pointer" onClick={() => {
+                                        navigator.clipboard.writeText(purchaseSuccess.secretCode);
+                                        addToast("Copied to clipboard!", "success");
+                                    }}>
+                                        {purchaseSuccess.secretCode}
+                                    </div>
+                                    <p className="text-xs text-gray-500 mt-2">(Click to copy)</p>
                                 </div>
+
                                 <button
-                                    onClick={handleCheckout}
-                                    className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition active:scale-95"
+                                    onClick={() => {
+                                        setPurchaseSuccess(null);
+                                        setIsOpen(false);
+                                    }}
+                                    className="w-full py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition"
                                 >
-                                    Checkout Now
+                                    Close
                                 </button>
                             </div>
+                        ) : (
+                            // Normal Cart Content
+                            <>
+                                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                                    {cart.length === 0 ? (
+                                        <div className="h-full flex flex-col items-center justify-center text-gray-500 space-y-4">
+                                            <ShoppingBag size={64} className="opacity-20" />
+                                            <p>Your cart is empty</p>
+                                        </div>
+                                    ) : (
+                                        cart.map(item => (
+                                            <div key={item._id} className="flex gap-4">
+                                                <div className="relative w-20 h-20 bg-surface rounded-lg border border-white/5 overflow-hidden flex-shrink-0">
+                                                    <Image
+                                                        src={item.image}
+                                                        alt={item.name}
+                                                        fill
+                                                        className="object-contain p-2"
+                                                    />
+                                                </div>
+                                                <div className="flex-1 flex flex-col justify-between">
+                                                    <div>
+                                                        <h3 className="font-medium text-sm line-clamp-1">{item.name}</h3>
+                                                        <p className="text-xs text-gray-400">{item.category}</p>
+                                                    </div>
+                                                    <div className="flex items-center justify-between mt-2">
+                                                        <div className="flex items-center rounded-md border border-white/10 bg-white/5">
+                                                            <button
+                                                                onClick={() => updateQuantity(item._id, -1)}
+                                                                className="px-2 py-1 hover:bg-white/10 text-xs transition disabled:opacity-50"
+                                                                disabled={item.quantity <= 1}
+                                                            >
+                                                                -
+                                                            </button>
+                                                            <span className="px-2 text-xs font-mono">{item.quantity}</span>
+                                                            <button
+                                                                onClick={() => updateQuantity(item._id, 1)}
+                                                                className="px-2 py-1 hover:bg-white/10 text-xs transition"
+                                                            >
+                                                                +
+                                                            </button>
+                                                        </div>
+                                                        <p className="text-sm font-bold">${(item.price * item.quantity).toLocaleString()}</p>
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => removeFromCart(item._id)}
+                                                    className="text-gray-500 hover:text-red-500 transition self-start"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+
+                                {cart.length > 0 && (
+                                    <div className="p-6 border-t border-white/10 bg-surface/50 backdrop-blur-md">
+                                        <div className="flex justify-between items-end mb-4">
+                                            <span className="text-gray-400 text-sm">Total</span>
+                                            <span className="text-2xl font-bold">${totalAmount.toLocaleString()}</span>
+                                        </div>
+                                        <button
+                                            onClick={handleCheckoutClick}
+                                            className="w-full py-4 rounded-xl bg-white text-black font-bold hover:bg-gray-200 transition active:scale-95"
+                                        >
+                                            Checkout Now
+                                        </button>
+                                    </div>
+                                )}
+                            </>
                         )}
+
+                        {/* Confirmation Modal Overlay */}
+                        {isConfirming && (
+                            <div className="absolute inset-0 bg-black/80 flex items-center justify-center p-6 z-[80] backdrop-blur-sm">
+                                <div className="bg-[#1a1a1a] border border-white/20 p-6 rounded-2xl w-full max-w-sm shadow-2xl transform scale-100 animate-in fade-in zoom-in duration-200">
+                                    <h3 className="text-xl font-bold text-white mb-2">Confirm Purchase?</h3>
+                                    <p className="text-gray-400 mb-6">
+                                        You are about to pay <span className="text-white font-bold">${totalAmount.toLocaleString()}</span> for {cart.length} items.
+                                    </p>
+                                    <div className="flex gap-3">
+                                        <button
+                                            onClick={() => setIsConfirming(false)}
+                                            className="flex-1 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium transition"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={processCheckout}
+                                            className="flex-1 py-3 bg-primary hover:bg-primaryGlow text-black rounded-xl font-bold transition shadow-[0_0_15px_rgba(251,191,36,0.2)]"
+                                        >
+                                            Confirm Pay
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                     </motion.div>
                 </>
             )}

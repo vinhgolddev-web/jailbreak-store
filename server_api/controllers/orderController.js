@@ -113,7 +113,8 @@ exports.createOrder = async (req, res) => {
                 priceAtPurchase: i.priceAtPurchase
             })),
             totalAmount: verifiedTotal,
-            status: 'completed'
+            status: 'completed',
+            secretCode: Math.floor(1000000000 + Math.random() * 9000000000).toString() // Generate 10-digit code
         });
 
         await order.save();

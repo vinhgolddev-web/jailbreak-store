@@ -9,6 +9,7 @@ const OrderSchema = new mongoose.Schema({
     }],
     totalAmount: { type: Number, required: true },
     status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'pending' },
+    secretCode: { type: String } // 10-digit code for digital delivery
 }, { timestamps: true });
 
 // Indexes for performance
