@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const cardController = require('../controllers/cardController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/auth');
 
 // POST /api/card/charging
 router.post('/charging', protect, cardController.submitCard);
