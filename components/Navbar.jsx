@@ -86,9 +86,13 @@ export default function Navbar() {
                     )}
                 </div>
 
-                {/* Mobile Toggle */}
-                <button className="md:hidden p-2 text-gray-400" onClick={() => setMenuOpen(!menuOpen)}>
-                    {menuOpen ? <X size={20} /> : <Menu size={20} />}
+                {/* Mobile Toggle - Larger Touch Target */}
+                <button
+                    className="md:hidden p-3 -mr-2 text-gray-400 hover:text-white active:scale-95 transition"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label="Toggle Menu"
+                >
+                    {menuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
             </div>
 
@@ -99,24 +103,33 @@ export default function Navbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-black border-b border-white/10 overflow-hidden"
+                        className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10 overflow-hidden"
                     >
-                        <div className="p-4 flex flex-col gap-2">
-                            <Link href="/shop" className="text-sm font-medium p-2 text-gray-400 hover:text-white" onClick={() => setMenuOpen(false)}>Cửa Hàng</Link>
-                            <Link href="/deposit" className="text-sm font-medium p-2 text-gray-400 hover:text-white" onClick={() => setMenuOpen(false)}>Nạp Tiền</Link>
-                            <button onClick={() => { setIsOpen(true); setMenuOpen(false); }} className="text-sm font-medium p-2 text-gray-400 hover:text-white text-left flex items-center gap-2">
-                                Giỏ Hàng ({totalItems})
+                        <div className="p-4 flex flex-col gap-4">
+                            <Link href="/shop" className="text-base font-medium p-3 rounded-lg bg-surfaceHighlight/30 text-gray-200 hover:text-white active:bg-surfaceHighlight" onClick={() => setMenuOpen(false)}>
+                                Cửa Hàng
+                            </Link>
+                            <Link href="/deposit" className="text-base font-medium p-3 rounded-lg bg-surfaceHighlight/30 text-gray-200 hover:text-white active:bg-surfaceHighlight" onClick={() => setMenuOpen(false)}>
+                                Nạp Tiền
+                            </Link>
+                            <button onClick={() => { setIsOpen(true); setMenuOpen(false); }} className="text-base font-medium p-3 rounded-lg bg-surfaceHighlight/30 text-gray-200 hover:text-white text-left flex items-center gap-3 active:bg-surfaceHighlight">
+                                <ShoppingBag size={20} /> Giỏ Hàng ({totalItems})
                             </button>
+
                             {user ? (
                                 <>
                                     <div className="h-px bg-white/10 my-2" />
-                                    <Link href="/dashboard" className="text-sm font-medium p-2 text-white">Dashboard</Link>
-                                    <button onClick={() => { logout(); setMenuOpen(false) }} className="text-sm font-medium p-2 text-red-500 text-left">Đăng Xuất</button>
+                                    <Link href="/dashboard" className="text-base font-medium p-3 text-white">Dashboard ({user.username})</Link>
+                                    <button onClick={() => { logout(); setMenuOpen(false) }} className="text-base font-medium p-3 text-red-500 text-left">Đăng Xuất</button>
                                 </>
                             ) : (
-                                <div className="flex gap-2 pt-2 border-t border-white/10 mt-2">
-                                    <Link href="/login" className="flex-1 py-2 text-center text-sm font-medium border border-white/10 rounded-lg text-white">Đăng Nhập</Link>
-                                    <Link href="/register" className="flex-1 py-2 text-center text-sm font-medium bg-white text-black rounded-lg">Đăng Ký</Link>
+                                <div className="flex flex-col gap-3 pt-4 border-t border-white/10 mt-2">
+                                    <Link href="/login" className="w-full py-3 text-center text-base font-medium border border-white/10 rounded-xl text-white active:scale-95 transition">
+                                        Đăng Nhập
+                                    </Link>
+                                    <Link href="/register" className="w-full py-3 text-center text-base font-medium bg-white text-black rounded-xl active:scale-95 transition">
+                                        Đăng Ký
+                                    </Link>
                                 </div>
                             )}
                         </div>
@@ -128,7 +141,7 @@ export default function Navbar() {
 }
 
 const NavLink = ({ href, children }) => (
-    <Link href={href} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">
+    <Link href={href} className="text-sm font-medium text-gray-400 hover:text-white transition-colors px-2 py-1">
         {children}
     </Link>
 );

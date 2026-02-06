@@ -7,6 +7,12 @@ const config = {
     ],
     theme: {
         extend: {
+            screens: {
+                'sm': '576px',  // Mobile Landscape / Large Phones
+                // 'md': '768px', // Default
+                'lg': '992px',  // Laptops / Small Desktops
+                'xl': '1200px', // Large Desktops
+            },
             colors: {
                 background: '#000000', // True Black
                 surface: '#111111',    // Dark Zinc

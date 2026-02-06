@@ -73,14 +73,15 @@ export default function CartDrawer() {
                             <h2 className="text-xl font-bold flex items-center gap-2">
                                 <ShoppingBag size={20} /> Giỏ Hàng
                             </h2>
-                            <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/5 rounded-full transition">
-                                <X size={20} />
+                            <button onClick={() => setIsOpen(false)} className="p-3 hover:bg-white/5 rounded-full transition active:scale-95">
+                                <X size={24} />
                             </button>
                         </div>
 
                         {/* Success Screen */}
                         {purchaseSuccess ? (
                             <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-6 text-center">
+                                {/* ... existing success content ... */}
                                 <div className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 mb-4">
                                     <ShoppingBag size={40} />
                                 </div>
@@ -89,7 +90,7 @@ export default function CartDrawer() {
 
                                 <div className="bg-white/10 p-6 rounded-xl border border-white/20 w-full">
                                     <p className="text-sm text-gray-500 mb-2 uppercase tracking-wider">Mã bí mật</p>
-                                    <div className="text-3xl font-mono font-black text-primary tracking-widest select-all cursor-pointer" onClick={() => {
+                                    <div className="text-3xl font-mono font-black text-primary tracking-widest select-all cursor-pointer active:scale-95 transition" onClick={() => {
                                         navigator.clipboard.writeText(purchaseSuccess.secretCode);
                                         addToast("Đã sao chép vào bộ nhớ đệm!", "success");
                                     }}>
@@ -103,7 +104,7 @@ export default function CartDrawer() {
                                         setPurchaseSuccess(null);
                                         setIsOpen(false);
                                     }}
-                                    className="w-full py-3 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition"
+                                    className="w-full py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold transition min-h-[50px]"
                                 >
                                     Đóng
                                 </button>
@@ -120,7 +121,7 @@ export default function CartDrawer() {
                                     ) : (
                                         cart.map(item => (
                                             <div key={item._id} className="flex gap-4">
-                                                <div className="relative w-20 h-20 bg-surface rounded-lg border border-white/5 overflow-hidden flex-shrink-0">
+                                                <div className="relative w-24 h-24 bg-surface rounded-lg border border-white/5 overflow-hidden flex-shrink-0">
                                                     <Image
                                                         src={item.image}
                                                         alt={item.name}
@@ -128,36 +129,36 @@ export default function CartDrawer() {
                                                         className="object-contain p-2"
                                                     />
                                                 </div>
-                                                <div className="flex-1 flex flex-col justify-between">
+                                                <div className="flex-1 flex flex-col justify-between py-1">
                                                     <div>
-                                                        <h3 className="font-medium text-sm line-clamp-1">{item.name}</h3>
+                                                        <h3 className="font-medium text-base line-clamp-1">{item.name}</h3>
                                                         <p className="text-xs text-gray-400">{item.category}</p>
                                                     </div>
                                                     <div className="flex items-center justify-between mt-2">
-                                                        <div className="flex items-center rounded-md border border-white/10 bg-white/5">
+                                                        <div className="flex items-center rounded-lg border border-white/10 bg-white/5 overflow-hidden">
                                                             <button
                                                                 onClick={() => updateQuantity(item._id, -1)}
-                                                                className="px-2 py-1 hover:bg-white/10 text-xs transition disabled:opacity-50"
+                                                                className="w-10 h-10 flex items-center justify-center hover:bg-white/10 active:bg-white/20 transition disabled:opacity-30"
                                                                 disabled={item.quantity <= 1}
                                                             >
                                                                 -
                                                             </button>
-                                                            <span className="px-2 text-xs font-mono">{item.quantity}</span>
+                                                            <span className="w-8 text-center text-sm font-mono">{item.quantity}</span>
                                                             <button
                                                                 onClick={() => updateQuantity(item._id, 1)}
-                                                                className="px-2 py-1 hover:bg-white/10 text-xs transition"
+                                                                className="w-10 h-10 flex items-center justify-center hover:bg-white/10 active:bg-white/20 transition"
                                                             >
                                                                 +
                                                             </button>
                                                         </div>
-                                                        <p className="text-sm font-bold">${(item.price * item.quantity).toLocaleString()}</p>
+                                                        <p className="text-base font-bold">${(item.price * item.quantity).toLocaleString()}</p>
                                                     </div>
                                                 </div>
                                                 <button
                                                     onClick={() => removeFromCart(item._id)}
-                                                    className="text-gray-500 hover:text-red-500 transition self-start"
+                                                    className="p-2 -mr-2 text-gray-500 hover:text-red-500 transition self-start active:scale-90"
                                                 >
-                                                    <Trash2 size={16} />
+                                                    <Trash2 size={20} />
                                                 </button>
                                             </div>
                                         ))

@@ -62,9 +62,9 @@ export default function ProductCard({ product, disabled }) {
                     <Button
                         onClick={() => addToCart(product)}
                         disabled={disabled || product.stock < 1}
-                        className={`h-8 px-4 text-xs font-medium rounded-md transition-all ${product.stock < 1
+                        className={`min-h-[44px] sm:min-h-[36px] px-4 text-sm sm:text-xs font-semibold sm:font-medium rounded-lg sm:rounded-md transition-all active:scale-95 ${product.stock < 1
                             ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-                            : 'bg-white text-black hover:bg-gray-200'
+                            : 'bg-white text-black hover:bg-gray-200 shadow-sm'
                             }`}
                     >
                         {product.stock > 0 ? 'Thêm vào Giỏ' : 'Hết Hàng'}
