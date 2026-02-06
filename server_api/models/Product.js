@@ -7,7 +7,7 @@ const ProductSchema = new mongoose.Schema({
     image: { type: String, required: true },
     description: { type: String },
     stock: { type: Number, default: 1 },
-    rarity: { type: String, enum: ['Thường', 'Hiếm', 'Siêu hiếm'], default: 'Thường' },
+    rarity: { type: String, enum: ['Common', 'Rare', 'Epic', 'Legendary', 'Godly'], default: 'Common' },
     isFeatured: { type: Boolean, default: false },
 }, { timestamps: true });
 
