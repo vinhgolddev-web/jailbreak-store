@@ -1,9 +1,16 @@
 const Product = require('../models/Product');
 
-// Get all products
+// Get all products (with optional search)
 exports.getProducts = async (req, res) => {
     try {
-        const products = await Product.find().lean();
+        const { search } = req.query;
+        let query = {};
+
+        if (search) {
+            query.name = { $regex: search, $options: 'i' }; // Case-insensitive partial match
+        }
+
+        const products = await Product.find(query).lean();
         res.json(products);
     } catch (_err) {
         res.status(500).json({ message: 'Server error' });
