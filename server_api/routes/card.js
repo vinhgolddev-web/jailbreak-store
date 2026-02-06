@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const router = express.Router();
 const cardController = require('../controllers/cardController');
-const { verifyToken } = require('../utils/authMiddleware');
+const { verifyToken } = require('../middleware/auth');
 
 // POST /api/card/submit - User submits card
 router.post('/submit', verifyToken, cardController.submitCard);
