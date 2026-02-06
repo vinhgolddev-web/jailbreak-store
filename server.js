@@ -116,4 +116,15 @@ server.use((err, req, res, next) => {
     res.status(500).json({ message: 'Internal Server Error', error: err.message });
 });
 
+// Process-level Error Handling (Safety Net)
+process.on('unhandledRejection', (err) => {
+    console.error('[UNHANDLED REJECTION] Shutting down...', err);
+    process.exit(1);
+});
+
+process.on('uncaughtException', (err) => {
+    console.error('[UNCAUGHT EXCEPTION] Shutting down...', err);
+    process.exit(1);
+});
+
 module.exports = server;
