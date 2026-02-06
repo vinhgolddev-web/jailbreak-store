@@ -1,5 +1,5 @@
 const nextConfig = {
-  output: "standalone",
+  // output: "standalone", // Removed to support custom server.js
   reactStrictMode: true,
   poweredByHeader: false,
   images: {
