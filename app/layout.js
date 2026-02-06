@@ -1,3 +1,4 @@
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
 import { CartProvider } from '@/context/CartContext';
@@ -5,6 +6,12 @@ import Navbar from '@/components/Navbar';
 import CartDrawer from '@/components/CartDrawer';
 import LiveSalesNotification from '@/components/LiveSalesNotification';
 import './globals.css';
+
+const font = Plus_Jakarta_Sans({
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-jakarta',
+});
 
 export const metadata = {
   title: 'Jailbreak Store | Premium Roblox Marketplace',
@@ -21,7 +28,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
+      <body className={font.className}>
         <AuthProvider>
           <ToastProvider>
             <CartProvider>

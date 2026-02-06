@@ -25,8 +25,8 @@ const config = {
                 border: '#333333',     // Dark border
             },
             fontFamily: {
-                sans: ['"Inter"', 'sans-serif'],
-                // display: ['"Inter"', 'sans-serif'], // Removed Orbitron
+                sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                display: ['"Plus Jakarta Sans"', 'sans-serif'],
             },
             backgroundImage: {
                 'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
