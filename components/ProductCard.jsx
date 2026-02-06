@@ -2,12 +2,13 @@ import Button from './ui/Button';
 import Image from 'next/image';
 import { ShoppingBag, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
-// Import useCart
+import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function ProductCard({ product, disabled }) {
+    const [imgSrc, setImgSrc] = useState(product.image);
     const isLegendary = product.rarity === 'Legendary';
     const { addToCart } = useCart();
     const { user } = useAuth();
@@ -33,9 +34,10 @@ export default function ProductCard({ product, disabled }) {
             {/* Image Container */}
             <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-6 group-hover:bg-black/80 transition-colors">
                 <Image
-                    src={product.image}
+                    src={imgSrc}
                     alt={product.name}
                     fill
+                    onError={() => setImgSrc('https://placehold.co/400x400/1a1a1a/ffffff?text=No+Image')}
                     className="object-contain grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />

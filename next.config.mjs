@@ -6,15 +6,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'static.wikia.nocookie.net',
-      },
-      {
-        protocol: 'https',
-        hostname: 'tr.rbxcdn.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'jailbreak.fandom.com',
+        hostname: '**',
       },
     ],
   },
