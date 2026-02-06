@@ -3,6 +3,7 @@ import { ToastProvider } from '@/context/ToastContext';
 import { CartProvider } from '@/context/CartContext';
 import Navbar from '@/components/Navbar';
 import CartDrawer from '@/components/CartDrawer';
+import LiveSalesNotification from '@/components/LiveSalesNotification';
 import './globals.css';
 
 export const metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
             <CartProvider>
               <Navbar />
               <CartDrawer />
+              <LiveSalesNotification />
               <div id="cart-drawer-root" /> {/* Portal target if needed */}
               <main className="min-h-screen pt-20 relative">
                 {/* Global Ambient Glow */}

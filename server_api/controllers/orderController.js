@@ -127,3 +127,36 @@ exports.getAllOrders = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// Get Recent Orders (Public - Limited Data)
+exports.getRecentOrders = async (req, res) => {
+    try {
+        // Fetch last 10 completed orders
+        const orders = await Order.find({ status: 'completed' })
+            .select('userId items createdAt')
+            .populate('userId', 'username')
+            .populate('items.productId', 'name')
+            .sort({ createdAt: -1 })
+            .limit(10);
+
+        // Format for public privacy (mask username)
+        const recentSales = orders.map(order => {
+            const username = order.userId?.username || 'Guest';
+            const maskedUser = username.length > 2
+                ? `${username.substring(0, 2)}***${username.substring(username.length - 1)}`
+                : `${username.substring(0, 1)}***`;
+
+            return {
+                id: order._id,
+                user: maskedUser,
+                product: order.items[0]?.productId?.name || 'Vật phẩm ẩn',
+                time: order.createdAt
+            };
+        });
+
+        res.json(recentSales);
+    } catch (err) {
+        console.error('Recent Orders Error:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

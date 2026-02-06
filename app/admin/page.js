@@ -83,7 +83,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <StatCard
                     title="Total Revenue"
-                    value={`$${stats.totalRevenue.toLocaleString()}`}
+                    value={`${stats.totalRevenue.toLocaleString()} VNĐ`}
                     icon={DollarSign}
                     color="text-green-500"
                 />
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
                                         <div className="font-medium text-white">{order.userId?.username || 'Unknown'}</div>
                                         <div className="text-xs text-gray-500">{order.userId?.email}</div>
                                     </td>
-                                    <td className="py-4 font-bold text-green-400">${order.totalAmount.toLocaleString()}</td>
+                                    <td className="py-4 font-bold text-green-400">{order.totalAmount.toLocaleString()} VNĐ</td>
                                     <td className="py-4">
                                         <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-500 border border-green-500/20">
                                             {order.status}

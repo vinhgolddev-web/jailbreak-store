@@ -80,7 +80,7 @@ export default function ProductDetail({ params }) {
                             </span>
                         </div>
                         <h1 className="text-4xl font-bold tracking-tight text-white mb-2">{product.name}</h1>
-                        <p className="text-2xl font-semibold text-white">${product.price.toLocaleString()}</p>
+                        <p className="text-2xl font-semibold text-white">{product.price.toLocaleString()} VNĐ</p>
                         <p className="text-sm text-gray-500 mt-2 flex items-center gap-2">
                             <span className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-red-500'}`} />
                             {product.stock > 0 ? `${product.stock} Units Available` : 'Out of Stock'}

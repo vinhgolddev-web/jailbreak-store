@@ -61,17 +61,17 @@ export default function Home() {
           <Feature
             icon={<Zap className="text-primary" size={32} />}
             title="Giao Hàng Tốc Độ"
-            desc="Hệ thống bot tự động của chúng tôi sẽ gửi vật phẩm cho bạn trong vòng 60 giây sau khi thanh toán."
+            desc="Nhận hàng ngay khi thanh toán"
           />
           <Feature
             icon={<ShieldCheck className="text-accent" size={32} />}
             title="An Toàn Tuyệt Đối"
-            desc="Phương thức chuyển đồ độc quyền đảm bảo an toàn 100% cho tài khoản của bạn, không lo bị ban."
+            desc="Mọi thông tin của bạn được bảo mật 100%"
           />
           <Feature
             icon={<Star className="text-purple-500" size={32} />}
             title="Độ Hiếm Được Kiểm Định"
-            desc="Mọi vật phẩm đều được xác thực chính hãng. Chúng tôi chỉ cung cấp các item sạch, không trùng lặp."
+            desc="Mọi vật phẩm được kiểm định chính hãng, không DUPLICATED"
           />
         </div>
       </section>

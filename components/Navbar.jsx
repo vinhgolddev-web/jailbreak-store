@@ -47,7 +47,7 @@ export default function Navbar() {
                         <div className="flex items-center gap-4 pl-4 border-l border-white/10">
                             <div className="flex flex-col items-end">
                                 <span className="text-[10px] text-gray-500 font-medium tracking-wider">SỐ DƯ</span>
-                                <span className="text-sm font-semibold text-white">${user.balance?.toLocaleString()}</span>
+                                <span className="text-sm font-semibold text-white">{user.balance?.toLocaleString()} VNĐ</span>
                             </div>
 
                             <div className="relative group">

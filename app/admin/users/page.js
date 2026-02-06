@@ -66,13 +66,13 @@ export default function AdminUsers() {
                                 </td>
                                 <td className="py-4">
                                     <span className={`px - 2 py - 1 rounded - full text - xs font - bold border ${user.role === 'admin'
-                                            ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-                                            : 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                                        ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                        : 'bg-gray-500/10 text-gray-400 border-gray-500/20'
                                         } `}>
                                         {user.role}
                                     </span>
                                 </td>
-                                <td className="py-4 font-mono text-primary">${user.balance.toLocaleString()}</td>
+                                <td className="py-4 font-mono text-primary">{user.balance.toLocaleString()} VNĐ</td>
                                 <td className="py-4 text-gray-500 text-sm">{new Date(user.createdAt).toLocaleDateString()}</td>
                             </tr>
                         ))}

@@ -48,7 +48,7 @@ export default function Dashboard() {
                 <div className="md:ml-auto md:text-right p-4 bg-surfaceHighlight/20 rounded-xl md:bg-transparent md:p-0">
                     <p className="text-gray-400 text-sm">Số dư khả dụng</p>
                     <p className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-yellow-400 to-yellow-600">
-                        ${user.balance.toLocaleString()}
+                        {user.balance.toLocaleString()} VNĐ
                     </p>
                 </div>
             </div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <StatCard label="Tổng đơn hàng" value={orders.length} icon={<Package className="text-blue-400" />} />
-                <StatCard label="Số dư hiện tại" value={`$${user.balance.toLocaleString()}`} icon={<Wallet className="text-yellow-400" />} />
+                <StatCard label="Số dư hiện tại" value={`${user.balance.toLocaleString()} VNĐ`} icon={<Wallet className="text-yellow-400" />} />
                 <Link href="/deposit" className="md:col-span-1">
                     <div className="h-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-6 flex flex-col justify-center items-center hover:bg-green-500/30 transition cursor-pointer group">
                         <span className="text-green-400 font-bold text-xl group-hover:scale-110 transition-transform">+ Nạp Thêm Tiền</span>
@@ -98,7 +98,7 @@ export default function Dashboard() {
                                         </span>
                                     </td>
                                     <td className="p-4 text-right font-mono text-gray-300">
-                                        -${order.totalAmount.toLocaleString()}
+                                        -{order.totalAmount.toLocaleString()} VNĐ
                                     </td>
                                 </tr>
                             ))

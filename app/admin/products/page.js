@@ -114,7 +114,7 @@ export default function AdminProducts() {
                             <div>
                                 <h3 className="font-bold text-white truncate">{product.name}</h3>
                                 <p className="text-xs text-gray-500 mb-1">{product.category} • {product.rarity}</p>
-                                <p className="font-mono text-primary">${product.price.toLocaleString()}</p>
+                                <p className="font-mono text-primary">{product.price.toLocaleString()} VNĐ</p>
                             </div>
                             <div className="flex justify-between items-center mt-2">
                                 <span className={`text-xs ${product.stock > 0 ? 'text-green-500' : 'text-red-500'}`}>

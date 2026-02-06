@@ -31,8 +31,15 @@ const buyLimiter = rateLimit({
     }
 });
 
-router.post('/', buyLimiter, orderController.createOrder);
-router.get('/', orderController.getMyOrders);
+// GET /api/orders
+router.get('/', verifyToken, orderController.getMyOrders);
+
+// GET /api/orders/recent (Public)
+router.get('/recent', orderController.getRecentOrders);
+
+// POST /api/orders (Purchase)
+router.post('/', verifyToken, buyLimiter, orderController.createOrder);
+
 router.get('/all', isAdmin, orderController.getAllOrders); // Admin
 
 module.exports = router;

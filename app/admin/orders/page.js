@@ -52,7 +52,7 @@ export default function AdminOrders() {
                                 <td className="py-4 text-gray-400">
                                     {order.items.map(item => item.productId?.name || 'Unknown Item').join(', ')}
                                 </td>
-                                <td className="py-4 font-bold text-green-400">${order.totalAmount.toLocaleString()}</td>
+                                <td className="py-4 font-bold text-green-400">{order.totalAmount.toLocaleString()} VNĐ</td>
                                 <td className="py-4">
                                     <span className="px-2 py-1 rounded-full text-xs font-bold bg-green-500/10 text-green-500 border border-green-500/20">
                                         {order.status}

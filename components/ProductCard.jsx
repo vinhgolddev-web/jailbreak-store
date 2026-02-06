@@ -58,7 +58,7 @@ export default function ProductCard({ product, disabled }) {
                 <p className="text-xs text-gray-500 mb-4 capitalize">{product.category.toLowerCase()}</p>
 
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-white/5">
-                    <span className="text-sm font-semibold text-white">${product.price.toLocaleString()}</span>
+                    <span className="text-sm font-semibold text-white">{product.price.toLocaleString()} VNĐ</span>
                     <Button
                         onClick={() => addToCart(product)}
                         disabled={disabled || product.stock < 1}
