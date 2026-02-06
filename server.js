@@ -25,7 +25,24 @@ server.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-server.use(helmet()); // Enable standard security headers
+
+// Security Headers (CSP)
+server.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Needed for Next.js
+            styleSrc: ["'self'", "'unsafe-inline'"], // Needed for styles
+            imgSrc: ["'self'", "data:", "https:"], // Allow external images (wallpapers.com)
+            connectSrc: ["'self'", "https:", "wss:"], // wss: for HMR
+            fontSrc: ["'self'", "https:", "data:"],
+            objectSrc: ["'none'"],
+            mediaSrc: ["'self'", "https:"],
+            frameSrc: ["'self'", "https:"],
+        },
+    },
+}));
+
 server.use(morgan('dev'));
 
 // Rate Limiting
