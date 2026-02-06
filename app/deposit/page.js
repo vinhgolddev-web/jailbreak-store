@@ -110,6 +110,7 @@ function DepositContent() {
                 <h1 className="text-3xl font-black mb-6 text-center text-gradient-gold">NẠP TIỀN</h1>
 
                 {/* Tabs */}
+                {/* Tabs - Temporarily using only QR */}
                 <div className="flex gap-2 p-1 bg-black/40 rounded-xl mb-6">
                     <button
                         onClick={() => setActiveTab('qr')}
@@ -118,10 +119,10 @@ function DepositContent() {
                         Chuyển Khoản / QR
                     </button>
                     <button
-                        onClick={() => setActiveTab('card')}
-                        className={`flex-1 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'card' ? 'bg-primary text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
+                        disabled
+                        className="flex-1 py-2 rounded-lg text-sm font-bold text-gray-600 cursor-not-allowed border border-white/5 opacity-50"
                     >
-                        Thẻ Cào Auto
+                        Thẻ Cào (Bảo Trì)
                     </button>
                 </div>
 

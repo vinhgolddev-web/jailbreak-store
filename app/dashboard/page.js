@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import api from '@/lib/axios';
 import { useAuth } from '@/context/AuthContext';
-import { Package, Crown, Clock } from 'lucide-react';
+import { Package, Crown, Clock, Wallet } from 'lucide-react';
 import Link from 'next/link';
 
 export default function Dashboard() {
@@ -32,19 +32,22 @@ export default function Dashboard() {
     return (
         <div className="container mx-auto px-4 py-12">
             {/* Header */}
-            <div className="flex items-center gap-6 mb-12">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primaryGlow flex items-center justify-center text-3xl font-bold text-black shadow-2xl shadow-primary/20">
-                    {user.username[0].toUpperCase()}
-                </div>
-                <div>
-                    <h1 className="text-4xl font-display font-bold">Xin chào, {user.username}</h1>
-                    <div className="flex items-center gap-2 text-primary font-bold bg-primary/10 px-3 py-1 rounded w-fit mt-2">
-                        <Crown size={16} /> Thành viên VIP
+            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-12">
+                <div className="flex items-center gap-6">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primaryGlow flex items-center justify-center text-3xl font-bold text-black shadow-2xl shadow-primary/20 shrink-0">
+                        {user.username[0].toUpperCase()}
+                    </div>
+                    <div>
+                        <h1 className="text-3xl md:text-4xl font-display font-bold">Xin chào, {user.username}</h1>
+                        <div className="flex items-center gap-2 text-primary font-bold bg-primary/10 px-3 py-1 rounded w-fit mt-2">
+                            <Crown size={16} /> Thành viên VIP
+                        </div>
                     </div>
                 </div>
-                <div className="ml-auto text-right hidden md:block">
+
+                <div className="md:ml-auto md:text-right p-4 bg-surfaceHighlight/20 rounded-xl md:bg-transparent md:p-0">
                     <p className="text-gray-400 text-sm">Số dư khả dụng</p>
-                    <p className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-yellow-400 to-yellow-600">
+                    <p className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary via-yellow-400 to-yellow-600">
                         ${user.balance.toLocaleString()}
                     </p>
                 </div>
@@ -53,7 +56,7 @@ export default function Dashboard() {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <StatCard label="Tổng đơn hàng" value={orders.length} icon={<Package className="text-blue-400" />} />
-                <StatCard label="Tuổi tài khoản" value="5 Ngày" icon={<Clock className="text-purple-400" />} />
+                <StatCard label="Số dư hiện tại" value={`$${user.balance.toLocaleString()}`} icon={<Wallet className="text-yellow-400" />} />
                 <Link href="/deposit" className="md:col-span-1">
                     <div className="h-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl p-6 flex flex-col justify-center items-center hover:bg-green-500/30 transition cursor-pointer group">
                         <span className="text-green-400 font-bold text-xl group-hover:scale-110 transition-transform">+ Nạp Thêm Tiền</span>

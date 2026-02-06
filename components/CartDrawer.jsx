@@ -99,6 +99,21 @@ export default function CartDrawer() {
                                     <p className="text-xs text-gray-500 mt-2">(Bấm để sao chép)</p>
                                 </div>
 
+                                <div className="p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl w-full">
+                                    <p className="text-sm font-bold text-blue-400 mb-2">👇 BƯỚC TIẾP THEO 👇</p>
+                                    <p className="text-gray-300 text-sm mb-3">
+                                        Gửi mã trên cho Admin để nhận hàng ngay:
+                                    </p>
+                                    <a
+                                        href="https://www.facebook.com/vinh.gold.185743"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-bold transition shadow-lg shadow-blue-600/20 active:scale-95"
+                                    >
+                                        Liên hệ Facebook Admin
+                                    </a>
+                                </div>
+
                                 <button
                                     onClick={() => {
                                         setPurchaseSuccess(null);
