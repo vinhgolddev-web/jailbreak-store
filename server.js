@@ -15,6 +15,9 @@ const PORT = process.env.PORT || 3000;
 // Initialize Express
 const server = express();
 
+// Trust Proxy (Required for Railway/Heroku/Nginx)
+server.set('trust proxy', 1);
+
 const rateLimit = require('express-rate-limit');
 
 // Middleware
