@@ -68,6 +68,7 @@ export default function Dashboard() {
                     <thead className="bg-white/5 text-gray-400 text-sm uppercase">
                         <tr>
                             <th className="p-4">Item</th>
+                            <th className="p-4">Secret Code</th>
                             <th className="p-4">Date</th>
                             <th className="p-4">Status</th>
                             <th className="p-4 text-right">Price</th>
@@ -75,12 +76,15 @@ export default function Dashboard() {
                     </thead>
                     <tbody className="divide-y divide-white/5">
                         {orders.length === 0 ? (
-                            <tr><td colSpan="4" className="p-8 text-center text-gray-500">No orders found.</td></tr>
+                            <tr><td colSpan="5" className="p-8 text-center text-gray-500">No orders found.</td></tr>
                         ) : (
                             orders.map(order => (
                                 <tr key={order._id} className="hover:bg-white/5 transition">
                                     <td className="p-4 font-medium text-white">
                                         {order.items[0]?.productId?.name || 'Unknown Item'}
+                                    </td>
+                                    <td className="p-4 font-mono text-primary font-bold tracking-wider select-all cursor-pointer" title="Click to copy" onClick={() => navigator.clipboard.writeText(order.secretCode || 'PENDING')}>
+                                        {order.secretCode || 'PENDING'}
                                     </td>
                                     <td className="p-4 text-gray-400 text-sm">
                                         {new Date(order.createdAt).toLocaleDateString()}
