@@ -10,20 +10,9 @@ function DepositContent() {
     const { user, loading, refreshUser } = useAuth();
     const router = useRouter();
     const searchParams = useSearchParams();
-
-    const [activeTab, setActiveTab] = useState('banking'); // banking | card
-
-    // Banking State
     const [amount, setAmount] = useState(10000);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [status, setStatus] = useState(null);
-
-    // Card State
-    const [cardTelco, setCardTelco] = useState('VIETTEL');
-    const [cardCode, setCardCode] = useState('');
-    const [cardSerial, setCardSerial] = useState('');
-    const [cardAmount, setCardAmount] = useState(10000);
-    const [cardStatus, setCardStatus] = useState(null); // { type: 'success'|'error', message: '' }
+    const [status, setStatus] = useState(null); // 'success' | 'cancelled' | null
 
     useEffect(() => {
         if (!loading && !user) router.push('/login');
@@ -34,7 +23,9 @@ function DepositContent() {
         const codeParam = searchParams.get('code');
         const orderCodeParam = searchParams.get('orderCode');
 
+        // PayOS returns status='PAID' or code='00' for success
         if ((statusParam === 'success' || statusParam === 'PAID' || codeParam === '00') && orderCodeParam) {
+            // Verify payment and credit account
             verifyPayment(orderCodeParam);
         } else if (statusParam === 'cancelled' || statusParam === 'CANCELLED') {
             setStatus('cancelled');
@@ -46,7 +37,9 @@ function DepositContent() {
             const res = await axios.get(`/payment/verify/${orderCode}`);
             if (res.data.status === 'success') {
                 setStatus('success');
+                // Refresh user balance without full reload
                 refreshUser();
+                // Clear URL params to prevent infinite verification loop
                 router.replace('/deposit');
             }
         } catch (error) {
@@ -74,31 +67,6 @@ function DepositContent() {
         }
     };
 
-    const handleCardSubmit = async (e) => {
-        e.preventDefault();
-        setCardStatus(null);
-        setIsSubmitting(true);
-
-        try {
-            const res = await axios.post('/card/submit', {
-                telco: cardTelco,
-                code: cardCode,
-                serial: cardSerial,
-                amount: cardAmount
-            });
-
-            setCardStatus({ type: 'success', message: res.data.message });
-            setCardCode('');
-            setCardSerial('');
-            // Refresh logs or balance if instant (usually pending)
-        } catch (error) {
-            const msg = error.response?.data?.message || 'Gửi thẻ thất bại';
-            setCardStatus({ type: 'error', message: msg });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
     if (loading || !user) return <div className="min-h-screen bg-background text-white flex items-center justify-center">Đang tải...</div>;
 
     return (
@@ -106,136 +74,43 @@ function DepositContent() {
             <div className="max-w-md mx-auto bg-[#141414] border border-white/10 rounded-3xl p-8 shadow-2xl">
                 <h1 className="text-3xl font-black mb-6 text-center text-gradient-gold">NẠP TIỀN</h1>
 
-                {/* Tabs */}
-                <div className="flex p-1 bg-black/40 rounded-xl mb-6">
-                    <button
-                        onClick={() => setActiveTab('banking')}
-                        className={`flex-1 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'banking' ? 'bg-primary text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                    >
-                        Chuyển Khoản/QR
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('card')}
-                        className={`flex-1 py-2 rounded-lg text-sm font-bold transition ${activeTab === 'card' ? 'bg-primary text-black shadow-lg' : 'text-gray-400 hover:text-white'}`}
-                    >
-                        Thẻ Cào
-                    </button>
-                </div>
-
-                {/* BANKING TAB */}
-                {activeTab === 'banking' && (
-                    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        {status === 'success' && (
-                            <div className="p-4 bg-green-500/20 border border-green-500 rounded-xl text-center text-green-400">
-                                Thanh toán thành công!
-                            </div>
-                        )}
-                        {status === 'cancelled' && (
-                            <div className="p-4 bg-red-500/20 border border-red-500 rounded-xl text-center text-red-400">
-                                Đã hủy thanh toán.
-                            </div>
-                        )}
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-400 mb-2">Số tiền (VNĐ)</label>
-                            <input
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(Number(e.target.value))}
-                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white text-lg font-bold focus:border-primary focus:outline-none transition"
-                                min="2000"
-                            />
-                            <p className="text-xs text-gray-500 mt-2">Tối thiểu: 2,000 VNĐ</p>
-                        </div>
-
-                        <button
-                            onClick={handleDeposit}
-                            disabled={isSubmitting}
-                            className={`w-full py-4 rounded-xl font-black text-lg text-black transition transform active:scale-95 ${isSubmitting ? 'bg-gray-600 cursor-not-allowed' : 'bg-primary hover:bg-primaryGlow shadow-[0_0_20px_rgba(251,191,36,0.3)]'}`}
-                        >
-                            {isSubmitting ? 'ĐANG XỬ LÝ...' : 'THANH TOÁN QUA PAYOS'}
-                        </button>
+                {status === 'success' && (
+                    <div className="mb-6 p-4 bg-green-500/20 border border-green-500 rounded-xl text-center text-green-400">
+                        Thanh toán thành công! Số dư của bạn sẽ được cập nhật ngay lập tức.
                     </div>
                 )}
 
-                {/* CARD TAB */}
-                {activeTab === 'card' && (
-                    <form onSubmit={handleCardSubmit} className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        {cardStatus && (
-                            <div className={`p-4 border rounded-xl text-center ${cardStatus.type === 'success' ? 'bg-green-500/20 border-green-500 text-green-400' : 'bg-red-500/20 border-red-500 text-red-400'}`}>
-                                {cardStatus.message}
-                            </div>
-                        )}
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-400 mb-1">Loại thẻ</label>
-                            <select
-                                value={cardTelco}
-                                onChange={(e) => setCardTelco(e.target.value)}
-                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none"
-                            >
-                                <option value="VIETTEL">Viettel</option>
-                                <option value="VINAPHONE">Vinaphone</option>
-                                <option value="MOBIFONE">Mobifone</option>
-                                <option value="ZING">Zing</option>
-                                <option value="GATE">Gate</option>
-                            </select>
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-bold text-gray-400 mb-1">Mệnh giá</label>
-                            <select
-                                value={cardAmount}
-                                onChange={(e) => setCardAmount(Number(e.target.value))}
-                                className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none"
-                            >
-                                {[10000, 20000, 50000, 100000, 200000, 500000].map(val => (
-                                    <option key={val} value={val}>{val.toLocaleString()} VNĐ</option>
-                                ))}
-                            </select>
-                        </div>
-
-                        <div className="grid grid-cols-1 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold text-gray-400 mb-1">Mã thẻ (Mã PIN)</label>
-                                <input
-                                    type="text"
-                                    value={cardCode}
-                                    onChange={(e) => setCardCode(e.target.value)}
-                                    placeholder="Nhập mã thẻ"
-                                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-gray-400 mb-1">Số Serial</label>
-                                <input
-                                    type="text"
-                                    value={cardSerial}
-                                    onChange={(e) => setCardSerial(e.target.value)}
-                                    placeholder="Nhập số serial"
-                                    className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className={`w-full py-4 rounded-xl font-black text-lg text-black transition transform active:scale-95 mt-4 ${isSubmitting ? 'bg-gray-600 cursor-not-allowed' : 'bg-primary hover:bg-primaryGlow'}`}
-                        >
-                            {isSubmitting ? 'ĐANG GỬI...' : 'NẠP THẺ NGAY'}
-                        </button>
-
-                        <p className="text-xs text-center text-gray-500">
-                            Lưu ý: Chọn sai mệnh giá có thể bị phạt 50%-100% giá trị thẻ.
-                        </p>
-                    </form>
+                {status === 'cancelled' && (
+                    <div className="mb-6 p-4 bg-red-500/20 border border-red-500 rounded-xl text-center text-red-400">
+                        Đã hủy thanh toán.
+                    </div>
                 )}
 
+                <div className="space-y-6">
+                    <div>
+                        <label className="block text-sm font-bold text-gray-400 mb-2">Số tiền (VNĐ)</label>
+                        <input
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(Number(e.target.value))}
+                            className="w-full bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-white text-lg font-bold focus:border-primary focus:outline-none transition"
+                            min="2000"
+                        />
+                        <p className="text-xs text-gray-500 mt-2">Tối thiểu: 2,000 VNĐ</p>
+                    </div>
+
+                    <button
+                        onClick={handleDeposit}
+                        disabled={isSubmitting}
+                        className={`w-full py-4 rounded-xl font-black text-lg text-black transition transform active:scale-95 ${isSubmitting ? 'bg-gray-600 cursor-not-allowed' : 'bg-primary hover:bg-primaryGlow shadow-[0_0_20px_rgba(251,191,36,0.3)]'
+                            }`}
+                    >
+                        {isSubmitting ? 'ĐANG XỬ LÝ...' : 'THANH TOÁN QUA PAYOS'}
+                    </button>
+                </div>
+
                 <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                    <p className="text-xs text-gray-500">Giao dịch được bảo vệ và mã hóa 100%</p>
+                    <p className="text-xs text-gray-500">Cổng thanh toán an toàn qua PayOS</p>
                 </div>
             </div>
         </div>
