@@ -6,7 +6,6 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation'; // Correct import for App Router
 import Button from '@/components/ui/Button';
 import { ShoppingCart, Shield, Truck, Zap, AlertCircle } from 'lucide-react';
-import Image from 'next/image';
 
 // Import useCart
 import { useCart } from '@/context/CartContext';
@@ -55,13 +54,10 @@ export default function ProductDetail({ params }) {
 
                 {/* Image Side */}
                 <div className="relative rounded-xl overflow-hidden bg-surface border border-white/10 aspect-[4/3] flex items-center justify-center p-8 bg-black/50">
-                    <Image
+                    <img
                         src={product.image}
                         alt={product.name}
-                        width={800}
-                        height={600}
                         className="w-full h-full object-contain drop-shadow-2xl"
-                        priority
                     />
                 </div>
 
