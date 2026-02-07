@@ -168,7 +168,7 @@ export default function GachaPage() {
                 <div className="flex justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                    {cases.map((c) => (
+                    {Array.isArray(cases) && cases.map((c) => (
                         <motion.div
                             key={c._id}
                             whileHover={{ y: -5 }}
@@ -180,7 +180,7 @@ export default function GachaPage() {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">{c.name}</h3>
                             <div className="mt-auto pt-4 w-full border-t border-white/5 flex justify-between items-center">
-                                <span className="text-yellow-400 font-bold">{c.price.toLocaleString()} VNĐ</span>
+                                <span className="text-yellow-400 font-bold">{c.price?.toLocaleString() || '0'} VNĐ</span>
                                 <Button size="sm" className="bg-white/10 hover:bg-white/20">Mở Ngay</Button>
                             </div>
                         </motion.div>
@@ -294,7 +294,7 @@ export default function GachaPage() {
                                         disabled={user.balance < selectedCase.price || spinning}
                                         className="w-full py-4 text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500"
                                     >
-                                        {spinning ? 'Đang quay...' : `Quay (${selectedCase.price.toLocaleString()} VNĐ)`}
+                                        {spinning ? 'Đang quay...' : `Quay (${selectedCase.price?.toLocaleString() || '0'} VNĐ)`}
                                     </Button>
                                 ) : (
                                     <div className="flex gap-3">
