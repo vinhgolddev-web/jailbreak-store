@@ -24,10 +24,10 @@ export default function Navbar() {
 
     const navLinks = [
         { href: '/', label: 'HOME' },
-        { href: '/shop', label: 'SHOP' }, // Changed from /products to /shop to match user request context usually
+        { href: '/shop', label: 'SHOP' },
         { href: '/gacha', label: 'GACHA' },
-        { href: '/sell-cars', label: 'SELL' }, // Changed to /sell-cars
-        { href: '/orders', label: 'ORDERS' },
+        { href: '/sell-cars', label: 'SELL' },
+        { href: '/orders', label: 'ORDERS' }, // Check if this exists?
     ];
 
     const isActive = (path) => pathname === path;
@@ -89,7 +89,7 @@ export default function Navbar() {
                         {/* Auth */}
                         {user ? (
                             <div className="hidden md:flex items-center gap-4 pl-4 border-l border-white/10">
-                                <Link href="/profile" className="flex items-center gap-3 group">
+                                <Link href="/dashboard" className="flex items-center gap-3 group">
                                     <div className="text-right">
                                         <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Welcome</p>
                                         <p className="text-sm font-bold text-white group-hover:text-primary transition-colors">{user.username}</p>
@@ -107,7 +107,7 @@ export default function Navbar() {
                                 </button>
                             </div>
                         ) : (
-                            <Link href="/auth">
+                            <Link href="/login">
                                 <button className="hidden md:block px-6 py-2 bg-primary/10 border border-primary/50 text-primary font-bold uppercase tracking-wider hover:bg-primary hover:text-black transition-all shadow-neon-blue skew-x-[-10deg]">
                                     LOGIN
                                 </button>
@@ -147,7 +147,7 @@ export default function Navbar() {
                         ))}
 
                         {!user && (
-                            <Link href="/auth" onClick={() => setIsMenuOpen(false)}>
+                            <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                                 <button className="w-full py-4 bg-primary text-black font-black uppercase tracking-widest shadow-neon-blue">
                                     Login / Register
                                 </button>
@@ -156,7 +156,7 @@ export default function Navbar() {
 
                         {user && (
                             <div className="flex border-t border-white/10 pt-4 gap-2">
-                                <Link href="/profile" onClick={() => setIsMenuOpen(false)} className="flex-1 py-3 bg-white/5 text-center font-bold text-white hover:bg-white/10">
+                                <Link href="/dashboard" onClick={() => setIsMenuOpen(false)} className="flex-1 py-3 bg-white/5 text-center font-bold text-white hover:bg-white/10">
                                     Profile ({user.username})
                                 </Link>
                                 <button onClick={() => { logout(); setIsMenuOpen(false); }} className="px-4 py-3 bg-red-500/10 text-red-500 font-bold hover:bg-red-500/20">

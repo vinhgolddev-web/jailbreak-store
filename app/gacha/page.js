@@ -209,7 +209,7 @@ export default function GachaPage() {
     };
 
     return (
-        <div className="min-h-screen py-10 px-4 md:px-8 bg-[url('/grid-bg.png')] bg-fixed bg-cover">
+        <div className="min-h-screen py-10 px-4 md:px-8 bg-[#050b14] bg-grid-pattern bg-fixed">
             <div className="max-w-7xl mx-auto space-y-12">
 
                 {/* Header */}
@@ -265,7 +265,7 @@ export default function GachaPage() {
                                     onClick={() => setSelectedCase(gachaCase)}
                                     className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-blue-400 hover:to-primary text-black font-black uppercase tracking-widest py-4 text-lg shadow-neon-blue skew-x-[-10deg]"
                                 >
-                                    Mở Ngay • {gachaCase.price.toLocaleString()} VNĐ
+                                    Mở Ngay • {gachaCase.price?.toLocaleString()} VNĐ
                                 </Button>
                             </div>
                         </motion.div>
@@ -278,8 +278,8 @@ export default function GachaPage() {
                         <button
                             onClick={() => setHistoryTab('global')}
                             className={`flex-1 py-4 text-center font-display font-bold uppercase tracking-wider transition-colors ${historyTab === 'global'
-                                    ? 'bg-primary/10 text-primary border-b-2 border-primary shadow-[inset_0_-10px_20px_rgba(0,234,255,0.1)]'
-                                    : 'text-gray-500 hover:text-white hover:bg-white/5'
+                                ? 'bg-primary/10 text-primary border-b-2 border-primary shadow-[inset_0_-10px_20px_rgba(0,234,255,0.1)]'
+                                : 'text-gray-500 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             <Globe className="inline-block w-4 h-4 mr-2 mb-1" />
@@ -288,8 +288,8 @@ export default function GachaPage() {
                         <button
                             onClick={() => setHistoryTab('personal')}
                             className={`flex-1 py-4 text-center font-display font-bold uppercase tracking-wider transition-colors ${historyTab === 'personal'
-                                    ? 'bg-primary/10 text-primary border-b-2 border-primary shadow-[inset_0_-10px_20px_rgba(0,234,255,0.1)]'
-                                    : 'text-gray-500 hover:text-white hover:bg-white/5'
+                                ? 'bg-primary/10 text-primary border-b-2 border-primary shadow-[inset_0_-10px_20px_rgba(0,234,255,0.1)]'
+                                : 'text-gray-500 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             <User className="inline-block w-4 h-4 mr-2 mb-1" />
