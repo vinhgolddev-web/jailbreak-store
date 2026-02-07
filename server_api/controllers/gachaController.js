@@ -62,12 +62,28 @@ exports.rollGacha = async (req, res) => {
 
         if (wonItem.rarity === 'Secret') {
             isSecret = true;
-            // Pick a random secret reward from DB
-            const secretCount = await SecretItem.countDocuments({ active: true });
 
-            if (secretCount > 0) {
-                const randomInfo = Math.floor(Math.random() * secretCount);
-                const secretReward = await SecretItem.findOne({ active: true }).skip(randomInfo);
+            // Fetch all active secret items to calculate weights
+            const secretItems = await SecretItem.find({ active: true });
+
+            if (secretItems.length > 0) {
+                // Weighted Random Logic
+                const totalSecretWeight = secretItems.reduce((sum, item) => sum + (item.probability || 0), 0);
+                let randomSecret = Math.random() * totalSecretWeight;
+
+                let secretReward = null;
+                for (const item of secretItems) {
+                    if (randomSecret < (item.probability || 0)) {
+                        secretReward = item;
+                        break;
+                    }
+                    randomSecret -= (item.probability || 0);
+                }
+
+                // Fallback (Precision issues)
+                if (!secretReward) {
+                    secretReward = secretItems[secretItems.length - 1];
+                }
 
                 // We return both:
                 // 1. A placeholder for the spinner (wonItem - usually the question mark or Secret visual)
