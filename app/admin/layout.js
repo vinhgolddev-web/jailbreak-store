@@ -4,7 +4,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { LayoutDashboard, Users, ShoppingBag, Package, LogOut, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingBag, Package, LogOut, ArrowLeft, Search } from 'lucide-react';
 
 export default function AdminLayout({ children }) {
     const { user, loading, logout } = useAuth();
