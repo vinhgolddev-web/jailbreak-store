@@ -80,7 +80,7 @@ export default function GachaPage() {
         const baitItems = currCase.items.filter(i => ['Godly', 'Secret', 'HyperChrome'].includes(i.rarity));
         const baitItem = baitItems.length > 0 ? baitItems[Math.floor(Math.random() * baitItems.length)] : null;
 
-        const triggerNearMiss = Math.random() < 0.05; // 5% chance (1 in 20)
+        const triggerNearMiss = Math.random() < 0.01; // 1% chance (1 in 100)
 
         for (let i = 0; i < totalItems; i++) {
             if (i === winnerIndex) {
