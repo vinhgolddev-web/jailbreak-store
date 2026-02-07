@@ -12,7 +12,7 @@
 
 @layer utilities {
   .glass {
-    @apply bg-[#181A20]/80 backdrop-blur-md border border-white/5;
+    @apply bg-surface/80 backdrop-blur-md border border-white/5;
   }
 
   .card-hover {

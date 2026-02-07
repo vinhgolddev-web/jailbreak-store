@@ -28,7 +28,7 @@ export default function Footer() {
                         <ul className="space-y-3 text-sm text-gray-400">
                             <li><FooterLink href="/shop">Cửa Hàng</FooterLink></li>
                             <li><FooterLink href="/deposit">Nạp Tiền</FooterLink></li>
-                            <li><FooterLink href="#">Điều Khoản Dịch Vụ</FooterLink></li>
+                            <li><FooterLink href="#" onClick={(e) => e.preventDefault()}>Điều Khoản Dịch Vụ</FooterLink></li>
                         </ul>
                     </div>
 
@@ -83,8 +83,8 @@ const SocialLink = ({ href, icon, label }) => (
     </a>
 );
 
-const FooterLink = ({ href, children }) => (
-    <Link href={href} className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200">
+const FooterLink = ({ href, children, ...props }) => (
+    <Link href={href} className="hover:text-primary transition-colors hover:translate-x-1 inline-block duration-200" {...props}>
         {children}
     </Link>
 );

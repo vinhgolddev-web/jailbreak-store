@@ -62,6 +62,14 @@ export default function Dashboard() {
                         <span className="text-green-400 font-bold text-xl group-hover:scale-110 transition-transform">+ Nạp Thêm Tiền</span>
                     </div>
                 </Link>
+
+                {/* Admin Link */}
+                {user.role === 'admin' && (
+                    <Link href="/admin" className="md:col-span-3 bg-red-900/20 border border-red-500/30 rounded-2xl p-4 flex items-center justify-center gap-2 hover:bg-red-900/40 transition group">
+                        <Crown className="text-red-500 group-hover:animate-spin" />
+                        <span className="text-red-400 font-bold uppercase tracking-widest">Truy cập Admin Panel</span>
+                    </Link>
+                )}
             </div>
 
             {/* Recent Orders */}

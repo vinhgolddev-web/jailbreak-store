@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const generateUniqueCode = async (Model, fieldName = 'code', length = 8) => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let isUnique = false;
@@ -9,8 +11,9 @@ const generateUniqueCode = async (Model, fieldName = 'code', length = 8) => {
 
     while (!isUnique && attempts < maxAttempts) {
         code = '';
+        // Use crypto for better randomness
         for (let i = 0; i < length; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
+            code += chars.charAt(crypto.randomInt(0, chars.length));
         }
 
         // Check if code exists in DB

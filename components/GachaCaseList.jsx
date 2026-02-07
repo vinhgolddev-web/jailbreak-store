@@ -14,7 +14,13 @@ const GachaCaseList = memo(({ cases, onSelect }) => {
                 >
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="relative w-full aspect-square mb-4">
-                        <Image src={c.image} alt={c.name} fill className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500" />
+                        <Image
+                            src={c.image}
+                            alt={c.name}
+                            fill
+                            className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500"
+                            sizes="(max-width: 768px) 50vw, 25vw"
+                        />
                     </div>
                     <h3 className="text-xl font-bold text-center mb-2 group-hover:text-primary transition-colors">{c.name}</h3>
                     <div className="text-center">

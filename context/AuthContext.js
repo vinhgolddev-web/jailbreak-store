@@ -12,30 +12,39 @@ export const AuthProvider = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
+        const initAuth = async () => {
+            const token = localStorage.getItem('token');
+            const storedUser = localStorage.getItem('user');
 
-        if (token) {
-            if (storedUser) {
-                // Optimistic load
-                setUser(JSON.parse(storedUser));
+            if (!token) {
+                setLoading(false);
+                return;
             }
-            // Background refresh to ensure validity and sync balance
-            api.get('/auth/me')
-                .then(res => {
-                    setUser(res.data);
-                    localStorage.setItem('user', JSON.stringify(res.data));
-                })
-                .catch(() => {
-                    // Token invalid or expired
-                    localStorage.removeItem('token');
+
+            if (storedUser) {
+                try {
+                    setUser(JSON.parse(storedUser));
+                } catch (e) {
+                    console.error('Failed to parse stored user', e);
                     localStorage.removeItem('user');
-                    setUser(null);
-                })
-                .finally(() => setLoading(false));
-        } else {
-            setLoading(false);
-        }
+                }
+            }
+
+            try {
+                const res = await api.get('/auth/me');
+                setUser(res.data);
+                localStorage.setItem('user', JSON.stringify(res.data));
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        initAuth();
     }, []);
 
     const login = async (email, password) => {

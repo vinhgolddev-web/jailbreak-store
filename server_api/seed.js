@@ -17,6 +17,14 @@ const connectDB = async () => {
 };
 
 const importData = async () => {
+    // Safety Check for Production
+    if (process.env.NODE_ENV === 'production' && !process.argv.includes('--force')) {
+        console.error('🚨 DANGER: You are attempting to run SEED in PRODUCTION.');
+        console.error('This will WIPE all Gacha Cases and Secret Items.');
+        console.error('To proceed, run: node server_api/seed.js --force');
+        process.exit(1);
+    }
+
     await connectDB();
 
     try {

@@ -16,6 +16,12 @@ exports.createOrder = async (req, res) => {
             return res.status(400).json({ message: 'Giỏ hàng trống hoặc không hợp lệ' });
         }
 
+        // Validate ObjectIDs
+        const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+        if (orderItems.some(i => !isValidObjectId(i.productId))) {
+            return res.status(400).json({ message: 'ID sản phẩm không hợp lệ' });
+        }
+
         // 1. Fetch products
         const productIds = orderItems.map(i => i.productId);
         const products = await Product.find({ _id: { $in: productIds } }).session(session);

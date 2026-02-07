@@ -1,5 +1,7 @@
 const Product = require('../models/Product');
 
+const escapeRegex = require('../utils/escapeRegex');
+
 // Get all products (with optional search)
 exports.getProducts = async (req, res) => {
     try {
@@ -7,7 +9,8 @@ exports.getProducts = async (req, res) => {
         let query = {};
 
         if (search) {
-            query.name = { $regex: search, $options: 'i' }; // Case-insensitive partial match
+            const safeSearch = escapeRegex(search);
+            query.name = { $regex: safeSearch, $options: 'i' }; // Safe case-insensitive match
         }
 
         const products = await Product.find(query).lean();

@@ -6,12 +6,13 @@ exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
-        if (password.length < 6 || password.length > 100) {
-            return res.status(400).json({ message: 'Password must be between 6 and 100 characters' });
+        if (password.length < 8 || password.length > 100) {
+            return res.status(400).json({ message: 'Password must be at least 8 characters' });
         }
 
-        if (username.length < 3 || username.length > 30) {
-            return res.status(400).json({ message: 'Username must be between 3 and 30 characters' });
+        const usernameRegex = /^[a-zA-Z0-9_]+$/;
+        if (username.length < 3 || username.length > 30 || !usernameRegex.test(username)) {
+            return res.status(400).json({ message: 'Username must be 3-30 chars and alphanumeric (letters, numbers, underscore)' });
         }
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

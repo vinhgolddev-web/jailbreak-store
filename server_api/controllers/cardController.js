@@ -168,8 +168,8 @@ exports.handleCallback = async (req, res) => {
                     { new: true }
                 );
 
-                // Update final balance log
-                updatedTx.balanceAfter = user.balance;
+                // Update final balance log with REAL user balance
+                updatedTx.balanceAfter = user.balance; // Now accurate
                 await updatedTx.save();
             }
 

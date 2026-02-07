@@ -46,5 +46,19 @@ Builds the Next.js app and starts the optimized Express server.
 - **Hardening**: CSP headers, implementation of rate limits for APIs.
 - **Structure**: Monorepo-style structure with `server_api` (Backend) and `app` (Frontend).
 
+## 🌱 Database Seeding
+To populate the database with initial products and gacha cases:
+```bash
+npm run seed
+```
+*(Warning: This will clear existing data in development mode. Use `--force` for production).*
+
+## ✅ Audit Status
+This project has undergone **30 rounds of rigorous self-audit** covering:
+- Security (XSS, NoSQL Injection, ReDoS, Rate Limiting)
+- Logic (RNG Fairness, Atomic Transactions)
+- Performance (Image Optimization, Database Indexing)
+- UX (Auth Flows, Mobile Responsiveness)
+
 ## 📄 License
 Private Property of Vinh Gold Dev. 

@@ -12,7 +12,8 @@ const ProductSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Index for Shop Filtering
-ProductSchema.index({ category: 1 });
+ProductSchema.index({ category: 1, price: 1 }); // For filtering by category and sorting by price
 ProductSchema.index({ name: 1 });
+ProductSchema.index({ rarity: 1 }); // For filtering by rarity
 
 module.exports = mongoose.model('Product', ProductSchema);

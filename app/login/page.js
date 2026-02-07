@@ -18,13 +18,19 @@ export default function Login() {
         }
     }, [user, router]);
 
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
         try {
             await login(email, password);
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
+            setLoading(false);
         }
+        // Note: loading stays true if success because we redirect
     };
 
     return (
@@ -40,26 +46,31 @@ export default function Login() {
                 <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
                     <div>
                         <input
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
                             placeholder="Email"
                             type="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
+                            disabled={loading}
                         />
                     </div>
                     <div>
                         <input
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
                             placeholder="Mật khẩu"
                             type="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
+                            disabled={loading}
                         />
                     </div>
-                    <button className="w-full bg-white text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-transform active:scale-95">
-                        Đăng Nhập
+                    <button
+                        disabled={loading}
+                        className="w-full bg-white text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-transform active:scale-95 disabled:bg-gray-500 disabled:cursor-not-allowed"
+                    >
+                        {loading ? 'Đang xử lý...' : 'Đăng Nhập'}
                     </button>
                 </form>
 

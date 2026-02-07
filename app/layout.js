@@ -61,7 +61,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body className={font.className}>
         <AuthProvider>
           <ToastProvider>
@@ -72,8 +72,7 @@ export default function RootLayout({ children }) {
                 <LiveSalesNotification />
                 <div id="cart-drawer-root" /> {/* Portal target if needed */}
                 <main className="flex-grow pt-20 relative">
-                  {/* Global Ambient Glow */}
-                  {/* Global Ambient Glow - REMOVED */}
+                  {/* Global Ambient Glow - Removed for performance/cleanliness */}
 
                   {children}
                 </main>

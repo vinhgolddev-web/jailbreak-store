@@ -19,12 +19,22 @@ export default function Register() {
         }
     }, [user, router]);
 
+    const [loading, setLoading] = useState(false);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (password.length < 8) {
+            setError('Mật khẩu phải có ít nhất 8 ký tự');
+            return;
+        }
+        setLoading(true);
+        setError('');
+
         try {
             await registerUser(username, email, password);
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
+            setLoading(false);
         }
     };
 
@@ -39,36 +49,43 @@ export default function Register() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <input
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
                             placeholder="Tên đăng nhập"
                             type="text"
                             value={username}
                             onChange={e => setUsername(e.target.value)}
                             required
+                            disabled={loading}
                         />
                     </div>
                     <div>
                         <input
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
                             placeholder="Email"
                             type="email"
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                             required
+                            disabled={loading}
                         />
                     </div>
                     <div>
                         <input
-                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                            placeholder="Mật khẩu"
+                            className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all disabled:opacity-50"
+                            placeholder="Mật khẩu (Tối thiểu 8 ký tự)"
                             type="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                             required
+                            disabled={loading}
+                            minLength={8}
                         />
                     </div>
-                    <button className="w-full bg-primary text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-transform active:scale-95 shadow-[0_0_20px_rgba(251,191,36,0.3)]">
-                        Đăng Ký
+                    <button
+                        disabled={loading}
+                        className="w-full bg-primary text-black font-bold py-4 rounded-xl hover:scale-[1.02] transition-transform active:scale-95 shadow-[0_0_20px_rgba(251,191,36,0.3)] disabled:bg-gray-600 disabled:cursor-not-allowed"
+                    >
+                        {loading ? 'Đang tạo tài khoản...' : 'Đăng Ký'}
                     </button>
                 </form>
 

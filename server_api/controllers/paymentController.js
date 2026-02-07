@@ -36,7 +36,8 @@ exports.createPaymentLink = async (req, res) => {
             balanceAfter: user.balance, // Not updated yet
             description: `PayOS Deposit Pending #${orderCode}`,
             method: 'payos',
-            orderCode: orderCode
+            orderCode: String(orderCode), // Convert to String
+            status: 'pending'
         });
 
         res.json({ checkoutUrl: paymentLinkResponse.checkoutUrl, orderCode: orderCode });
@@ -52,42 +53,47 @@ exports.handleWebhook = async (req, res) => {
     try {
         const webhookData = payos.verifyPaymentWebhookData(req.body);
 
-        if (webhookData.desc === 'success' || webhookData.code == '00') {
+        if (webhookData.code == '00') {
             const { orderCode, amount } = webhookData;
 
-            // Atomic Update to prevent race condition with verifyPayment
+            // Atomic status check & update
+            // Only proceed if status is 'pending'
             const transaction = await Transaction.findOneAndUpdate(
                 {
-                    orderCode: orderCode,
-                    type: 'deposit',
-                    description: { $not: /Success/ } // Only proceed if NOT already success
+                    orderCode: orderCode, // Ensure type match (String/Number)
+                    status: 'pending'     // Idempotency Key
                 },
                 {
-                    $set: { description: `PayOS Deposit Success #${orderCode}` }
+                    $set: {
+                        status: 'completed',
+                        description: `PayOS Deposit Success #${orderCode}`,
+                        amount: amount // Trust webhook amount or verified amount
+                    }
                 },
                 { new: true }
             );
 
             if (!transaction) {
-                return res.json({ message: 'Transaction not found or already processed' });
+                // If not found, it might be already completed or invalid.
+                // We return 200 to acknowledge webhook (stop retries)
+                return res.json({ message: 'Transaction processed or invalid' });
             }
 
-            // Update User Balance
-            // Calculate new balance based on current + amount
+            // Credit User
             const user = await User.findByIdAndUpdate(
                 transaction.userId,
                 { $inc: { balance: amount } },
                 { new: true }
             );
 
-            // Backfill balance after (Optional, for record)
-            if (user) {
-                transaction.balanceAfter = user.balance;
-                await transaction.save();
-            }
+            // Update log
+            transaction.balanceAfter = user.balance;
+            await transaction.save();
+
+            return res.json({ message: 'Webhook processed success' });
         }
 
-        res.json({ message: 'Webhook received' });
+        res.json({ message: 'Webhook received (Ignored status)' });
 
     } catch (error) {
         console.error('Webhook Error:', error);

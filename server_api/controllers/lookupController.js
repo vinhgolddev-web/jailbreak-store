@@ -17,9 +17,23 @@ exports.searchCode = async (req, res) => {
             .lean();
 
         if (gachaResult) {
+            const sanitizedGacha = {
+                _id: gachaResult._id,
+                itemName: gachaResult.itemName,
+                itemImage: gachaResult.itemImage,
+                rarity: gachaResult.rarity,
+                status: gachaResult.status,
+                code: gachaResult.code,
+                user: {
+                    username: gachaResult.userId?.username,
+                    email: gachaResult.userId?.email ? gachaResult.userId.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : '***'
+                },
+                createdAt: gachaResult.createdAt
+            };
+
             return res.json({
                 type: 'GACHA',
-                data: gachaResult,
+                data: sanitizedGacha,
                 found: true
             });
         }
@@ -39,9 +53,25 @@ exports.searchCode = async (req, res) => {
         }
 
         if (orderResult) {
+            // Sanitize Data
+            const sanitizedOrder = {
+                _id: orderResult._id,
+                status: orderResult.status,
+                items: orderResult.items.map(i => ({
+                    productName: i.productId?.name,
+                    image: i.productId?.image,
+                    rarity: i.productId?.rarity
+                })),
+                user: {
+                    username: orderResult.userId?.username,
+                    email: orderResult.userId?.email ? orderResult.userId.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : '***' // Mask email
+                },
+                createdAt: orderResult.createdAt
+            };
+
             return res.json({
                 type: 'ORDER',
-                data: orderResult,
+                data: sanitizedOrder,
                 found: true
             });
         }

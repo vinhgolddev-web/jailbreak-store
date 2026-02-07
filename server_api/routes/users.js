@@ -9,4 +9,7 @@ router.get('/', isAdmin, userController.getAllUsers);
 // Public Leaderboard
 router.get('/leaderboard', userController.getLeaderboard);
 
+// Delete User (Admin)
+router.delete('/:id', isAdmin, userController.deleteUser);
+
 module.exports = router;

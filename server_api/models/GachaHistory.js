@@ -14,8 +14,8 @@ const GachaHistorySchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-GachaHistorySchema.index({ userId: 1 });
-GachaHistorySchema.index({ createdAt: -1 }); // Changed from rolledAt to createdAt to match schema
+GachaHistorySchema.index({ userId: 1, createdAt: -1 }); // Compound index for user history
+GachaHistorySchema.index({ rarity: 1 }); // For stats or rarity filtering
 GachaHistorySchema.index({ code: 1 }, { unique: true }); // For Code Lookup Tool & Uniqueness
 
 module.exports = mongoose.model('GachaHistory', GachaHistorySchema);

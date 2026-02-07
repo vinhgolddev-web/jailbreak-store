@@ -43,6 +43,8 @@ exports.rollGacha = async (req, res) => {
             return res.status(400).json({ message: 'Số dư không đủ' });
         }
 
+        const calculateRoll = require('../utils/calculateRoll');
+
         // Roll logic
         const items = gachaCase.items;
         if (!items || items.length === 0) {
@@ -50,20 +52,7 @@ exports.rollGacha = async (req, res) => {
             return res.status(400).json({ message: 'Case is empty (Contact Admin)' });
         }
 
-        const totalWeight = items.reduce((sum, item) => sum + item.probability, 0);
-        let random = Math.random() * totalWeight;
-
-        let wonItem = null;
-        for (const item of items) {
-            if (random < item.probability) {
-                wonItem = item;
-                break;
-            }
-            random -= item.probability;
-        }
-
-        if (!wonItem) wonItem = items[items.length - 1]; // Fallback
-
+        let wonItem = calculateRoll(items);
         wonItem = wonItem.toObject ? wonItem.toObject() : wonItem;
 
         // Secret Rarity Logic
@@ -76,21 +65,8 @@ exports.rollGacha = async (req, res) => {
             const secretItems = await SecretItem.find({ active: true }).session(session);
 
             if (secretItems.length > 0) {
-                // Weighted logic for secrets
-                const totalSecretWeight = secretItems.reduce((sum, item) => sum + (item.probability || 0), 0);
-                let randomSecret = Math.random() * totalSecretWeight;
-                let secretReward = null;
-
-                for (const item of secretItems) {
-                    if (randomSecret < (item.probability || 0)) {
-                        secretReward = item;
-                        break;
-                    }
-                    randomSecret -= (item.probability || 0);
-                }
-
-                if (!secretReward) secretReward = secretItems[secretItems.length - 1];
-
+                // Weighted logic for secrets using Secure RNG
+                const secretReward = calculateRoll(secretItems);
                 const secretRewardObj = secretReward.toObject ? secretReward.toObject() : secretReward;
 
                 finalReward = {

@@ -8,6 +8,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
 import Image from 'next/image';
+import { formatCurrency } from '@/lib/utils';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
@@ -90,9 +91,14 @@ export default function Navbar() {
                             {/* Auth */}
                             {user ? (
                                 <div className="hidden md:flex items-center gap-3 pl-3 border-l border-white/10">
+                                    import {formatCurrency} from '@/lib/utils'; // Add to imports (I will handle import separately or merging relies on snippet context)
+
+                                    // Inside component
                                     <div className="text-right hidden lg:block">
                                         <div className="text-xs text-gray-400">Balance</div>
-                                        <div className="text-sm font-bold text-primary">{(user.balance || 0).toLocaleString()} VNĐ</div>
+                                        <div className="text-sm font-bold text-primary truncate max-w-[120px]" title={formatCurrency(user.balance)}>
+                                            {formatCurrency(user.balance)}
+                                        </div>
                                     </div>
 
                                     <div className="relative group">

@@ -46,90 +46,82 @@ server.use(helmet({
     },
 }));
 
+// Add Permissions-Policy Header
+server.use((req, res, next) => {
+    res.setHeader('Permissions-Policy', 'geolocation=(self), microphone=(), camera=()');
+    next();
+});
+
+// Custom NoSQL Injection Sanitizer
+const mongoSanitize = (v) => {
+    if (v instanceof Object) {
+        for (const key in v) {
+            if (/^\$/.test(key)) {
+                delete v[key];
+            } else {
+                mongoSanitize(v[key]);
+            }
+        }
+    }
+    return v;
+};
+
+server.use((req, res, next) => {
+    req.body = mongoSanitize(req.body);
+    req.query = mongoSanitize(req.query);
+    req.params = mongoSanitize(req.params);
+    next();
+});
+
 server.use(morgan('dev'));
 
-// Rate Limiting
-// 1. Global API Limiter
-const apiLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 200,
+// Rate Limiters
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
     standardHeaders: true,
     legacyHeaders: false,
-    message: { message: 'Too many requests, please try again later.' },
-    validate: { xForwardedForHeader: false }
+    message: { message: "Too many requests from this IP, please try again later." }
 });
 
-// 2. Strict Auth Limiter (Brute Force Protection)
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 10, // Max 10 attempts per 15 min
-    message: { message: 'Too many login attempts. Please try again in 15 minutes.' }
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5, // Limit each IP to 5 requests per hour (Strict for Lookup)
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { message: "Too many lookup attempts, please try again in an hour." }
 });
 
-server.use('/api', apiLimiter);
-server.use('/api/auth/login', authLimiter); // Apply stricter limit to login
-server.use('/api/auth/register', authLimiter);
+// Apply Global Limiter to API routes (excluding specific ones if needed)
+server.use('/api', globalLimiter);
 
-// --- API Routes ---
+// Routes
 server.use('/api/auth', require('./server_api/routes/auth'));
-server.use('/api/products', require('./server_api/routes/products'));
-server.use('/api/orders', require('./server_api/routes/orders'));
 server.use('/api/users', require('./server_api/routes/users'));
+server.use('/api/products', require('./server_api/routes/products'));
 server.use('/api/cart', require('./server_api/routes/cart'));
-server.use('/api/wallet', require('./server_api/routes/wallet'));
+server.use('/api/orders', require('./server_api/routes/orders'));
 server.use('/api/payment', require('./server_api/routes/payment'));
-server.use('/api/card', require('./server_api/routes/card')); // TSR Card Integration
+server.use('/api/wallet', require('./server_api/routes/wallet'));
+server.use('/api/card', require('./server_api/routes/card'));
 server.use('/api/gacha', require('./server_api/routes/gacha')); // Gacha System
 server.use('/api/admin', require('./server_api/routes/admin')); // Admin Dashboard
-server.use('/api/lookup', require('./server_api/routes/lookup')); // Code Lookup Tool
+server.use('/api/lookup', authLimiter, require('./server_api/routes/lookup')); // Code Lookup Tool (Strict Limit)
 
-// Database Connection
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 5000,
-            socketTimeoutMS: 45000,
-        });
-        console.log('MongoDB Connected');
-    } catch (err) {
-        console.error('[DB ERROR]', err.message);
-        process.exit(1);
-    }
-};
-
-mongoose.connection.on('error', err => console.error('[MONGOOSE ERROR]', err));
-mongoose.connection.on('disconnected', () => console.warn('[MONGOOSE] Disconnected'));
-
-// Check Critical Environment Variables
-const checkEnv = () => {
-    const required = ['MONGO_URI', 'JWT_SECRET', 'NEXT_PUBLIC_API_URL'];
-    const missing = required.filter(key => !process.env[key]);
-    if (missing.length > 0) {
-        console.error('[FATAL] Missing required Environment Variables:', missing.join(', '));
-        process.exit(1);
-    }
-};
-
-checkEnv();
-
-// Connect first, then start server
-connectDB().then(() => {
-    app.prepare().then(() => {
-        // Handle everything else with Next.js (Express 5 fix)
-        server.all(/(.*)/, (req, res) => handle(req, res));
-
-        server.listen(PORT, (err) => {
-            if (err) throw err;
-            console.log(`> Ready on http://localhost:${PORT}`);
-        });
-    });
-});
+// ...
 
 // Global Error Handler
 server.use((err, req, res, next) => {
     console.error('[SERVER ERROR] Stack:', err.stack);
     console.error('[SERVER ERROR] Message:', err.message);
-    res.status(500).json({ message: 'Internal Server Error', error: err.message });
+
+    // Hide stack trace in response
+    const response = {
+        message: 'Internal Server Error',
+        error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+    };
+
+    res.status(500).json(response);
 });
 
 // Process-level Error Handling (Safety Net)

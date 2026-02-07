@@ -26,11 +26,14 @@ exports.syncCart = async (req, res) => {
     try {
         const { cart } = req.body; // Expecting array of { _id, quantity }
 
-        // Transform frontend cart to schema format
-        const dbCart = cart.map(item => ({
-            productId: item._id,
-            quantity: item.quantity
-        }));
+        // Transform frontend cart to schema format & Validate
+        const mongoose = require('mongoose');
+        const dbCart = cart
+            .filter(item => item && item._id && mongoose.Types.ObjectId.isValid(item._id) && Number.isInteger(item.quantity) && item.quantity > 0)
+            .map(item => ({
+                productId: item._id,
+                quantity: Math.min(item.quantity, 50) // Limit max quantity per item to 50
+            }));
 
         // Update user
         await User.findByIdAndUpdate(req.user.id, { cart: dbCart });
