@@ -116,9 +116,15 @@ export default function GachaPage() {
             const res = await api.post('/gacha/roll', { caseId: selectedCase._id });
             const { wonItem: realItem, visualItem, newBalance } = res.data;
 
+            console.log('🎰 GACHA DEBUG:');
+            console.log('Real Item (what you actually won):', realItem);
+            console.log('Visual Item (placeholder for secret):', visualItem);
+
             // Use realItem for spinner so what users see is what they get (WYSIWYG)
             // This prevents confusion if the "Secret Placeholder" looks like a different item (e.g. Volt)
             const rollSequence = generateRollItems(selectedCase, realItem);
+            console.log('Winner Item in Sequence (index 45):', rollSequence[45]);
+
             setRollItems(rollSequence);
             setSpinKey(prev => prev + 1); // Force remount to reset animation perfectly
             refreshUser(); // Update balance immediately in UI
