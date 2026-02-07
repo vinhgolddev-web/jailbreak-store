@@ -98,9 +98,7 @@ exports.createOrder = async (req, res) => {
         // Commit Transaction (Success)
         await session.commitTransaction();
 
-        // 7. Send Email (Async, outside transaction)
-        const { sendOrderNotification } = require('../utils/mailer');
-        sendOrderNotification(order).catch(err => console.error("Email failed:", err));
+
 
         res.status(201).json({ message: 'Purchase successful', order });
 
