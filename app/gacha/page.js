@@ -57,8 +57,14 @@ export default function GachaPage() {
             if (i === winnerIndex) {
                 items.push({ ...winner, id: `winner-${i}` });
             } else {
-                // Random random item from case
-                const randomItem = currCase.items[Math.floor(Math.random() * currCase.items.length)];
+                // Random filler item from case
+                // FILTER OUT SECRET ITEMS from fillers to avoid "Trolling" the user
+                const fillerItems = currCase.items.filter(item => item.rarity !== 'Secret');
+
+                // Fallback if case ONLY has secret items (unlikely)
+                const pool = fillerItems.length > 0 ? fillerItems : currCase.items;
+
+                const randomItem = pool[Math.floor(Math.random() * pool.length)];
                 items.push({ ...randomItem, id: `random-${i}-${Math.random()}` });
             }
         }
