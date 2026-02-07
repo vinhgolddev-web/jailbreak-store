@@ -256,9 +256,18 @@ export default function GachaPage() {
                                         className="text-center mb-4"
                                     >
                                         <p className="text-gray-400 text-sm uppercase tracking-widest">Bạn đã nhận được</p>
-                                        <p className={`text-2xl font-bold ${getRarityTextColor(spinResult.rarity)} drop-shadow-md`}>
+                                        <p className={`text-2xl font-bold ${getRarityTextColor(spinResult.rarity)} drop-shadow-md mb-2`}>
                                             {spinResult.name}
                                         </p>
+                                        {spinResult.secretCode && (
+                                            <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mt-4 animate-pulse">
+                                                <p className="text-red-400 text-xs font-bold uppercase mb-1">Mã Bí Mật Của Bạn</p>
+                                                <p className="text-xl font-mono text-white font-black tracking-wider select-all">
+                                                    {spinResult.secretCode}
+                                                </p>
+                                                <p className="text-gray-500 text-[10px] mt-1">Chụp màn hình lại để làm bằng chứng!</p>
+                                            </div>
+                                        )}
                                     </motion.div>
                                 )}
                             </AnimatePresence>

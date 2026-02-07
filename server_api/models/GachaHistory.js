@@ -8,6 +8,7 @@ const GachaHistorySchema = new mongoose.Schema({
     itemImage: { type: String, required: true },
     rarity: { type: String, required: true },
     isSecret: { type: Boolean, default: false },
+    secretCode: { type: String, default: null }, // Unique code for secret items
     pricePaid: { type: Number, required: true },
     createdAt: { type: Date, default: Date.now }
 });

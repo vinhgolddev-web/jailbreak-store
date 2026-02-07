@@ -62,11 +62,19 @@ exports.rollGacha = async (req, res) => {
                 const randomInfo = Math.floor(Math.random() * secretCount);
                 const secretReward = await SecretItem.findOne({ active: true }).skip(randomInfo);
 
+                // Generate Secret Code (e.g., SECRET-1234-5678)
+                const codeSuffix = Math.random().toString(36).substring(2, 10).toUpperCase();
+                const secretCode = `SECRET-${codeSuffix}`;
+
                 // We return both:
                 // 1. A placeholder for the spinner (wonItem - usually the question mark or Secret visual)
                 // 2. The "Actual" reward (finalReward - e.g. Torpedo)
                 // We merge them so frontend has all info
-                finalReward = { ...secretReward.toObject(), originalSecret: wonItem };
+                finalReward = {
+                    ...secretReward.toObject(),
+                    originalSecret: wonItem,
+                    secretCode: secretCode // Attach code to reward
+                };
             } else {
                 // Fallback if no secret items in DB
                 finalReward = wonItem;
@@ -82,6 +90,7 @@ exports.rollGacha = async (req, res) => {
             itemImage: finalReward.image,
             rarity: finalReward.rarity,
             isSecret: isSecret,
+            secretCode: finalReward.secretCode || null,
             pricePaid: gachaCase.price
         });
 
