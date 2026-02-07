@@ -184,7 +184,8 @@ export default function GachaPage() {
                             <h2 className="text-2xl font-bold text-primary mb-6">{selectedCase.name}</h2>
 
                             {/* CS2 Spinner Window */}
-                            <div className="relative w-full h-40 bg-[#1a1a1a] rounded-lg mb-8 overflow-hidden border-4 border-[#2a2a2a] shadow-inner">
+                            {/* Fixed width to match JS calculation (containerWidth = 460) to ensure pointer alignment */}
+                            <div className="relative w-[460px] h-40 bg-[#1a1a1a] rounded-lg mb-8 overflow-hidden border-4 border-[#2a2a2a] shadow-inner mx-auto">
                                 {/* Center Indicator Line */}
                                 <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-yellow-500 z-20 shadow-[0_0_10px_rgba(234,179,8,0.8)] transform -translate-x-1/2"></div>
 
