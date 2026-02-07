@@ -148,7 +148,6 @@ export default function GachaPage() {
             <div className="container mx-auto px-4">
 
                 {/* Page Title */}
-                {/* Page Title */}
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-6xl font-black mb-4 text-white drop-shadow-2xl">
                         VÒNG QUAY <span className="text-primary text-glow">MAY MẮN</span>
