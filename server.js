@@ -118,7 +118,8 @@ server.use('/api/lookup', authLimiter, require('./server_api/routes/lookup')); /
 
 
 // Next.js Route Handler (must be AFTER API routes)
-server.get('*', (req, res) => {
+// Handle all remaining routes with Next.js
+server.use((req, res) => {
     return handle(req, res);
 });
 
