@@ -101,20 +101,35 @@ export default function GachaPage() {
             // Target X = - (WinnerIndex * ItemWidth) + (ContainerHalfWidth) - (ItemHalfWidth)
             // Let's create a jitter for realism, but keep it centered enough.
 
-            const cardWidth = 112; // w-28 = 7rem = 112px
-            const gap = 8; // gap-2 = 0.5rem = 8px
-            const itemTotalWidth = cardWidth + gap;
-            const containerWidth = 460; // Approximate width of the window inside modal padding
-            const winnerIndex = 34;
+            // Calculate Target Offset with absolute precision
+            // 1. Define physical constants matched to CSS
+            const cardWidth = 112; // w-28 (7rem * 16px)
+            const gap = 8;         // gap-2 (0.5rem * 16px)
+            const itemStride = cardWidth + gap; // Distance from one item start to the next
+            const containerWidth = 460; // w-[460px]
 
-            // Random Jitter within the card (so it doesn't always stop dead center)
+            // 2. Locate the center of the Winner Card relative to the START of the strip
+            // winnerIndex items come before it.
+            const winnerIndex = 34;
+            const distanceToWinnerStart = winnerIndex * itemStride;
+            const winnerCenter = distanceToWinnerStart + (cardWidth / 2);
+
+            // 3. Locate the center of the Viewport
+            const viewportCenter = containerWidth / 2;
+
+            // 4. Calculate required Scroll (X) to align WinnerCenter with ViewportCenter
+            // We want: StartPos + X = ViewportCenter - WinnerCenter
+            // So: X = ViewportCenter - WinnerCenter
+
+            const baseTargetX = viewportCenter - winnerCenter;
+
+            // 5. Add Jitter (Randomness within the card boundaries)
+            // Jitter +/- 20px (Safe within 112px card)
             const jitter = Math.floor(Math.random() * 40) - 20;
 
-            const targetX = -((winnerIndex * itemTotalWidth) - (containerWidth / 2) + (cardWidth / 2)) + jitter;
+            const finalTargetX = baseTargetX + jitter;
 
-            // Start animation implicitly by changing xOffset state? 
-            // Better to use Framer Motion control, but simple state works if we pass it to 'animate'.
-            setXOffset(targetX);
+            setXOffset(finalTargetX);
 
             setTimeout(() => {
                 setSpinResult(wonItem);
@@ -198,7 +213,7 @@ export default function GachaPage() {
                                 <div className="h-full flex items-center">
                                     {spinning || spinResult ? (
                                         <motion.div
-                                            className="flex gap-2 px-[50%]" // Start with padding to center initial items if needed? No, logic handles x.
+                                            className="flex gap-2" // Removed px-[50%] to rely on absolute calc
                                             initial={{ x: 0 }}
                                             animate={{ x: xOffset }}
                                             transition={{ duration: 6, ease: [0.15, 0.85, 0.35, 1] }} // Bezier for that "slow down" feel
