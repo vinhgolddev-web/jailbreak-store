@@ -4,17 +4,49 @@
 
 @layer base {
   body {
-    @apply bg-background text-white antialiased overflow-x-hidden;
-    /* Clean black background, no messy gradients */
+    @apply bg-background text-text antialiased overflow-x-hidden;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(0, 234, 255, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 42, 109, 0.08) 0%, transparent 40%);
+    background-attachment: fixed;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-black/50 backdrop-blur-md border border-white/10;
+    @apply bg-surface/80 backdrop-blur-md border border-white/10;
   }
+  
+  .glass-panel {
+    @apply bg-[#0f1923]/90 backdrop-blur-xl border border-white/5 shadow-xl;
+  }
+
+  .neon-border-blue {
+    @apply border border-primary/50 shadow-[0_0_10px_rgba(0,234,255,0.3)];
+  }
+
+  .neon-border-red {
+    @apply border border-secondary/50 shadow-[0_0_10px_rgba(255,42,109,0.3)];
+  }
+
+  .neon-text-blue {
+    @apply text-primary drop-shadow-[0_0_5px_rgba(0,234,255,0.8)];
+  }
+
+  .neon-text-red {
+    @apply text-secondary drop-shadow-[0_0_5px_rgba(255,42,109,0.8)];
+  }
+
   .card-hover {
-    @apply transition-all duration-200 hover:border-white/20;
+    @apply transition-all duration-300 hover:border-primary/50 hover:shadow-neon-blue hover:-translate-y-1;
+  }
+  
+  .hud-btn {
+    @apply relative overflow-hidden transition-all duration-300 active:scale-95;
+  }
+  
+  .hud-clip {
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
   }
 }
 

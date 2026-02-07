@@ -8,6 +8,11 @@ const { verifyToken, isAdmin } = require('../middleware/auth');
 // @access  Public
 router.get('/', gachaController.getGachaCases);
 
+// @route   GET /api/gacha/recent
+// @desc    Get recent wins (Public)
+// @access  Public
+router.get('/recent', gachaController.getRecentWins);
+
 // @route   POST /api/gacha/roll
 // @desc    Open a case
 // @access  Private
