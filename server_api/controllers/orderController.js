@@ -88,7 +88,7 @@ exports.createOrder = async (req, res) => {
             userId: user._id,
             items: finalItems,
             totalAmount: totalAmount,
-            status: 'completed',
+            status: 'pending',
             secretCode: Math.floor(1000000000 + Math.random() * 9000000000).toString()
         });
 
