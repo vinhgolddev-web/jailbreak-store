@@ -15,9 +15,42 @@ const font = Plus_Jakarta_Sans({
 });
 
 export const metadata = {
-  title: 'Jailbreak Store | Premium Roblox Marketplace',
-  description: 'The #1 place to buy cheap Jailbreak Cash, Vehicles, and Items. Instant delivery and ban-free guarantee.',
-  keywords: 'roblox, jailbreak, cheap cash, trading, items',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://jailbreakstore.com'),
+  title: {
+    default: 'Jailbreak Store | Shop Cash & Items Uy Tín',
+    template: '%s | Jailbreak Store'
+  },
+  description: 'Shop bán Cash, Item, và Xe Jailbreak Roblox uy tín số 1 Việt Nam. Giao dịch tự động, giá rẻ, an toàn 100%.',
+  keywords: ['roblox', 'jailbreak', 'mua cash jailbreak', 'shop jailbreak', 'jailbreak items', 'uy tín', 'giá rẻ'],
+  authors: [{ name: 'Jailbreak Store Team' }],
+  creator: 'Jailbreak Store',
+  openGraph: {
+    type: 'website',
+    locale: 'vi_VN',
+    url: '/',
+    title: 'Jailbreak Store | Shop Cash & Items Uy Tín',
+    description: 'Shop bán Cash, Item, và Xe Jailbreak Roblox uy tín số 1 Việt Nam. Giao dịch tự động.',
+    siteName: 'Jailbreak Store',
+    images: [
+      {
+        url: '/logo.png', // Ensure this matches your public logo path
+        width: 800,
+        height: 600,
+        alt: 'Jailbreak Store Logo',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Jailbreak Store | Shop Cash & Items Uy Tín',
+    description: 'Shop bán Cash, Item, và Xe Jailbreak Roblox uy tín số 1 Việt Nam.',
+    images: ['/logo.png'],
+  },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export const viewport = {
