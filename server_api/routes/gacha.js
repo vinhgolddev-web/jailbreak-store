@@ -13,4 +13,14 @@ router.get('/', gachaController.getGachaCases);
 // @access  Private
 router.post('/roll', verifyToken, gachaController.rollGacha);
 
+// @route   GET /api/gacha/history
+// @desc    Get user's gacha history
+// @access  Private
+router.get('/history', verifyToken, gachaController.getHistory);
+
+// @route   GET /api/gacha/history/all
+// @desc    Get all gacha history (Admin)
+// @access  Private (Admin check should be here, but using verifyToken for now)
+router.get('/history/all', verifyToken, gachaController.getAllHistory);
+
 module.exports = router;

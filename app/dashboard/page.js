@@ -65,8 +65,8 @@ export default function Dashboard() {
             </div>
 
             {/* Recent Orders */}
-            <h2 className="text-2xl font-display font-bold mb-6">Lịch Sử Đơn Hàng</h2>
-            <div className="bg-[#141414] rounded-2xl border border-white/5 overflow-hidden">
+            <h2 className="text-2xl font-display font-bold mb-6">Lịch Sử Mua Hàng</h2>
+            <div className="bg-[#141414] rounded-2xl border border-white/5 overflow-hidden mb-12">
                 <table className="w-full text-left">
                     <thead className="bg-white/5 text-gray-400 text-sm uppercase">
                         <tr>
@@ -106,10 +106,89 @@ export default function Dashboard() {
                     </tbody>
                 </table>
             </div>
+
+            {/* Gacha History */}
+            <GachaHistorySection />
         </div>
     );
 }
 
+function GachaHistorySection() {
+    const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get('/gacha/history')
+            .then(res => setHistory(res.data))
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) return <div className="text-center text-gray-500">Đang tải lịch sử quay...</div>;
+
+    return (
+        <div className="mb-12">
+            <h2 className="text-2xl font-display font-bold mb-6 text-yellow-500 flex items-center gap-2">
+                <Crown size={24} /> Lịch Sử Quay Gacha
+            </h2>
+            <div className="bg-[#141414] rounded-2xl border border-yellow-500/20 overflow-hidden">
+                <table className="w-full text-left">
+                    <thead className="bg-yellow-500/10 text-yellow-200 text-sm uppercase">
+                        <tr>
+                            <th className="p-4">Hòm</th>
+                            <th className="p-4">Vật phẩm trúng</th>
+                            <th className="p-4">Mã Code</th>
+                            <th className="p-4">Độ hiếm</th>
+                            <th className="p-4 text-right">Chi phí</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                        {history.length === 0 ? (
+                            <tr><td colSpan="5" className="p-8 text-center text-gray-500">Chưa có lượt quay nào.</td></tr>
+                        ) : (
+                            history.map(item => (
+                                <tr key={item._id} className="hover:bg-white/5 transition">
+                                    <td className="p-4 text-gray-300">{item.caseName}</td>
+                                    <td className="p-4 font-bold text-white flex items-center gap-2">
+                                        <div className="w-8 h-8 relative rounded overflow-hidden border border-white/10">
+                                            <img src={item.itemImage} alt="" className="object-cover w-full h-full" />
+                                        </div>
+                                        {item.itemName}
+                                    </td>
+                                    <td className="p-4 font-mono text-yellow-400 font-bold tracking-wider select-all cursor-pointer" title="Bấm để copy">
+                                        {item.secretCode}
+                                    </td>
+                                    <td className="p-4">
+                                        <span className={`px-2 py-1 rounded text-xs font-bold border ${getRarityStyle(item.rarity)}`}>
+                                            {item.rarity}
+                                        </span>
+                                    </td>
+                                    <td className="p-4 text-right font-mono text-gray-400">
+                                        -{item.pricePaid.toLocaleString()} VNĐ
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+function getRarityStyle(rarity) {
+    const styles = {
+        'Common': 'text-gray-400 border-gray-500 bg-gray-900',
+        'Uncommon': 'text-green-400 border-green-500 bg-green-900',
+        'Rare': 'text-blue-400 border-blue-500 bg-blue-900',
+        'Epic': 'text-purple-400 border-purple-500 bg-purple-900',
+        'Legendary': 'text-yellow-400 border-yellow-500 bg-yellow-900',
+        'HyperChrome': 'text-red-400 border-red-500 bg-red-900',
+        'Godly': 'text-rose-400 border-rose-500 bg-rose-900',
+        'Secret': 'text-white border-red-600 bg-red-600 animate-pulse'
+    };
+    return styles[rarity] || 'text-gray-400';
+}
 const StatCard = ({ label, value, icon }) => (
     <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 flex items-center justify-between">
         <div>

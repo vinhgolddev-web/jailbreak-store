@@ -139,6 +139,78 @@ export default function AdminDashboard() {
                     )}
                 </div>
             </div>
+
+            {/* Gacha History (Admin) */}
+            <AdminGachaHistory />
         </div>
     );
+}
+
+function AdminGachaHistory() {
+    const [history, setHistory] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get('/gacha/history/all')
+            .then(res => setHistory(res.data.slice(0, 10))) // Show last 10
+            .catch(err => console.error(err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) return <div className="h-48 bg-surfaceHighlight rounded-2xl animate-pulse" />;
+
+    return (
+        <div className="bg-surfaceHighlight rounded-2xl border border-white/5 p-6">
+            <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-yellow-500">
+                <Activity size={20} /> Gacha Activity (Last 10)
+            </h2>
+            <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                    <thead className="bg-white/5 text-gray-400 text-sm uppercase">
+                        <tr>
+                            <th className="pb-3 pl-4">User</th>
+                            <th className="pb-3">Item Won</th>
+                            <th className="pb-3">Secret Code</th>
+                            <th className="pb-3">Rarity</th>
+                            <th className="pb-3">Case</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5 text-sm">
+                        {history.map(item => (
+                            <tr key={item._id} className="hover:bg-white/5 transition-colors">
+                                <td className="py-4 pl-4">
+                                    <div className="font-bold text-white">{item.userId?.username || 'Unknown'}</div>
+                                    <div className="text-xs text-gray-500">{item.userId?.email}</div>
+                                </td>
+                                <td className="py-4 font-medium text-white">{item.itemName}</td>
+                                <td className="py-4 font-mono text-yellow-500 font-bold select-all">
+                                    {item.secretCode}
+                                </td>
+                                <td className="py-4">
+                                    <span className={`px-2 py-1 rounded text-[10px] font-bold border ${getRarityStyle(item.rarity)}`}>
+                                        {item.rarity}
+                                    </span>
+                                </td>
+                                <td className="py-4 text-gray-400">{item.caseName}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+function getRarityStyle(rarity) {
+    const styles = {
+        'Common': 'border-gray-500 text-gray-400',
+        'Uncommon': 'border-green-500 text-green-400',
+        'Rare': 'border-blue-500 text-blue-400',
+        'Epic': 'border-purple-500 text-purple-400',
+        'Legendary': 'border-yellow-500 text-yellow-400',
+        'HyperChrome': 'border-red-500 text-red-500',
+        'Godly': 'border-rose-500 text-rose-500',
+        'Secret': 'border-red-600 text-red-600 font-black animate-pulse'
+    };
+    return styles[rarity] || 'border-gray-500 text-gray-400';
 }

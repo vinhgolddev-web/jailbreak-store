@@ -269,15 +269,18 @@ export default function GachaPage() {
                                         </p>
 
                                         {/* Secret Code Display */}
+                                        {/* Secret Code Display */}
                                         {spinResult.secretCode && (
-                                            <div className="bg-red-900/40 border-2 border-red-500 rounded-xl p-4 mt-6 animate-bounce shadow-[0_0_20px_rgba(220,38,38,0.5)]">
-                                                <p className="text-red-300 text-xs font-bold uppercase mb-2 tracking-widest">MÃ BÍ MẬT (SECRET CODE)</p>
+                                            <div className={`${spinResult.originalSecret ? 'bg-red-900/40 border-red-500 shadow-[0_0_20px_rgba(220,38,38,0.5)] animate-bounce' : 'bg-white/5 border-white/20'} border-2 rounded-xl p-4 mt-6`}>
+                                                <p className={`${spinResult.originalSecret ? 'text-red-300' : 'text-gray-400'} text-xs font-bold uppercase mb-2 tracking-widest`}>
+                                                    {spinResult.originalSecret ? 'MÃ BÍ MẬT (SECRET CODE)' : 'MÃ QUÀ TẶNG (GIFT CODE)'}
+                                                </p>
                                                 <div className="bg-black/50 rounded px-4 py-2">
                                                     <p className="text-3xl font-mono text-white font-black tracking-[0.2em] select-all">
                                                         {spinResult.secretCode}
                                                     </p>
                                                 </div>
-                                                <p className="text-red-400 text-[10px] mt-2 italic">
+                                                <p className={`${spinResult.originalSecret ? 'text-red-400' : 'text-gray-500'} text-[10px] mt-2 italic`}>
                                                     *Chụp ảnh màn hình lại để nhận thưởng
                                                 </p>
                                             </div>

@@ -62,24 +62,27 @@ exports.rollGacha = async (req, res) => {
                 const randomInfo = Math.floor(Math.random() * secretCount);
                 const secretReward = await SecretItem.findOne({ active: true }).skip(randomInfo);
 
-                // Generate Secret Code (e.g., SECRET-1234-5678)
-                const codeSuffix = Math.random().toString(36).substring(2, 10).toUpperCase();
-                const secretCode = `SECRET-${codeSuffix}`;
-
                 // We return both:
                 // 1. A placeholder for the spinner (wonItem - usually the question mark or Secret visual)
                 // 2. The "Actual" reward (finalReward - e.g. Torpedo)
                 // We merge them so frontend has all info
                 finalReward = {
                     ...secretReward.toObject(),
-                    originalSecret: wonItem,
-                    secretCode: secretCode // Attach code to reward
+                    originalSecret: wonItem
                 };
             } else {
                 // Fallback if no secret items in DB
                 finalReward = wonItem;
             }
         }
+
+        // Generate Secret Code for ALL items (e.g., CODE-XXXX-XXXX)
+        const codePrefix = isSecret ? 'SECRET' : 'GIFT';
+        const codeSuffix = Math.random().toString(36).substring(2, 10).toUpperCase();
+        const secretCode = `${codePrefix}-${codeSuffix}`;
+
+        // Attach code to reward
+        finalReward = { ...finalReward, secretCode };
 
         // Save History
         await GachaHistory.create({
@@ -90,7 +93,7 @@ exports.rollGacha = async (req, res) => {
             itemImage: finalReward.image,
             rarity: finalReward.rarity,
             isSecret: isSecret,
-            secretCode: finalReward.secretCode || null,
+            secretCode: secretCode,
             pricePaid: gachaCase.price
         });
 
@@ -100,6 +103,27 @@ exports.rollGacha = async (req, res) => {
             newBalance: user.balance
         });
 
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+exports.getHistory = async (req, res) => {
+    try {
+        const history = await GachaHistory.find({ userId: req.user.id }).sort({ rolledAt: -1 });
+        res.json(history);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+exports.getAllHistory = async (req, res) => {
+    try {
+        // Populate user details for admin view
+        const history = await GachaHistory.find().populate('userId', 'username email').sort({ rolledAt: -1 });
+        res.json(history);
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Server Error' });
