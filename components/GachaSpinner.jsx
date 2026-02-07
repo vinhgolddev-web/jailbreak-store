@@ -38,7 +38,7 @@ const GachaSpinner = memo(({ rollItems, activeCase }) => {
                     const randomOffset = Math.floor(Math.random() * 80) - 40;
 
                     spinnerRef.current.style.transition = 'transform 6s cubic-bezier(0.15, 0, 0.15, 1)';
-                    spinnerRef.current.style.transform = `translateX(-${winnerOffset + randomOffset}px)`;
+                    spinnerRef.current.style.transform = `translate3d(-${winnerOffset + randomOffset}px, -50%, 0)`;
                 }
             }, 100);
         }
@@ -50,7 +50,7 @@ const GachaSpinner = memo(({ rollItems, activeCase }) => {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary rotate-45 z-20" />
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-primary rotate-45 z-20" />
 
-            <div className="absolute top-1/2 -translate-y-1/2 left-1/2 flex items-center gap-2 will-change-transform" ref={spinnerRef}>
+            <div className="absolute top-1/2 left-1/2 flex items-center gap-2 will-change-transform" ref={spinnerRef} style={{ transform: 'translate3d(0, -50%, 0)' }}>
                 {rollItems.length > 0 ? rollItems.map((item) => (
                     <div
                         key={item.id}
