@@ -56,22 +56,41 @@ export default function GachaPage() {
         setRollItems([]);
     };
 
+    const getMotivationMessage = (rarity) => {
+        switch (rarity) {
+            case 'Common': return "Suýt nữa thì trúng Godly! Thử lại ngay!";
+            case 'Uncommon': return "Vận may đang đến! Đừng dừng lại!";
+            case 'Rare': return "Khá lắm! Sắp tới lượt Jackbot rồi!";
+            case 'Epic': return "Quá tuyệt! Thần tài đang gõ cửa!";
+            case 'Legendary': return "SIÊU PHẨM! CHÚC MỪNG BẠN!";
+            case 'HyperChrome': return "HUYỀN THOẠI! CẢ SERVER ĐANG GATO!";
+            case 'Godly': return "ĐỈNH CỦA CHÓP! BẠN LÀ NHẤT!";
+            case 'Secret': return "VÔ CỰC MAY MẮN! BẠN LÀ NGƯỜI ĐƯỢC CHỌN!";
+            default: return "Chúc mừng bạn!";
+        }
+    };
+
     const generateRollItems = (currCase, winner) => {
         const items = [];
         const totalItems = 50;
         const winnerIndex = 34; // Winner will be at this index
 
+        // Find a high-tier item for "Near Miss" effect
+        // Filter for Godly or Secret, fallback to Legendary
+        const baitItems = currCase.items.filter(i => ['Godly', 'Secret', 'HyperChrome'].includes(i.rarity));
+        const baitItem = baitItems.length > 0 ? baitItems[Math.floor(Math.random() * baitItems.length)] : null;
+
         for (let i = 0; i < totalItems; i++) {
             if (i === winnerIndex) {
                 items.push({ ...winner, id: `winner-${i}` });
+            } else if (i === winnerIndex + 1 && baitItem && (winner.rarity === 'Common' || winner.rarity === 'Uncommon')) {
+                // PSYCHOLOGICAL TRICK: Near Miss!
+                // If user won trash, put a GODLY item right next to it.
+                items.push({ ...baitItem, id: `bait-${i}-${Math.random()}` });
             } else {
                 // Random filler item from case
-                // FILTER OUT SECRET ITEMS from fillers to avoid "Trolling" the user
-                const fillerItems = currCase.items.filter(item => item.rarity !== 'Secret');
-
-                // Fallback if case ONLY has secret items (unlikely)
-                const pool = fillerItems.length > 0 ? fillerItems : currCase.items;
-
+                // FILTER OUT SECRET ITEMS from fillers to avoid "Trolling" the user -> CHANGED: Allow them for excitement
+                const pool = currCase.items;
                 const randomItem = pool[Math.floor(Math.random() * pool.length)];
                 items.push({ ...randomItem, id: `random-${i}-${Math.random()}` });
             }
@@ -143,10 +162,13 @@ export default function GachaPage() {
                 setSpinResult(wonItem);
                 refreshUser();
 
+                const msg = getMotivationMessage(wonItem.rarity);
                 if (wonItem.secretCode) {
-                    addToast(`BẠN ĐÃ TRÚNG ${wonItem.name.toUpperCase()}!!!`, 'success');
+                    addToast(`TRÚNG ĐỘC ĐẮC: ${wonItem.name.toUpperCase()}!!!`, 'success');
                 } else {
-                    addToast(`Chúc mừng! Bạn nhận được ${wonItem.name}`, 'success');
+                    // Use Warning/Info toast for common items to encourage retrying
+                    const toastType = (wonItem.rarity === 'Common' || wonItem.rarity === 'Uncommon') ? 'info' : 'success';
+                    addToast(`${msg} (Bạn nhận được ${wonItem.name})`, toastType);
                 }
 
                 setSpinning(false);

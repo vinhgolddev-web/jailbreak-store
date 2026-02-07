@@ -13,13 +13,29 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user'); // Basic persistence
+        const storedUser = localStorage.getItem('user');
 
-        if (token && storedUser) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setUser(JSON.parse(storedUser));
+        if (token) {
+            if (storedUser) {
+                // Optimistic load
+                setUser(JSON.parse(storedUser));
+            }
+            // Background refresh to ensure validity and sync balance
+            api.get('/auth/me')
+                .then(res => {
+                    setUser(res.data);
+                    localStorage.setItem('user', JSON.stringify(res.data));
+                })
+                .catch(() => {
+                    // Token invalid or expired
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    setUser(null);
+                })
+                .finally(() => setLoading(false));
+        } else {
+            setLoading(false);
         }
-        setLoading(false);
     }, []);
 
     const login = async (email, password) => {
