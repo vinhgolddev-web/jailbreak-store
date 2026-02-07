@@ -256,16 +256,24 @@ export default function GachaPage() {
                                         className="text-center mb-4"
                                     >
                                         <p className="text-gray-400 text-sm uppercase tracking-widest">Bạn đã nhận được</p>
-                                        <p className={`text-2xl font-bold ${getRarityTextColor(spinResult.rarity)} drop-shadow-md mb-2`}>
+
+                                        {/* Name Display */}
+                                        <p className={`text-2xl font-bold drop-shadow-md mb-2 ${spinResult.secretCode ? 'text-red-600 animate-pulse' : getRarityTextColor(spinResult.rarity)}`}>
                                             {spinResult.name}
                                         </p>
+
+                                        {/* Secret Code Display */}
                                         {spinResult.secretCode && (
-                                            <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mt-4 animate-pulse">
-                                                <p className="text-red-400 text-xs font-bold uppercase mb-1">Mã Bí Mật Của Bạn</p>
-                                                <p className="text-xl font-mono text-white font-black tracking-wider select-all">
-                                                    {spinResult.secretCode}
+                                            <div className="bg-red-900/40 border-2 border-red-500 rounded-xl p-4 mt-6 animate-bounce shadow-[0_0_20px_rgba(220,38,38,0.5)]">
+                                                <p className="text-red-300 text-xs font-bold uppercase mb-2 tracking-widest">MÃ BÍ MẬT (SECRET CODE)</p>
+                                                <div className="bg-black/50 rounded px-4 py-2">
+                                                    <p className="text-3xl font-mono text-white font-black tracking-[0.2em] select-all">
+                                                        {spinResult.secretCode}
+                                                    </p>
+                                                </div>
+                                                <p className="text-red-400 text-[10px] mt-2 italic">
+                                                    *Chụp ảnh màn hình lại để nhận thưởng
                                                 </p>
-                                                <p className="text-gray-500 text-[10px] mt-1">Chụp màn hình lại để làm bằng chứng!</p>
                                             </div>
                                         )}
                                     </motion.div>
