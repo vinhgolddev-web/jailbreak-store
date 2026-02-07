@@ -80,12 +80,14 @@ export default function GachaPage() {
         const baitItems = currCase.items.filter(i => ['Godly', 'Secret', 'HyperChrome'].includes(i.rarity));
         const baitItem = baitItems.length > 0 ? baitItems[Math.floor(Math.random() * baitItems.length)] : null;
 
+        const triggerNearMiss = Math.random() < 0.2; // 20% chance (1 in 5)
+
         for (let i = 0; i < totalItems; i++) {
             if (i === winnerIndex) {
                 items.push({ ...winner, id: `winner-${i}` });
-            } else if (i === winnerIndex + 1 && baitItem && (winner.rarity === 'Common' || winner.rarity === 'Uncommon')) {
+            } else if (i === winnerIndex + 1 && baitItem && triggerNearMiss && (winner.rarity === 'Common' || winner.rarity === 'Uncommon')) {
                 // PSYCHOLOGICAL TRICK: Near Miss!
-                // If user won trash, put a GODLY item right next to it.
+                // If user won trash AND random check passes, put a GODLY item right next to it.
                 items.push({ ...baitItem, id: `bait-${i}-${Math.random()}` });
             } else {
                 // Random filler item from case
