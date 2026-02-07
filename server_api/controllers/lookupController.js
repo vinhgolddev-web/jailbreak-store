@@ -53,3 +53,38 @@ exports.searchCode = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// Update status (Claim Item)
+exports.updateStatus = async (req, res) => {
+    try {
+        const { id, type } = req.body;
+
+        if (!id || !type) {
+            return res.status(400).json({ message: 'Missing ID or Type' });
+        }
+
+        if (type === 'GACHA') {
+            const item = await GachaHistory.findById(id);
+            if (!item) return res.status(404).json({ message: 'Item not found' });
+
+            item.status = 'claimed';
+            await item.save();
+            return res.json({ success: true, message: 'Item marked as CLAIMED', data: item });
+        }
+
+        if (type === 'ORDER') {
+            const order = await Order.findById(id);
+            if (!order) return res.status(404).json({ message: 'Order not found' });
+
+            order.status = 'completed';
+            await order.save();
+            return res.json({ success: true, message: 'Order marked as COMPLETED', data: order });
+        }
+
+        res.status(400).json({ message: 'Invalid Type' });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

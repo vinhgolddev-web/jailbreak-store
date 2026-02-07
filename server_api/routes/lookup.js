@@ -8,4 +8,9 @@ const { verifyToken, isAdmin } = require('../middleware/auth');
 // @access  Admin only
 router.get('/search', verifyToken, isAdmin, lookupController.searchCode);
 
+// @route   POST /api/lookup/claim
+// @desc    Mark item/order as claimed/completed
+// @access  Admin only
+router.post('/claim', verifyToken, isAdmin, lookupController.updateStatus);
+
 module.exports = router;

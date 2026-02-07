@@ -35,6 +35,32 @@ export default function AdminLookup() {
         }
     };
 
+    const handleClaim = async () => {
+        if (!result || !confirm('Mark this item as CLAIMED/COMPLETED?')) return;
+
+        try {
+            const res = await api.post('/lookup/claim', {
+                id: result.data._id,
+                type: result.type
+            });
+
+            if (res.data.success) {
+                addToast(res.data.message, 'success');
+                // Refresh result
+                setResult(prev => ({
+                    ...prev,
+                    data: {
+                        ...prev.data,
+                        status: result.type === 'GACHA' ? 'claimed' : 'completed'
+                    }
+                }));
+            }
+        } catch (err) {
+            addToast('Failed to update status', 'error');
+            console.error(err);
+        }
+    };
+
     return (
         <div className="space-y-6 max-w-4xl mx-auto">
             <h1 className="text-3xl font-bold font-display mb-8">Code Lookup Tool</h1>
@@ -153,11 +179,11 @@ export default function AdminLookup() {
                             <div className="col-span-1 md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                                 <div className="bg-white/5 p-4 rounded-xl text-center">
                                     <span className="block text-gray-500 text-xs mb-1">Status</span>
-                                    <span className={`font-bold ${result.type === 'GACHA' ? 'text-green-500' :
-                                            result.data.status === 'completed' ? 'text-green-500' :
-                                                'text-yellow-500'
+                                    <span className={`font-bold ${result.data.status === 'claimed' || result.data.status === 'completed'
+                                            ? 'text-green-500'
+                                            : 'text-yellow-500'
                                         }`}>
-                                        {result.type === 'GACHA' ? 'CLAIMED' : result.data.status?.toUpperCase()}
+                                        {result.data.status ? result.data.status.toUpperCase() : 'UNKNOWN'}
                                     </span>
                                 </div>
                                 <div className="bg-white/5 p-4 rounded-xl text-center">
@@ -173,6 +199,15 @@ export default function AdminLookup() {
                                     </span>
                                 </div>
                             </div>
+
+                            {/* Actions */}
+                            {(result.data.status === 'unclaimed' || result.data.status === 'pending') && (
+                                <div className="col-span-1 md:col-span-2 flex justify-end mt-4 pt-4 border-t border-white/5">
+                                    <Button onClick={handleClaim} className="bg-green-600 hover:bg-green-500 text-white px-8">
+                                        Mark as {result.type === 'GACHA' ? 'CLAIMED' : 'COMPLETED'}
+                                    </Button>
+                                </div>
+                            )}
 
                         </div>
                     </div>

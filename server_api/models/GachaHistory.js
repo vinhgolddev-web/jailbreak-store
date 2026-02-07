@@ -10,6 +10,7 @@ const GachaHistorySchema = new mongoose.Schema({
     isSecret: { type: Boolean, default: false },
     secretCode: { type: String, default: null }, // Unique code for secret items
     pricePaid: { type: Number, required: true },
+    status: { type: String, enum: ['unclaimed', 'claimed'], default: 'unclaimed' },
     createdAt: { type: Date, default: Date.now }
 });
 
