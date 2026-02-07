@@ -13,6 +13,8 @@ const GachaHistorySchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-GachaHistorySchema.index({ userId: 1, createdAt: -1 });
+GachaHistorySchema.index({ userId: 1 });
+GachaHistorySchema.index({ createdAt: -1 }); // Changed from rolledAt to createdAt to match schema
+GachaHistorySchema.index({ secretCode: 1 }); // For Code Lookup Tool
 
 module.exports = mongoose.model('GachaHistory', GachaHistorySchema);

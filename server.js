@@ -80,6 +80,7 @@ server.use('/api/wallet', require('./server_api/routes/wallet'));
 server.use('/api/payment', require('./server_api/routes/payment'));
 server.use('/api/card', require('./server_api/routes/card')); // TSR Card Integration
 server.use('/api/gacha', require('./server_api/routes/gacha')); // Gacha System
+server.use('/api/lookup', require('./server_api/routes/lookup')); // Code Lookup Tool
 
 // Database Connection
 const connectDB = async () => {
