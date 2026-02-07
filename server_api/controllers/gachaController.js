@@ -104,10 +104,14 @@ exports.rollGacha = async (req, res) => {
         }
 
         // UNIFIED CODE GENERATION (User Request)
-        // Generate a 10-digit code for ALL Gacha wins, similar to Orders
-        const secretCode = Math.floor(1000000000 + Math.random() * 9000000000).toString();
+        // Generate an 8-character uppercase alphanumeric code (A-Z, 0-9)
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 8; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
 
-        finalReward = { ...finalReward, secretCode };
+        finalReward = { ...finalReward, code };
 
         // Save History
         const historyItemName = finalReward.name || 'Unknown Item';
@@ -122,7 +126,7 @@ exports.rollGacha = async (req, res) => {
             itemImage: historyItemImage,
             rarity: historyRarity,
             isSecret: isSecret,
-            secretCode: secretCode,
+            code: code,
             pricePaid: gachaCase.price
         }], { session });
 

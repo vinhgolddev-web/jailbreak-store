@@ -91,10 +91,10 @@ export default function CartDrawer() {
                                 <div className="bg-white/10 p-6 rounded-xl border border-white/20 w-full">
                                     <p className="text-sm text-gray-500 mb-2 uppercase tracking-wider">Mã bí mật</p>
                                     <div className="text-3xl font-mono font-black text-primary tracking-widest select-all cursor-pointer active:scale-95 transition" onClick={() => {
-                                        navigator.clipboard.writeText(purchaseSuccess.secretCode);
+                                        navigator.clipboard.writeText(purchaseSuccess.code);
                                         addToast("Đã sao chép vào bộ nhớ đệm!", "success");
                                     }}>
-                                        {purchaseSuccess.secretCode}
+                                        {purchaseSuccess.code}
                                     </div>
                                     <p className="text-xs text-gray-500 mt-2">(Bấm để sao chép)</p>
                                 </div>

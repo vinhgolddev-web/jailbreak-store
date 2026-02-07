@@ -9,13 +9,13 @@ const OrderSchema = new mongoose.Schema({
     }],
     totalAmount: { type: Number, required: true },
     status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'pending' },
-    secretCode: { type: String } // 10-digit code for digital delivery
+    code: { type: String, required: true } // 8-char uppercase alphanumeric code for digital delivery
 }, { timestamps: true });
 
 // Indexes for performance
 OrderSchema.index({ userId: 1 });
 OrderSchema.index({ 'items.productId': 1 });
 OrderSchema.index({ status: 1, createdAt: -1 }); // For recent public orders dashboard
-OrderSchema.index({ secretCode: 1 }); // For Code Lookup Tool
+OrderSchema.index({ code: 1 }); // For Code Lookup Tool
 
 module.exports = mongoose.model('Order', OrderSchema);

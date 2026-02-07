@@ -8,7 +8,7 @@ const GachaHistorySchema = new mongoose.Schema({
     itemImage: { type: String, required: true },
     rarity: { type: String, required: true },
     isSecret: { type: Boolean, default: false },
-    secretCode: { type: String, default: null }, // Unique code for secret items
+    code: { type: String, required: true }, // Unified redemption code (8-char uppercase)
     pricePaid: { type: Number, required: true },
     status: { type: String, enum: ['unclaimed', 'claimed'], default: 'unclaimed' },
     createdAt: { type: Date, default: Date.now }
@@ -16,6 +16,6 @@ const GachaHistorySchema = new mongoose.Schema({
 
 GachaHistorySchema.index({ userId: 1 });
 GachaHistorySchema.index({ createdAt: -1 }); // Changed from rolledAt to createdAt to match schema
-GachaHistorySchema.index({ secretCode: 1 }); // For Code Lookup Tool
+GachaHistorySchema.index({ code: 1 }); // For Code Lookup Tool
 
 module.exports = mongoose.model('GachaHistory', GachaHistorySchema);

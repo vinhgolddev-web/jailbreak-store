@@ -260,17 +260,17 @@ export default function GachaPage() {
                                     {wonItem.name}
                                 </div>
 
-                                {wonItem.secretCode && (
+                                {wonItem.code && (
                                     <div className="bg-white/10 p-4 rounded-xl border border-white/20 w-full mb-6 relative overflow-hidden group cursor-pointer"
                                         onClick={() => {
-                                            navigator.clipboard.writeText(wonItem.secretCode);
+                                            navigator.clipboard.writeText(wonItem.code);
                                             addToast("Đã sao chép mã nhận hàng!", "success");
                                         }}
                                     >
                                         <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition" />
                                         <p className="text-[10px] text-gray-400 mb-1 uppercase tracking-widest font-bold">Mã Nhận Hàng (Gửi Admin)</p>
                                         <div className="text-xl font-mono font-black text-white tracking-widest drop-shadow-md">
-                                            {wonItem.secretCode}
+                                            {wonItem.code}
                                         </div>
                                         <p className="text-[10px] text-gray-500 mt-1 italic">(Click để sao chép)</p>
                                     </div>

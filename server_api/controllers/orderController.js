@@ -88,13 +88,20 @@ exports.createOrder = async (req, res) => {
             method: 'balance'
         }], { session });
 
+        // Generate 8-char uppercase alphanumeric code
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 8; i++) {
+            code += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+
         // 6. Create Order
         const order = new Order({
             userId: user._id,
             items: finalItems,
             totalAmount: totalAmount,
             status: 'pending',
-            secretCode: Math.floor(1000000000 + Math.random() * 9000000000).toString()
+            code: code
         });
 
         // Save order with session
