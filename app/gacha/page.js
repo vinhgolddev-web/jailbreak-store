@@ -261,18 +261,18 @@ export default function GachaPage() {
                                 </div>
 
                                 {wonItem.secretCode && (
-                                    <div className="bg-white/10 p-4 rounded-xl border border-yellow-500/30 w-full mb-6 relative overflow-hidden group cursor-pointer"
+                                    <div className="bg-white/10 p-4 rounded-xl border border-white/20 w-full mb-6 relative overflow-hidden group cursor-pointer"
                                         onClick={() => {
                                             navigator.clipboard.writeText(wonItem.secretCode);
-                                            addToast("Đã sao chép mã Secret!", "success");
+                                            addToast("Đã sao chép mã nhận hàng!", "success");
                                         }}
                                     >
-                                        <div className="absolute inset-0 bg-yellow-500/5 group-hover:bg-yellow-500/10 transition" />
-                                        <p className="text-[10px] text-yellow-500 mb-1 uppercase tracking-widest font-bold">Mã Nhận Thưởng Đặc Biệt</p>
+                                        <div className="absolute inset-0 bg-primary/5 group-hover:bg-primary/10 transition" />
+                                        <p className="text-[10px] text-gray-400 mb-1 uppercase tracking-widest font-bold">Mã Nhận Hàng (Gửi Admin)</p>
                                         <div className="text-xl font-mono font-black text-white tracking-widest drop-shadow-md">
                                             {wonItem.secretCode}
                                         </div>
-                                        <p className="text-[10px] text-gray-500 mt-1 italic">(Chụp ảnh hoặc copy mã này gửi Admin)</p>
+                                        <p className="text-[10px] text-gray-500 mt-1 italic">(Click để sao chép)</p>
                                     </div>
                                 )}
 

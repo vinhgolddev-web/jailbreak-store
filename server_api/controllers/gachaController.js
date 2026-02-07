@@ -69,7 +69,6 @@ exports.rollGacha = async (req, res) => {
         // Secret Rarity Logic
         let finalReward = wonItem;
         let isSecret = false;
-        let secretCode = null;
 
         if (wonItem.rarity === 'Secret') {
             isSecret = true;
@@ -99,20 +98,14 @@ exports.rollGacha = async (req, res) => {
                     originalSecret: wonItem
                 };
 
-                // Generate Secret Code
-                const codeSuffix = Math.random().toString(36).substring(2, 10).toUpperCase();
-                secretCode = `SECRET-${codeSuffix}`;
-
             } else {
                 finalReward = wonItem;
             }
         }
 
-        // Ensure consistency
-        if (!secretCode && isSecret) {
-            // Fallback code if secret but no secret item logic triggered (shouldn't happen with above logic but safe)
-            secretCode = `GIFT-${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
-        }
+        // UNIFIED CODE GENERATION (User Request)
+        // Generate a 10-digit code for ALL Gacha wins, similar to Orders
+        const secretCode = Math.floor(1000000000 + Math.random() * 9000000000).toString();
 
         finalReward = { ...finalReward, secretCode };
 
