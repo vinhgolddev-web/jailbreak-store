@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import api from '@/lib/axios';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -21,16 +21,18 @@ export default function Shop() {
     //     fetchProducts();
     // }, []);
 
-    const fetchProducts = async (query = '') => {
+    const fetchProducts = useCallback(async (query = '') => {
+        setLoading(true);
         try {
             const res = await api.get(`/products?search=${query}`);
             setProducts(res.data);
         } catch (err) {
             console.error(err);
+            addToast('Lỗi tải sản phẩm', 'error');
         } finally {
             setLoading(false);
         }
-    };
+    }, [addToast]);
 
     // Debounce search
     useEffect(() => {
@@ -38,9 +40,11 @@ export default function Shop() {
             fetchProducts(search);
         }, 500);
         return () => clearTimeout(timer);
-    }, [search]);
+    }, [search, fetchProducts]);
 
-    const filteredProducts = filter === 'All' ? products : products.filter(p => p.category === filter);
+    const filteredProducts = useMemo(() => {
+        return filter === 'All' ? products : products.filter(p => p.category === filter);
+    }, [products, filter]);
     const categories = ['All', 'Vehicle', 'Skin', 'Gamepass'];
 
     return (

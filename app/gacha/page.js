@@ -76,14 +76,6 @@ export default function GachaPage() {
         }
     };
 
-    const getRarityBorderColor = (rarity) => {
-        switch (rarity) {
-            case 'Common': return 'border-gray-500';
-            case 'Godly': return 'border-red-600 shadow-[0_0_15px_rgba(220,38,38,0.5)]';
-            case 'Secret': return 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.8)]';
-            default: return 'border-gray-700';
-        }
-    };
 
     const generateRollItems = (currCase, winner) => {
         const items = [];
@@ -123,22 +115,7 @@ export default function GachaPage() {
             setRollItems(rollSequence);
             refreshUser(); // Update balance immediately in UI
 
-            // Spin Animation
-            setTimeout(() => {
-                if (spinnerRef.current) {
-                    const cardWidth = 112; // w-28 = 7rem = 112px
-                    const gap = 8; // gap-2 = 0.5rem = 8px
-                    const totalWidth = cardWidth + gap;
-                    // Scroll to winner (index 45). Center it: (45 * 120) - (containerWidth / 2) + (cardWidth / 2)
-                    // Simplified: Translate X
-                    const winnerOffset = 45 * totalWidth;
-                    // Add some randomness within the card to simulate mechanics
-                    const randomOffset = Math.floor(Math.random() * 80) - 40;
-
-                    spinnerRef.current.style.transition = 'transform 6s cubic-bezier(0.15, 0, 0.15, 1)'; // Smooth ease-out
-                    spinnerRef.current.style.transform = `translateX(-${winnerOffset + randomOffset}px)`;
-                }
-            }, 100);
+            // Spin Animation (Handled by GachaSpinner useEffect listening to rollItems)
 
             // Show Result after spin
             setTimeout(() => {
@@ -176,32 +153,17 @@ export default function GachaPage() {
                     <p className="text-gray-400 text-lg">Săn vật phẩm giới hạn với giá cực rẻ!</p>
                 </div>
 
-                {/* Case Selection */}
+                import GachaSpinner from '@/components/GachaSpinner';
+                import GachaCaseList from '@/components/GachaCaseList';
+
+                // ... (inside GachaPage)
+
+                {/* Case Selection using Memoized Component */}
                 {!selectedCase && (
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                        {cases.map((c) => (
-                            <motion.div
-                                key={c._id}
-                                whileHover={{ y: -5 }}
-                                className="glass rounded-3xl p-6 cursor-pointer hover:border-primary/50 transition-all group relative overflow-hidden"
-                                onClick={() => setSelectedCase(c)}
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="relative w-full aspect-square mb-4">
-                                    <Image src={c.image} alt={c.name} fill className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-500" />
-                                </div>
-                                <h3 className="text-xl font-bold text-center mb-2 group-hover:text-primary transition-colors">{c.name}</h3>
-                                <div className="text-center">
-                                    <span className="inline-block bg-primary text-black font-bold px-4 py-1 rounded-full text-sm shadow-[0_0_15px_rgba(255,159,10,0.4)]">
-                                        {(c.price || 0).toLocaleString()} VNĐ
-                                    </span>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                    <GachaCaseList cases={cases} onSelect={setSelectedCase} />
                 )}
 
-                {/* Active Case (Spinner) */}
+                {/* Active Case (Spinner) using Memoized Component */}
                 {selectedCase && (
                     <div className="max-w-4xl mx-auto">
                         <div className="flex items-center justify-between mb-8">
@@ -211,42 +173,7 @@ export default function GachaPage() {
                             <div className="text-2xl font-bold text-primary">{selectedCase.name}</div>
                         </div>
 
-                        {/* Spinner Box */}
-                        <div className="relative h-48 bg-[#0a0a0a] rounded-xl border border-primary/30 overflow-hidden mb-8 shadow-[0_0_50px_rgba(255,159,10,0.1)]">
-                            {/* Center Line */}
-                            <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-primary z-20 shadow-[0_0_15px_rgba(255,159,10,1)]" />
-                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary rotate-45 z-20" />
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-primary rotate-45 z-20" />
-
-                            {/* Items Track */}
-                            <div className="absolute top-1/2 -translate-y-1/2 left-1/2 flex items-center gap-2 will-change-transform" ref={spinnerRef}>
-                                {rollItems.length > 0 ? rollItems.map((item, idx) => (
-                                    <div
-                                        key={item.id}
-                                        className={`relative w-28 h-36 flex-shrink-0 bg-[#181A20] border-b-4 ${getRarityBorderColor(item.rarity)} flex flex-col items-center justify-center p-2 rounded-lg`}
-                                    >
-                                        <div className="relative w-20 h-20 mb-2">
-                                            <Image
-                                                src={item.rarity === 'Secret' ? '/cs2_mystery_icon.png' : item.image}
-                                                alt={item.name}
-                                                fill
-                                                className={`object-contain ${item.rarity === 'Secret' ? 'scale-110 drop-shadow-[0_0_15px_rgba(255,215,0,0.6)]' : ''}`}
-                                            />
-                                        </div>
-                                        <span className={`text-[10px] font-bold truncate w-full text-center ${getRarityColor(item.rarity)}`}>
-                                            {item.name}
-                                        </span>
-                                    </div>
-                                )) : (
-                                    // Placeholder items before spin
-                                    selectedCase.items.slice(0, 10).map((item, i) => (
-                                        <div key={i} className="w-28 h-36 flex-shrink-0 bg-[#181A20] border-b-4 border-gray-700 flex flex-col items-center justify-center p-2 rounded-lg opacity-50">
-                                            <div className="w-16 h-16 bg-white/5 rounded-full" />
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-                        </div>
+                        <GachaSpinner rollItems={rollItems} activeCase={selectedCase} />
 
                         {/* Spin Button */}
                         <div className="flex justify-center">
