@@ -63,6 +63,9 @@ exports.rollGacha = async (req, res) => {
             wonItem = items[items.length - 1]; // Fallback
         }
 
+        // Ensure wonItem is a plain object for safe merging and property access
+        wonItem = wonItem.toObject ? wonItem.toObject() : wonItem;
+
         // Secret Rarity Logic
         let finalReward = wonItem;
         let isSecret = false;
@@ -92,12 +95,15 @@ exports.rollGacha = async (req, res) => {
                     secretReward = secretItems[secretItems.length - 1];
                 }
 
+                // Ensure secretReward is object
+                const secretRewardObj = secretReward.toObject ? secretReward.toObject() : secretReward;
+
                 // We return both:
                 // 1. A placeholder for the spinner (wonItem - usually the question mark or Secret visual)
                 // 2. The "Actual" reward (finalReward - e.g. Torpedo)
                 // We merge them so frontend has all info
                 finalReward = {
-                    ...secretReward.toObject(),
+                    ...secretRewardObj,
                     originalSecret: wonItem
                 };
             } else {
@@ -115,10 +121,10 @@ exports.rollGacha = async (req, res) => {
         finalReward = { ...finalReward, secretCode };
 
         // Explicitly determine name and image for History to ensure accuracy
-        // If it's a secret win, finalReward.name MUST be the secret item's name (e.g. Torpedo)
-        // If fallback occured, finalReward is wonItem (VOID RIM)
-        const historyItemName = finalReward.name;
-        const historyItemImage = finalReward.image;
+        // Validate to prevent crashes
+        const historyItemName = finalReward.name || 'Unknown Item';
+        const historyItemImage = finalReward.image || 'https://via.placeholder.com/150';
+        const historyRarity = finalReward.rarity || 'Common';
 
         // Save History
         await GachaHistory.create({
@@ -127,7 +133,7 @@ exports.rollGacha = async (req, res) => {
             caseName: gachaCase.name,
             itemName: historyItemName,
             itemImage: historyItemImage,
-            rarity: finalReward.rarity,
+            rarity: historyRarity, // Use validated rarity
             isSecret: isSecret,
             secretCode: secretCode,
             pricePaid: gachaCase.price
