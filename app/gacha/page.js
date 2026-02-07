@@ -24,7 +24,7 @@ export default function GachaPage() {
 
     const fetchCases = async () => {
         try {
-            const res = await api.get('/api/gacha');
+            const res = await api.get('/gacha');
             setCases(res.data);
         } catch (err) {
             console.error(err);
@@ -54,7 +54,7 @@ export default function GachaPage() {
 
         try {
             // Call API to get result immediately
-            const res = await api.post('/api/gacha/roll', { caseId: selectedCase._id });
+            const res = await api.post('/gacha/roll', { caseId: selectedCase._id });
             const { wonItem, newBalance } = res.data;
 
             // Wait for animation (simulated delay for now, real animation would use state)
