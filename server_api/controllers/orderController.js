@@ -12,8 +12,8 @@ exports.createOrder = async (req, res) => {
         const { items } = req.body;
         const orderItems = items || (req.body.productId ? [{ productId: req.body.productId, quantity: 1 }] : []);
 
-        if (!orderItems || orderItems.length === 0) {
-            return res.status(400).json({ message: 'Giỏ hàng trống' });
+        if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
+            return res.status(400).json({ message: 'Giỏ hàng trống hoặc không hợp lệ' });
         }
 
         // 1. Fetch products
