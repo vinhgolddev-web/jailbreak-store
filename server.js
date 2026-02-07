@@ -81,7 +81,11 @@ const globalLimiter = rateLimit({
     max: 100, // Limit each IP to 100 requests per windowMs
     standardHeaders: true,
     legacyHeaders: false,
-    message: { message: "Too many requests from this IP, please try again later." }
+    message: { message: "Too many requests from this IP, please try again later." },
+    validate: {
+        xForwardedForHeader: false, // Disable strict validation for proxies/IPv6
+        default: true
+    }
 });
 
 const authLimiter = rateLimit({
@@ -89,7 +93,11 @@ const authLimiter = rateLimit({
     max: 5, // Limit each IP to 5 requests per hour (Strict for Lookup)
     standardHeaders: true,
     legacyHeaders: false,
-    message: { message: "Too many lookup attempts, please try again in an hour." }
+    message: { message: "Too many lookup attempts, please try again in an hour." },
+    validate: {
+        xForwardedForHeader: false, // Disable strict validation for proxies/IPv6
+        default: true
+    }
 });
 
 // Apply Global Limiter to API routes (excluding specific ones if needed)
