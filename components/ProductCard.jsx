@@ -30,12 +30,12 @@ export default function ProductCard({ product, disabled }) {
             className={`group relative flex flex-col rounded-lg bg-surface border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${product.rarity === 'Legendary' || product.rarity === 'Godly' ? 'border-yellow-400/30 shadow-[0_0_15px_rgba(250,204,21,0.1)]' : 'border-white/10 hover:border-white/30'}`}
         >
             {/* Image Container */}
-            <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-8 group-hover:bg-black/80 transition-colors">
+            <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-2 group-hover:bg-black/80 transition-colors">
                 <Image
                     src={imgSrc}
                     alt={product.name}
                     fill
-                    onError={() => setImgSrc('https://placehold.co/400x400/1a1a1a/ffffff?text=No+Image')}
+                    onError={() => setImgSrc('https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg')}
                     className="object-contain grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
