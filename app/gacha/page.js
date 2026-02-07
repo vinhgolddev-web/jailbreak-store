@@ -134,7 +134,13 @@ export default function GachaPage() {
             setTimeout(() => {
                 setSpinResult(wonItem);
                 refreshUser();
-                addToast(`Chúc mừng! Bạn nhận được ${wonItem.name}`, 'success');
+
+                if (wonItem.secretCode) {
+                    addToast(`BẠN ĐÃ TRÚNG ${wonItem.name.toUpperCase()}!!!`, 'success');
+                } else {
+                    addToast(`Chúc mừng! Bạn nhận được ${wonItem.name}`, 'success');
+                }
+
                 setSpinning(false);
             }, 6500); // 6s spin + 0.5s buffer
 
