@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const User = require('../models/User');
 const GachaCase = require('../models/GachaCase');
 const GachaHistory = require('../models/GachaHistory');

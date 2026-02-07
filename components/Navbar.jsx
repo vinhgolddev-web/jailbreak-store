@@ -23,9 +23,9 @@ export default function Navbar() {
 
     const navLinks = [
         { href: '/', label: 'Home', icon: Home },
-        { href: '/products', label: 'Store', icon: Package },
+        { href: '/shop', label: 'Store', icon: Package },
         { href: '/gacha', label: 'Gacha', icon: Box },
-        { href: '/sell', label: 'Sell Cars', icon: Tag },
+        { href: '/sell-cars', label: 'Sell Cars', icon: Tag },
     ];
 
     return (
@@ -95,7 +95,7 @@ export default function Navbar() {
                                     </div>
 
                                     <div className="relative group">
-                                        <Link href="/profile">
+                                        <Link href="/dashboard">
                                             <div className="w-9 h-9 rounded-full bg-surface border border-white/10 overflow-hidden relative">
                                                 {user.avatar ? (
                                                     <Image src={user.avatar} alt={user.username} fill className="object-cover" />
