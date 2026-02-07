@@ -12,15 +12,11 @@ const rateLimit = require('express-rate-limit');
 
 const rollLimiter = rateLimit({
     windowMs: 2000, // 2 seconds
-    max: 1, // Limit each IP to 1 request per 2 seconds
+    max: 1, // Limit each user to 1 request per 2 seconds
     standardHeaders: true,
     legacyHeaders: false,
-    keyGenerator: (req) => req.user ? req.user.id : req.ip, // User-based limit
-    message: { message: "Please wait for the animation to finish!" },
-    validate: {
-        xForwardedForHeader: false, // Disable strict validation for proxies/IPv6
-        default: true
-    }
+    keyGenerator: (req) => req.user.id, // User-based limit (verifyToken ensures req.user exists)
+    message: { message: "Please wait for the animation to finish!" }
 });
 
 // @route   POST /api/gacha/roll
