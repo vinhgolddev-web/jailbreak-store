@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
@@ -21,6 +21,14 @@ export default function GachaPage() {
     // New State for CS2 Animation
     const [rollItems, setRollItems] = useState([]);
     const [xOffset, setXOffset] = useState(0);
+    const timerRef = useRef(null);
+
+    // Cleanup timer on unmount
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) clearTimeout(timerRef.current);
+        };
+    }, []);
 
     useEffect(() => {
         fetchCases();
@@ -131,7 +139,7 @@ export default function GachaPage() {
 
             setXOffset(finalTargetX);
 
-            setTimeout(() => {
+            timerRef.current = setTimeout(() => {
                 setSpinResult(wonItem);
                 refreshUser();
 

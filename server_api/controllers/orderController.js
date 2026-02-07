@@ -30,6 +30,12 @@ exports.createOrder = async (req, res) => {
 
         // 2. Validate Stock & Calculate Total
         for (const item of orderItems) {
+            // CRITICAL SECURITY: Prevent negative/zero quantity (Money printer exploit)
+            if (!Number.isInteger(item.quantity) || item.quantity < 1) {
+                await session.abortTransaction();
+                return res.status(400).json({ message: 'Số lượng không hợp lệ' });
+            }
+
             const product = products.find(p => p._id.toString() === item.productId);
 
             if (product.stock < item.quantity) {

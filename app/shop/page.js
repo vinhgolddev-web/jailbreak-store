@@ -40,20 +40,6 @@ export default function Shop() {
         return () => clearTimeout(timer);
     }, [search]);
 
-    const handleBuy = async (productId) => {
-        if (!user) return addToast('Vui lòng đăng nhập để mua hàng.', 'error');
-
-        try {
-            await api.post('/orders', { productId });
-            addToast('Mua thành công! Vật phẩm đã được thêm vào tài khoản.', 'success');
-            // Refresh User Balance & Product Stock without reloading
-            await refreshUser();
-            fetchProducts();
-        } catch (err) {
-            addToast(err.response?.data?.message || 'Mua thất bại', 'error');
-        }
-    };
-
     const filteredProducts = filter === 'All' ? products : products.filter(p => p.category === filter);
     const categories = ['All', 'Vehicle', 'Skin', 'Gamepass'];
 
@@ -107,7 +93,6 @@ export default function Shop() {
                         <ProductCard
                             key={product._id}
                             product={product}
-                            onBuy={handleBuy}
                         />
                     ))}
                 </div>

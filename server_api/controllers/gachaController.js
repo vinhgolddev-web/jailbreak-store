@@ -16,20 +16,27 @@ exports.getGachaCases = async (req, res) => {
 exports.rollGacha = async (req, res) => {
     const { caseId } = req.body;
 
+    if (!caseId || !caseId.match(/^[0-9a-fA-F]{24}$/)) {
+        return res.status(400).json({ message: 'Invalid Case ID' });
+    }
+
     try {
         const gachaCase = await GachaCase.findById(caseId);
         if (!gachaCase) {
             return res.status(404).json({ message: 'Case not found' });
         }
 
-        const user = await User.findById(req.user.id);
-        if (user.balance < gachaCase.price) {
+        // Atomic Balance Deduction
+        // Find user AND check balance >= price in one query
+        const user = await User.findOneAndUpdate(
+            { _id: req.user.id, balance: { $gte: gachaCase.price } },
+            { $inc: { balance: -gachaCase.price } },
+            { new: true }
+        );
+
+        if (!user) {
             return res.status(400).json({ message: 'Số dư không đủ' });
         }
-
-        // Deduct balance
-        user.balance -= gachaCase.price;
-        await user.save();
 
         // Roll logic: Weighted Random
         const items = gachaCase.items;
@@ -84,13 +91,19 @@ exports.rollGacha = async (req, res) => {
         // Attach code to reward
         finalReward = { ...finalReward, secretCode };
 
+        // Explicitly determine name and image for History to ensure accuracy
+        // If it's a secret win, finalReward.name MUST be the secret item's name (e.g. Torpedo)
+        // If fallback occured, finalReward is wonItem (VOID RIM)
+        const historyItemName = finalReward.name;
+        const historyItemImage = finalReward.image;
+
         // Save History
         await GachaHistory.create({
             userId: user._id,
             caseId: gachaCase._id,
             caseName: gachaCase.name,
-            itemName: finalReward.name,
-            itemImage: finalReward.image,
+            itemName: historyItemName,
+            itemImage: historyItemImage,
             rarity: finalReward.rarity,
             isSecret: isSecret,
             secretCode: secretCode,

@@ -4,7 +4,7 @@ const UserSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    balance: { type: Number, default: 0 },
+    balance: { type: Number, default: 0, min: 0 },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     avatar: { type: String, default: '' },
     cart: [
@@ -14,5 +14,7 @@ const UserSchema = new mongoose.Schema({
         }
     ]
 }, { timestamps: true });
+
+UserSchema.index({ createdAt: -1 });
 
 module.exports = mongoose.model('User', UserSchema);

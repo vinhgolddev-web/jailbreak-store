@@ -1,82 +1,46 @@
-const dotenv = require('dotenv');
-const User = require('./models/User');
-const Product = require('./models/Product');
-const Order = require('./models/Order');
-const Transaction = require('./models/Transaction');
-const connectDB = require('./config/db');
+const mongoose = require('mongoose');
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
-dotenv.config();
-connectDB();
+const GachaCase = require('./models/GachaCase');
+const SecretItem = require('./models/SecretItem');
 
-const seedData = async () => {
+const connectDB = async () => {
     try {
-        await User.deleteMany();
-        await Product.deleteMany();
-        await Order.deleteMany();
-        await Transaction.deleteMany();
-
-        // Create Admin User
-        const bcrypt = require('bcryptjs');
-        const salt = await bcrypt.genSalt(10);
-        const adminPassword = await bcrypt.hash('admin123', salt);
-
-        await User.create({
-            username: 'Admin',
-            email: 'admin@jailbreak.com',
-            password: adminPassword,
-            role: 'admin',
-            balance: 1000000000 // Infinite money for admin testing
-        });
-
-        await Product.insertMany([
-            {
-                name: 'Concept Car',
-                price: 2500000,
-                image: 'https://static.wikia.nocookie.net/jailbreak/images/0/07/Concept.png',
-                category: 'Vehicle',
-                rarity: 'Legendary',
-                stock: 5
-            },
-            {
-                name: 'HyperChrome Level 5',
-                price: 1000000,
-                image: 'https://tr.rbxcdn.com/186ace805174092408b49dbb4e54826b/420/420/Image/Png',
-                category: 'Skin',
-                rarity: 'Godly',
-                stock: 10
-            },
-            {
-                name: 'Volt Bike',
-                price: 1000000,
-                image: 'https://static.wikia.nocookie.net/jailbreak/images/1/18/Volt.png',
-                category: 'Vehicle',
-                rarity: 'Epic',
-                stock: 20
-            },
-            {
-                name: 'BlackHawk',
-                price: 1000000,
-                image: 'https://static.wikia.nocookie.net/jailbreak/images/6/6f/BlackHawk.png',
-                category: 'Vehicle',
-                rarity: 'Epic',
-                stock: 15
-            },
-            {
-                name: 'Pixel Texture',
-                price: 500000,
-                image: 'https://static.wikia.nocookie.net/jailbreak/images/a/a9/Pixel.png',
-                category: 'Skin',
-                rarity: 'Rare',
-                stock: 50
-            }
-        ]);
-
-        console.log('Data Imported!');
-        process.exit();
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log('MongoDB Connected');
     } catch (err) {
-        console.error(err);
+        console.error('DB Error:', err);
         process.exit(1);
     }
 };
 
-seedData();
+const importData = async () => {
+    await connectDB();
+
+    try {
+        // Read JSONs from root (parent of server_api)
+        const rootDir = path.join(__dirname, '../');
+        const casesData = JSON.parse(fs.readFileSync(path.join(rootDir, 'gachacases.json'), 'utf-8'));
+        const secretData = JSON.parse(fs.readFileSync(path.join(rootDir, 'secretitems.json'), 'utf-8'));
+
+        console.log('Clearing old data...');
+        await GachaCase.deleteMany({});
+        await SecretItem.deleteMany({});
+
+        console.log('Importing Gacha Cases...');
+        await GachaCase.insertMany(casesData);
+
+        console.log('Importing Secret Items...');
+        await SecretItem.insertMany(secretData);
+
+        console.log('✅ Data Imported Successfully!');
+        process.exit();
+    } catch (err) {
+        console.error('Error with data import:', err);
+        process.exit(1);
+    }
+};
+
+importData();

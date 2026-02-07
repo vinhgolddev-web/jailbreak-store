@@ -1,5 +1,21 @@
 const User = require('../models/User');
 
+// Update User Profile (Self)
+exports.updateProfile = async (req, res) => {
+    try {
+        const { username, email } = req.body;
+        // Whitelist allowed fields. DO NOT allow balance/role updates here.
+        const updates = {};
+        if (username) updates.username = username;
+        if (email) updates.email = email;
+
+        const user = await User.findByIdAndUpdate(req.user.id, updates, { new: true }).select('-password');
+        res.json(user);
+    } catch (_err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 // Get All Users (Admin)
 exports.getAllUsers = async (req, res) => {
     try {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const gachaController = require('../controllers/gachaController');
-const { verifyToken } = require('../middleware/auth');
+const { verifyToken, isAdmin } = require('../middleware/auth');
 
 // @route   GET /api/gacha
 // @desc    Get all gacha cases
@@ -20,7 +20,7 @@ router.get('/history', verifyToken, gachaController.getHistory);
 
 // @route   GET /api/gacha/history/all
 // @desc    Get all gacha history (Admin)
-// @access  Private (Admin check should be here, but using verifyToken for now)
-router.get('/history/all', verifyToken, gachaController.getAllHistory);
+// @access  Private (Admin)
+router.get('/history/all', isAdmin, gachaController.getAllHistory);
 
 module.exports = router;

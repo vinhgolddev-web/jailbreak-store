@@ -8,6 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
 export default function ProductCard({ product, disabled }) {
+    const { addToCart } = useCart();
     const [imgSrc, setImgSrc] = useState(product.image);
     const rarityColors = {
         'Common': 'text-gray-400 border-gray-400/20 bg-gray-400/10',

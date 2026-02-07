@@ -55,7 +55,8 @@ const apiLimiter = rateLimit({
     max: 200,
     standardHeaders: true,
     legacyHeaders: false,
-    message: { message: 'Too many requests, please try again later.' }
+    message: { message: 'Too many requests, please try again later.' },
+    validate: { xForwardedForHeader: false }
 });
 
 // 2. Strict Auth Limiter (Brute Force Protection)

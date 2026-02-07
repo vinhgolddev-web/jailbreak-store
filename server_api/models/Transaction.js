@@ -17,5 +17,6 @@ const TransactionSchema = new mongoose.Schema({
 
 // Index for performance
 TransactionSchema.index({ userId: 1 });
+TransactionSchema.index({ orderCode: 1 });
 
 module.exports = mongoose.model('Transaction', TransactionSchema);

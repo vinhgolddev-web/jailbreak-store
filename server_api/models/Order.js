@@ -15,5 +15,6 @@ const OrderSchema = new mongoose.Schema({
 // Indexes for performance
 OrderSchema.index({ userId: 1 });
 OrderSchema.index({ 'items.productId': 1 });
+OrderSchema.index({ status: 1, createdAt: -1 }); // For recent public orders dashboard
 
 module.exports = mongoose.model('Order', OrderSchema);

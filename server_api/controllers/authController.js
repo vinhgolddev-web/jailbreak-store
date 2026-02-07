@@ -6,6 +6,10 @@ exports.register = async (req, res) => {
     try {
         const { username, email, password } = req.body;
 
+        if (password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters' });
+        }
+
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
 
