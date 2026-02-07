@@ -7,7 +7,9 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 
-export default function ProductCard({ product, disabled }) {
+import { memo } from 'react';
+
+const ProductCard = memo(({ product, disabled }) => {
     const { addToCart } = useCart();
     const [imgSrc, setImgSrc] = useState(product.image);
     const rarityColors = {
@@ -19,6 +21,7 @@ export default function ProductCard({ product, disabled }) {
         'HyperChrome': 'text-red-500 border-red-500/20 bg-red-500/10',
         'Godly': 'text-rose-500 border-rose-500/20 bg-rose-500/10',
         'Limited': 'text-orange-400 border-orange-400/20 bg-orange-400/10',
+        'Secret': 'text-yellow-500 border-yellow-500/20 bg-yellow-500/10',
     };
 
     const colorClass = rarityColors[product.rarity] || 'text-gray-500 border-gray-500/20 bg-gray-500/5';
@@ -27,8 +30,8 @@ export default function ProductCard({ product, disabled }) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className={`group relative flex flex-col rounded-lg bg-surface border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${product.rarity === 'Legendary' || product.rarity === 'Godly' ? 'border-yellow-400/30 shadow-[0_0_15px_rgba(250,204,21,0.1)]' : 'border-white/10 hover:border-white/30'}`}
+            viewport={{ once: true, margin: "-50px" }}
+            className={`group relative flex flex-col rounded-lg bg-surface border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${['Legendary', 'Godly', 'Secret', 'HyperChrome'].includes(product.rarity) ? 'border-primary/40 shadow-[0_0_15px_rgba(255,159,10,0.15)]' : 'border-white/10 hover:border-white/30'}`}
         >
             {/* Image Container */}
             <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-6 group-hover:bg-black/80 transition-colors">
@@ -36,7 +39,7 @@ export default function ProductCard({ product, disabled }) {
                     src={imgSrc}
                     alt={product.name}
                     fill
-                    onError={() => setImgSrc('https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg')}
+                    onError={() => setImgSrc('/images/placeholder.png')} // Better placeholder handling
                     className="object-contain grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
@@ -50,8 +53,8 @@ export default function ProductCard({ product, disabled }) {
             {/* Info */}
             <div className="p-4 flex flex-col flex-1">
                 <div className="flex items-start justify-between mb-2">
-                    <h3 className="text-sm font-semibold text-white tracking-tight">{product.name}</h3>
-                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${colorClass}`}>
+                    <h3 className="text-sm font-semibold text-white tracking-tight line-clamp-1" title={product.name}>{product.name}</h3>
+                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border whitespace-nowrap ${colorClass}`}>
                         {product.rarity}
                     </span>
                 </div>
@@ -63,15 +66,17 @@ export default function ProductCard({ product, disabled }) {
                     <Button
                         onClick={() => addToCart(product)}
                         disabled={disabled || product.stock < 1}
-                        className={`min-h-[44px] sm:min-h-[36px] px-4 text-sm sm:text-xs font-semibold sm:font-medium rounded-lg sm:rounded-md transition-all active:scale-95 ${product.stock < 1
+                        className={`min-h-[36px] px-3 text-xs font-medium rounded-md transition-all active:scale-95 ${product.stock < 1
                             ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
                             : 'bg-white text-black hover:bg-gray-200 shadow-sm'
                             }`}
                     >
-                        {product.stock > 0 ? 'Thêm vào Giỏ' : 'Hết Hàng'}
+                        {product.stock > 0 ? 'Thêm' : 'Hết'}
                     </Button>
                 </div>
             </div>
         </motion.div>
     );
-}
+});
+
+export default ProductCard;
