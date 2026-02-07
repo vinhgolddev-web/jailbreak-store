@@ -99,6 +99,18 @@ const connectDB = async () => {
 mongoose.connection.on('error', err => console.error('[MONGOOSE ERROR]', err));
 mongoose.connection.on('disconnected', () => console.warn('[MONGOOSE] Disconnected'));
 
+// Check Critical Environment Variables
+const checkEnv = () => {
+    const required = ['MONGO_URI', 'JWT_SECRET', 'NEXT_PUBLIC_API_URL'];
+    const missing = required.filter(key => !process.env[key]);
+    if (missing.length > 0) {
+        console.error('[FATAL] Missing required Environment Variables:', missing.join(', '));
+        process.exit(1);
+    }
+};
+
+checkEnv();
+
 // Connect first, then start server
 connectDB().then(() => {
     app.prepare().then(() => {
