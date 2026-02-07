@@ -167,7 +167,7 @@ export default function CartDrawer() {
                                                                 +
                                                             </button>
                                                         </div>
-                                                        <p className="text-base font-bold">{(item.price * item.quantity).toLocaleString()} VNĐ</p>
+                                                        <p className="text-base font-bold">{(item.price * item.quantity || 0).toLocaleString()} VNĐ</p>
                                                     </div>
                                                 </div>
                                                 <button
@@ -185,7 +185,7 @@ export default function CartDrawer() {
                                     <div className="p-6 border-t border-white/10 bg-surface/50 backdrop-blur-md">
                                         <div className="flex justify-between items-end mb-4">
                                             <span className="text-gray-400 text-sm">Tổng cộng</span>
-                                            <span className="text-2xl font-bold">{totalAmount.toLocaleString()} VNĐ</span>
+                                            <span className="text-2xl font-bold">{(totalAmount || 0).toLocaleString()} VNĐ</span>
                                         </div>
                                         <button
                                             onClick={handleCheckoutClick}
@@ -204,7 +204,7 @@ export default function CartDrawer() {
                                 <div className="bg-[#1a1a1a] border border-white/20 p-6 rounded-2xl w-full max-w-sm shadow-2xl transform scale-100 animate-in fade-in zoom-in duration-200">
                                     <h3 className="text-xl font-bold text-white mb-2">Xác Nhận Mua?</h3>
                                     <p className="text-gray-400 mb-6">
-                                        Bạn sắp thanh toán <span className="text-white font-bold">{totalAmount.toLocaleString()} VNĐ</span> cho {cart.length} món.
+                                        Bạn sắp thanh toán <span className="text-white font-bold">{(totalAmount || 0).toLocaleString()} VNĐ</span> cho {cart.length} món.
                                     </p>
                                     <div className="flex gap-3">
                                         <button

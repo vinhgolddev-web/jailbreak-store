@@ -91,7 +91,7 @@ export default function Navbar() {
                                 <div className="hidden md:flex items-center gap-3 pl-3 border-l border-white/10">
                                     <div className="text-right hidden lg:block">
                                         <div className="text-xs text-gray-400">Balance</div>
-                                        <div className="text-sm font-bold text-primary">{user.balance?.toLocaleString()} VNĐ</div>
+                                        <div className="text-sm font-bold text-primary">{(user.balance || 0).toLocaleString()} VNĐ</div>
                                     </div>
 
                                     <div className="relative group">
@@ -180,7 +180,7 @@ export default function Navbar() {
                                         </div>
                                         <div>
                                             <div className="font-bold text-lg">{user.username}</div>
-                                            <div className="text-primary font-mono">{user.balance?.toLocaleString()} VNĐ</div>
+                                            <div className="text-primary font-mono">{(user.balance || 0).toLocaleString()} VNĐ</div>
                                         </div>
                                     </div>
                                     <Button variant="danger" onClick={logout} className="w-full justify-center">

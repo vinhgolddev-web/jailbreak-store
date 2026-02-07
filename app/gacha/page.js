@@ -193,7 +193,7 @@ export default function GachaPage() {
                                 <h3 className="text-xl font-bold text-center mb-2 group-hover:text-primary transition-colors">{c.name}</h3>
                                 <div className="text-center">
                                     <span className="inline-block bg-primary text-black font-bold px-4 py-1 rounded-full text-sm shadow-[0_0_15px_rgba(255,159,10,0.4)]">
-                                        {c.price.toLocaleString()} VNĐ
+                                        {(c.price || 0).toLocaleString()} VNĐ
                                     </span>
                                 </div>
                             </motion.div>
@@ -255,7 +255,7 @@ export default function GachaPage() {
                                 disabled={isRolling}
                                 className="px-12 py-4 text-xl shadow-[0_0_30px_rgba(255,159,10,0.4)] animate-pulse-slow"
                             >
-                                {isRolling ? 'Đang quay...' : `QUAY NGAY (${selectedCase.price.toLocaleString()} VNĐ)`}
+                                {isRolling ? 'Đang quay...' : `QUAY NGAY (${(selectedCase.price || 0).toLocaleString()} VNĐ)`}
                             </Button>
                         </div>
                     </div>
