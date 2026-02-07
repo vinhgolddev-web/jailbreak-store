@@ -133,9 +133,17 @@ export function CartProvider({ children }) {
         }));
     };
 
-    const clearCart = () => {
+    const clearCart = async () => {
         setCart([]);
         localStorage.removeItem('jb_cart');
+
+        if (user) {
+            try {
+                await api.post('/cart/sync', { cart: [] });
+            } catch (e) {
+                console.error('Failed to clear server cart', e);
+            }
+        }
     };
 
     const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
