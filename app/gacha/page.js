@@ -8,6 +8,8 @@ import api from '@/lib/axios';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { Sparkles, X, Gift, History, Globe, User } from 'lucide-react';
+import GachaSpinner from '@/components/GachaSpinner';
+import GachaCaseList from '@/components/GachaCaseList';
 
 export default function GachaPage() {
     const { user, refreshUser } = useAuth();
@@ -146,17 +148,13 @@ export default function GachaPage() {
             <div className="container mx-auto px-4">
 
                 {/* Page Title */}
+                {/* Page Title */}
                 <div className="text-center mb-12">
                     <h1 className="text-4xl md:text-6xl font-black mb-4 text-white drop-shadow-2xl">
                         VÒNG QUAY <span className="text-primary text-glow">MAY MẮN</span>
                     </h1>
                     <p className="text-gray-400 text-lg">Săn vật phẩm giới hạn với giá cực rẻ!</p>
                 </div>
-
-                import GachaSpinner from '@/components/GachaSpinner';
-                import GachaCaseList from '@/components/GachaCaseList';
-
-                // ... (inside GachaPage)
 
                 {/* Case Selection using Memoized Component */}
                 {!selectedCase && (
