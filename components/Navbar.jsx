@@ -28,6 +28,7 @@ export default function Navbar() {
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-6">
                     <NavLink href="/shop">Cửa Hàng</NavLink>
+                    <NavLink href="/sell-cars">Thu Xe</NavLink>
                     <NavLink href="/deposit">Nạp Tiền</NavLink>
 
                     {/* Cart Trigger */}
@@ -108,6 +109,9 @@ export default function Navbar() {
                         <div className="p-4 flex flex-col gap-4">
                             <Link href="/shop" className="text-base font-medium p-3 rounded-lg bg-surfaceHighlight/30 text-gray-200 hover:text-white active:bg-surfaceHighlight" onClick={() => setMenuOpen(false)}>
                                 Cửa Hàng
+                            </Link>
+                            <Link href="/sell-cars" className="text-base font-medium p-3 rounded-lg bg-surfaceHighlight/30 text-gray-200 hover:text-white active:bg-surfaceHighlight" onClick={() => setMenuOpen(false)}>
+                                Thu Xe
                             </Link>
                             <Link href="/deposit" className="text-base font-medium p-3 rounded-lg bg-surfaceHighlight/30 text-gray-200 hover:text-white active:bg-surfaceHighlight" onClick={() => setMenuOpen(false)}>
                                 Nạp Tiền
