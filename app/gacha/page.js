@@ -11,7 +11,7 @@ import { Sparkles, X, Gift } from 'lucide-react';
 
 export default function GachaPage() {
     const { user, refreshUser } = useAuth();
-    const { showToast } = useToast();
+    const { addToast } = useToast();
     const [cases, setCases] = useState([]);
     const [loading, setLoading] = useState(true);
     const [spinning, setSpinning] = useState(false);
@@ -28,7 +28,7 @@ export default function GachaPage() {
             setCases(res.data);
         } catch (err) {
             console.error(err);
-            showToast('Lỗi tải dữ liệu hòm', 'error');
+            addToast('Lỗi tải dữ liệu hòm', 'error');
         } finally {
             setLoading(false);
         }
@@ -36,7 +36,7 @@ export default function GachaPage() {
 
     const handleOpenCase = (gachaCase) => {
         if (!user) {
-            showToast('Vui lòng đăng nhập để quay!', 'error');
+            addToast('Vui lòng đăng nhập để quay!', 'error');
             return;
         }
         setSelectedCase(gachaCase);
@@ -45,7 +45,7 @@ export default function GachaPage() {
     const handleSpin = async () => {
         if (!user || !selectedCase) return;
         if (user.balance < selectedCase.price) {
-            showToast('Số dư không đủ!', 'error');
+            addToast('Số dư không đủ!', 'error');
             return;
         }
 
@@ -61,13 +61,13 @@ export default function GachaPage() {
             setTimeout(() => {
                 setSpinResult(wonItem);
                 refreshUser(); // Update balance in UI
-                showToast(`Chúc mừng! Bạn nhận được ${wonItem.name}`, 'success');
+                addToast(`Chúc mừng! Bạn nhận được ${wonItem.name}`, 'success');
                 setSpinning(false);
             }, 3000); // 3 seconds spin time
 
         } catch (err) {
             console.error(err);
-            showToast(err.response?.data?.message || 'Lỗi khi quay', 'error');
+            addToast(err.response?.data?.message || 'Lỗi khi quay', 'error');
             setSpinning(false);
         }
     };
