@@ -7,7 +7,7 @@ const Order = require('../models/Order'); // Reuse Order for history or create n
 // Wait, we do have Transaction model in seed.js? Let's check.
 // Using 'Order' for now is safe for "purchase history".
 
-const { protect } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/auth');
 
 // @route   GET /api/gacha
 // @desc    Get all gacha cases
