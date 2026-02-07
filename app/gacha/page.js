@@ -100,6 +100,10 @@ export default function GachaPage() {
         return items;
     };
 
+    const [spinKey, setSpinKey] = useState(0);
+
+    // ... (existing code)
+
     const handleSpin = async () => {
         if (!user) return addToast('Vui lòng đăng nhập để quay!', 'error');
         if (user.balance < selectedCase.price) return addToast('Số dư không đủ!', 'error');
@@ -115,6 +119,7 @@ export default function GachaPage() {
             // Use visualItem for spinner (shows Mystery Icon if Secret)
             const rollSequence = generateRollItems(selectedCase, visualItem);
             setRollItems(rollSequence);
+            setSpinKey(prev => prev + 1); // Force remount to reset animation perfectly
             refreshUser(); // Update balance immediately in UI
 
             // Spin Animation (Handled by GachaSpinner useEffect listening to rollItems)
@@ -170,7 +175,7 @@ export default function GachaPage() {
                             <div className="text-2xl font-bold text-primary">{selectedCase.name}</div>
                         </div>
 
-                        <GachaSpinner rollItems={rollItems} activeCase={selectedCase} />
+                        <GachaSpinner key={spinKey} rollItems={rollItems} activeCase={selectedCase} />
 
                         {/* Spin Button */}
                         <div className="flex justify-center">
