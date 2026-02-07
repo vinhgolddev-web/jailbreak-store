@@ -88,12 +88,12 @@ exports.createOrder = async (req, res) => {
             method: 'balance'
         }], { session });
 
-        // Generate 8-char uppercase alphanumeric code
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        for (let i = 0; i < 8; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+        const generateUniqueCode = require('../utils/codeGenerator');
+
+        // ...
+
+        // Generate 8-char uppercase alphanumeric code (Unique)
+        const code = await generateUniqueCode(Order, 'code', 8);
 
         // 6. Create Order
         const order = new Order({

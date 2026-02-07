@@ -103,13 +103,13 @@ exports.rollGacha = async (req, res) => {
             }
         }
 
+        const generateUniqueCode = require('../utils/codeGenerator');
+
+        // ...
+
         // UNIFIED CODE GENERATION (User Request)
-        // Generate an 8-character uppercase alphanumeric code (A-Z, 0-9)
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        for (let i = 0; i < 8; i++) {
-            code += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
+        // Generate an 8-character uppercase alphanumeric code (A-Z, 0-9) - Unique Checked
+        const code = await generateUniqueCode(GachaHistory, 'code', 8);
 
         finalReward = { ...finalReward, code };
 

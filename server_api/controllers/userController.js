@@ -25,3 +25,18 @@ exports.getAllUsers = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+// Get Leaderboard (Top 10 Richest)
+exports.getLeaderboard = async (req, res) => {
+    try {
+        const users = await User.find()
+            .sort({ balance: -1 })
+            .limit(10)
+            .select('username balance avatar') // Public info only
+            .lean();
+        res.json(users);
+    } catch (err) {
+        console.error('Leaderboard Error:', err);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};

@@ -16,6 +16,6 @@ const OrderSchema = new mongoose.Schema({
 OrderSchema.index({ userId: 1 });
 OrderSchema.index({ 'items.productId': 1 });
 OrderSchema.index({ status: 1, createdAt: -1 }); // For recent public orders dashboard
-OrderSchema.index({ code: 1 }); // For Code Lookup Tool
+OrderSchema.index({ code: 1 }, { unique: true }); // For Code Lookup Tool & Uniqueness
 
 module.exports = mongoose.model('Order', OrderSchema);

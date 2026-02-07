@@ -6,4 +6,7 @@ const { isAdmin } = require('../middleware/auth');
 // Admin only
 router.get('/', isAdmin, userController.getAllUsers);
 
+// Public Leaderboard
+router.get('/leaderboard', userController.getLeaderboard);
+
 module.exports = router;
