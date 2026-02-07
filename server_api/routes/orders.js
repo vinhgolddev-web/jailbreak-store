@@ -14,16 +14,14 @@ const buyLimiter = rateLimit({
     windowMs: 1000, // 1 second
     max: 1, // Limit each User to 1 request per second
     keyGenerator: (req, res) => {
-        if (req.user) return req.user.id;
-        return req.ip;
+        return req.user ? req.user.id : 'anonymous'; // Safe fallback, though verifyToken ensures req.user
     },
     legacyHeaders: false,
     standardHeaders: true,
     message: { message: "Transaction too fast. Please wait 1 second." },
     validate: {
         xForwardedForHeader: false,
-        default: true,
-        ip: false
+        default: true
     }
 });
 
