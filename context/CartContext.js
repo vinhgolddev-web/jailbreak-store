@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useToast } from './ToastContext';
 import { useAuth } from './AuthContext';
 import api from '@/lib/axios';
@@ -73,7 +73,7 @@ export function CartProvider({ children }) {
         }
     }, [cart, user]);
 
-    const addToCart = (product) => {
+    const addToCart = useCallback((product) => {
         // Redirect to login if not authenticated
         if (!user) {
             addToast('Please login to add items to cart', 'error');
@@ -107,13 +107,13 @@ export function CartProvider({ children }) {
             return [...prev, { ...product, quantity: 1 }];
         });
         // setIsOpen(true); // Auto-open disabled
-    };
+    }, [cart, user, addToast]);
 
-    const removeFromCart = (productId) => {
+    const removeFromCart = useCallback((productId) => {
         setCart(prev => prev.filter(item => item._id !== productId));
-    };
+    }, []);
 
-    const updateQuantity = (productId, delta) => {
+    const updateQuantity = useCallback((productId, delta) => {
         if (delta > 0) {
             const item = cart.find(i => i._id === productId);
             if (item && item.quantity >= item.stock) {
@@ -131,9 +131,9 @@ export function CartProvider({ children }) {
             }
             return item;
         }));
-    };
+    }, [cart, addToast]);
 
-    const clearCart = async () => {
+    const clearCart = useCallback(async () => {
         setCart([]);
         localStorage.removeItem('jb_cart');
 
@@ -144,10 +144,10 @@ export function CartProvider({ children }) {
                 console.error('Failed to clear server cart', e);
             }
         }
-    };
+    }, [user]);
 
-    const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const totalAmount = useMemo(() => cart.reduce((sum, item) => sum + (item.price * item.quantity), 0), [cart]);
+    const totalItems = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
 
     return (
         <CartContext.Provider value={{

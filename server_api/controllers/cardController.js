@@ -19,8 +19,13 @@ exports.submitCard = async (req, res) => {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
-        const partnerId = process.env.TSR_PARTNER_ID || '1234567890'; // Default for testing
-        const partnerKey = process.env.TSR_PARTNER_KEY || '8d30d12543e3f4628f8885c575727145'; // Default for testing
+        const partnerId = process.env.TSR_PARTNER_ID;
+        const partnerKey = process.env.TSR_PARTNER_KEY;
+
+        if (!partnerId || !partnerKey) {
+            console.error('TSR Config Missing');
+            return res.status(500).json({ message: 'Service configuration error' });
+        }
 
         // 2. Prepare Data
         const command = 'charging';
@@ -104,9 +109,84 @@ exports.submitCard = async (req, res) => {
     }
 };
 
-// Optional: Callback/Webhook Handler (If TSR supports it and you configured it)
+// Callback/Webhook Handler from Thesieure
 exports.handleCallback = async (req, res) => {
-    // Implement if TSR calls back to a URL
-    // Validate signature and update Transaction -> Success -> User Balance
-    res.status(200).send('OK');
+    try {
+        const { status, message, request_id, trans_id, declared_value, value, amount, code, serial, telco, callback_sign } = req.body;
+
+        const partnerKey = process.env.TSR_PARTNER_KEY;
+
+        // 1. Validate Signature
+        // Formula: MD5(partner_key + code + serial)
+        const rawSignature = `${partnerKey}${code}${serial}`;
+        const mySignature = crypto.createHash('md5').update(rawSignature).digest('hex');
+
+        if (mySignature !== callback_sign) {
+            return res.status(400).json({ message: 'Invalid signature' });
+        }
+
+        // 2. Find Transaction
+        const transaction = await Transaction.findOne({ orderCode: request_id, type: 'deposit', method: 'card' });
+
+        if (!transaction) {
+            return res.status(404).json({ message: 'Transaction not found' });
+        }
+
+        if (transaction.status === 'completed') {
+            return res.json({ message: 'Already completed' });
+        }
+
+        // 3. Handle Status
+        // Status 1: Success
+        // Status 2: Incorrect logic (Wrong card type/amount?) -> Failed
+        // Status 99: Pending
+        // Other: Fail
+
+        if (status == 1) {
+            // SUCCESS
+            // Use declared_value or value? "value" is the real value received.
+            const realAmount = Number(value);
+
+            // Atomic Lock & Update
+            const updatedTx = await Transaction.findOneAndUpdate(
+                { _id: transaction._id, status: 'pending' },
+                {
+                    status: 'completed',
+                    amount: realAmount, // Update to actual received amount
+                    balanceAfter: transaction.balanceBefore + realAmount, // Approximate, will fix in User update
+                    description: `Card Deposit Success: ${telco} ${realAmount.toLocaleString()}đ`
+                },
+                { new: true }
+            );
+
+            if (updatedTx) {
+                // Credit User
+                const user = await User.findByIdAndUpdate(
+                    transaction.userId,
+                    { $inc: { balance: realAmount } },
+                    { new: true }
+                );
+
+                // Update final balance log
+                updatedTx.balanceAfter = user.balance;
+                await updatedTx.save();
+            }
+
+        } else if (status == 2 || status == 3 || status == 4) {
+            // FAILED
+            await Transaction.findOneAndUpdate(
+                { _id: transaction._id, status: 'pending' },
+                {
+                    status: 'failed',
+                    description: `Card Failed: ${message || 'Unknown error'}`
+                }
+            );
+        }
+
+        res.status(200).json({ message: 'Callback received' });
+
+    } catch (error) {
+        console.error('Card Callback Error:', error);
+        res.status(500).json({ message: 'Internal error' });
+    }
 };

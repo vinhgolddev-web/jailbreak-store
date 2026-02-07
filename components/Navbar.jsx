@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { ShoppingCart, User, LogOut, Menu, X, Box, Tag, Home, Search, Package } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
 import Image from 'next/image';
@@ -21,12 +21,12 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const navLinks = [
+    const navLinks = useMemo(() => [
         { href: '/', label: 'Home', icon: Home },
         { href: '/shop', label: 'Store', icon: Package },
         { href: '/gacha', label: 'Gacha', icon: Box },
         { href: '/sell-cars', label: 'Sell Cars', icon: Tag },
-    ];
+    ], []);
 
     return (
         <>
