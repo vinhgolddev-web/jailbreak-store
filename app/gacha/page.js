@@ -116,8 +116,9 @@ export default function GachaPage() {
             const res = await api.post('/gacha/roll', { caseId: selectedCase._id });
             const { wonItem: realItem, visualItem, newBalance } = res.data;
 
-            // Use visualItem for spinner (shows Mystery Icon if Secret)
-            const rollSequence = generateRollItems(selectedCase, visualItem);
+            // Use realItem for spinner so what users see is what they get (WYSIWYG)
+            // This prevents confusion if the "Secret Placeholder" looks like a different item (e.g. Volt)
+            const rollSequence = generateRollItems(selectedCase, realItem);
             setRollItems(rollSequence);
             setSpinKey(prev => prev + 1); // Force remount to reset animation perfectly
             refreshUser(); // Update balance immediately in UI
