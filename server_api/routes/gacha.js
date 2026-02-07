@@ -22,7 +22,7 @@ const rollLimiter = rateLimit({
 // @route   POST /api/gacha/roll
 // @desc    Open a case
 // @access  Private
-router.post('/roll', verifyToken, rollLimiter, gachaController.rollGacha);
+router.post('/roll', verifyToken, gachaController.rollGacha);
 
 // @route   GET /api/gacha/history
 // @desc    Get user's gacha history

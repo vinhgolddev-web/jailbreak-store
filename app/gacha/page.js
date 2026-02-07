@@ -221,6 +221,7 @@ export default function GachaPage() {
                                     <tr>
                                         <th className="p-4 font-medium whitespace-nowrap">Vật Phẩm</th>
                                         <th className="p-4 font-medium whitespace-nowrap">Độ Hiếm</th>
+                                        {historyTab === 'me' && <th className="p-4 font-medium whitespace-nowrap">Mã Code</th>}
                                         {historyTab === 'global' && <th className="p-4 font-medium whitespace-nowrap">Người Chơi</th>}
                                         <th className="p-4 font-medium text-right whitespace-nowrap">Thời Gian</th>
                                     </tr>
@@ -230,6 +231,11 @@ export default function GachaPage() {
                                         <tr key={i} className="hover:bg-white/5 transition-colors">
                                             <td className="p-4 font-bold text-white whitespace-nowrap">{h.itemName}</td>
                                             <td className={`p-4 font-bold whitespace-nowrap ${getRarityColor(h.rarity)}`}>{h.rarity}</td>
+                                            {historyTab === 'me' && (
+                                                <td className="p-4 whitespace-nowrap">
+                                                    <span className="font-mono font-bold text-primary bg-primary/10 px-2 py-1 rounded">{h.code}</span>
+                                                </td>
+                                            )}
                                             {historyTab === 'global' && <td className="p-4 text-gray-400 whitespace-nowrap">{h.username}</td>}
                                             <td className="p-4 text-gray-500 text-right whitespace-nowrap">{new Date(h.rolledAt).toLocaleTimeString()}</td>
                                         </tr>
