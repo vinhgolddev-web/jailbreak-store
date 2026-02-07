@@ -14,26 +14,16 @@ const config = {
                 'xl': '1200px', // Large Desktops
             },
             colors: {
-                background: '#050b14', // Deep Navy/Black (City Night)
-                surface: '#0f1923',    // Game Card Bg
-                surfaceHighlight: '#1a2733',
-                primary: '#00eaff',    // Cyan (Police/Tech)
-                secondary: '#ff2a6d',  // Neon Red/Pink (Criminal/Alert)
-                accent: '#d1ff00',     // Neon Yellow (Warning/Money)
-                success: '#00eaff',    // Cyan for success
-                danger: '#ff2a6d',     // Red for danger
-                border: '#1f2937',     // Dark Blue-Grey border
-                text: '#e2e8f0',       // Light Grey text
-                muted: '#94a3b8',      // Muted text
-            },
-            fontFamily: {
-                sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                display: ['"Orbitron"', 'sans-serif'], // Connecting to the game vibe
-            },
-            boxShadow: {
-                'neon-blue': '0 0 5px #00eaff, 0 0 10px #00eaff',
-                'neon-red': '0 0 5px #ff2a6d, 0 0 10px #ff2a6d',
-                'neon-yellow': '0 0 5px #d1ff00, 0 0 10px #d1ff00',
+                background: '#0F1115', // Deep Gunmetal
+                surface: '#181A20',    // Dark Gray Surface
+                surfaceHighlight: '#23262F', // Lighter Surface
+                primary: '#FF9F0A',    // Amber Orange
+                primaryHover: '#FFB340', // Lighter Orange
+                secondary: '#9CA3AF',  // Cool Gray Text
+                accent: '#FF9F0A',     // Same as Primary for consistency
+                success: '#22C55E',    // Green
+                danger: '#EF4444',     // Red
+                border: '#2A2D35',     // Subtle Border
             },
             fontFamily: {
                 sans: ['"Plus Jakarta Sans"', 'sans-serif'],

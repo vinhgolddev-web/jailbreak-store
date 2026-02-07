@@ -171,34 +171,3 @@ exports.getAllHistory = async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 };
-
-exports.getRecentWins = async (req, res) => {
-    try {
-        // Fetch last 20 wins, populate ONLY username
-        const history = await GachaHistory.find()
-            .sort({ rolledAt: -1 })
-            .limit(20)
-            .populate('userId', 'username');
-
-        // Mask usernames for privacy
-        const maskedHistory = history.map(h => {
-            const doc = h.toObject();
-            if (doc.userId && doc.userId.username) {
-                const name = doc.userId.username;
-                doc.winnerName = name.length > 3
-                    ? name.substring(0, 3) + '***'
-                    : name.substring(0, 1) + '***';
-            } else {
-                doc.winnerName = 'Unknown';
-            }
-            // Remove full user object to prevent leaking ID or other info
-            delete doc.userId;
-            return doc;
-        });
-
-        res.json(maskedHistory);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server Error' });
-    }
-};
