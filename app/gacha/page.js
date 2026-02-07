@@ -262,7 +262,12 @@ export default function GachaPage() {
                                                     className={`relative w-28 h-32 flex-shrink-0 bg-[#252525] border-b-4 ${getRarityBorderColor(item.rarity)} flex flex-col items-center justify-center p-2 rounded`}
                                                 >
                                                     <div className="relative w-20 h-20 mb-1">
-                                                        <Image src={item.image} alt={item.name} fill className="object-contain" />
+                                                        <Image
+                                                            src={item.rarity === 'Secret' ? '/cs2_mystery_icon.png' : item.image}
+                                                            alt={item.name}
+                                                            fill
+                                                            className={`object-contain ${item.rarity === 'Secret' ? 'scale-110 drop-shadow-[0_0_15px_rgba(255,215,0,0.6)]' : ''}`}
+                                                        />
                                                     </div>
                                                     <span className={`text-[10px] font-bold truncate w-full text-center ${getRarityTextColor(item.rarity)}`}>
                                                         {item.name}
@@ -276,7 +281,12 @@ export default function GachaPage() {
                                             {selectedCase.items.slice(0, 5).map((item, idx) => (
                                                 <div key={idx} className={`w-28 h-32 flex-shrink-0 bg-[#252525] border-b-4 ${getRarityBorderColor(item.rarity)} flex flex-col items-center justify-center p-2 rounded`}>
                                                     <div className="relative w-20 h-20 mb-1">
-                                                        <Image src={item.image} alt={item.name} fill className="object-contain" />
+                                                        <Image
+                                                            src={item.rarity === 'Secret' ? '/cs2_mystery_icon.png' : item.image}
+                                                            alt={item.name}
+                                                            fill
+                                                            className={`object-contain ${item.rarity === 'Secret' ? 'scale-110 drop-shadow-[0_0_15px_rgba(255,215,0,0.6)]' : ''}`}
+                                                        />
                                                     </div>
                                                 </div>
                                             ))}
