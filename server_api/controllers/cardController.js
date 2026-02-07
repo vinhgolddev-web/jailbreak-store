@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const axios = require('axios');
 const crypto = require('crypto');
 const Transaction = require('../models/Transaction');

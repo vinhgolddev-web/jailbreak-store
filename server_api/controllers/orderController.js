@@ -65,10 +65,15 @@ exports.createOrder = async (req, res) => {
 
         // 4. Atomic Stock Deduction (With Session)
         for (const item of finalItems) {
-            await Product.updateOne(
-                { _id: item.productId },
+            const result = await Product.updateOne(
+                { _id: item.productId, stock: { $gte: item.quantity } },
                 { $inc: { stock: -item.quantity } }
             ).session(session);
+
+            if (result.modifiedCount === 0) {
+                await session.abortTransaction();
+                return res.status(400).json({ message: 'Sản phẩm không đủ số lượng (Hết hàng trong khi thanh toán)' });
+            }
         }
 
         // 5. Create Transaction Log
