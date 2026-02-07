@@ -16,7 +16,11 @@ const rollLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     keyGenerator: (req) => req.user ? req.user.id : req.ip, // User-based limit
-    message: { message: "Please wait for the animation to finish!" }
+    message: { message: "Please wait for the animation to finish!" },
+    validate: {
+        xForwardedForHeader: false, // Disable strict validation for proxies/IPv6
+        default: true
+    }
 });
 
 // @route   POST /api/gacha/roll
