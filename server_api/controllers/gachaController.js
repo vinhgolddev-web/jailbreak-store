@@ -40,6 +40,13 @@ exports.rollGacha = async (req, res) => {
 
         // Roll logic: Weighted Random
         const items = gachaCase.items;
+
+        if (!items || items.length === 0) {
+            // Rollback balance if case is empty (shouldn't happen in production but good for safety)
+            await User.findByIdAndUpdate(user._id, { $inc: { balance: gachaCase.price } });
+            return res.status(400).json({ message: 'Case is empty (Contact Admin)' });
+        }
+
         const totalWeight = items.reduce((sum, item) => sum + item.probability, 0);
         let random = Math.random() * totalWeight;
 
