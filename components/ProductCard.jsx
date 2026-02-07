@@ -9,30 +9,28 @@ import { useRouter } from 'next/navigation';
 
 export default function ProductCard({ product, disabled }) {
     const [imgSrc, setImgSrc] = useState(product.image);
-    const isLegendary = product.rarity === 'Legendary';
-    const { addToCart } = useCart();
-    const { user } = useAuth();
-    const router = useRouter();
-
-    const handleBuyNow = () => {
-        if (!user) {
-            router.push('/login');
-            return;
-        }
-        addToCart(product);
-        // We could also redirect to checkout immediately if desired, 
-        // but for "Buy Now" in a cart system, usually it just adds and opens cart.
+    const rarityColors = {
+        'Common': 'text-gray-400 border-gray-400/20 bg-gray-400/10',
+        'Uncommon': 'text-green-400 border-green-400/20 bg-green-400/10',
+        'Rare': 'text-blue-400 border-blue-400/20 bg-blue-400/10',
+        'Epic': 'text-purple-400 border-purple-400/20 bg-purple-400/10',
+        'Legendary': 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10',
+        'HyperChrome': 'text-red-500 border-red-500/20 bg-red-500/10',
+        'Godly': 'text-rose-500 border-rose-500/20 bg-rose-500/10',
+        'Limited': 'text-orange-400 border-orange-400/20 bg-orange-400/10',
     };
+
+    const colorClass = rarityColors[product.rarity] || 'text-gray-500 border-gray-500/20 bg-gray-500/5';
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative flex flex-col rounded-lg bg-surface border border-white/10 overflow-hidden transition-all duration-300 hover:border-white/30 hover:-translate-y-1"
+            className={`group relative flex flex-col rounded-lg bg-surface border overflow-hidden transition-all duration-300 hover:-translate-y-1 ${product.rarity === 'Legendary' || product.rarity === 'Godly' ? 'border-yellow-400/30 shadow-[0_0_15px_rgba(250,204,21,0.1)]' : 'border-white/10 hover:border-white/30'}`}
         >
             {/* Image Container */}
-            <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-10 group-hover:bg-black/80 transition-colors">
+            <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-8 group-hover:bg-black/80 transition-colors">
                 <Image
                     src={imgSrc}
                     alt={product.name}
@@ -52,7 +50,7 @@ export default function ProductCard({ product, disabled }) {
             <div className="p-4 flex flex-col flex-1">
                 <div className="flex items-start justify-between mb-2">
                     <h3 className="text-sm font-semibold text-white tracking-tight">{product.name}</h3>
-                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${isLegendary ? 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10' : 'text-gray-500 border-gray-500/20'}`}>
+                    <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${colorClass}`}>
                         {product.rarity}
                     </span>
                 </div>
