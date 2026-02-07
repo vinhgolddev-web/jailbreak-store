@@ -116,7 +116,11 @@ server.use('/api/gacha', require('./server_api/routes/gacha')); // Gacha System
 server.use('/api/admin', require('./server_api/routes/admin')); // Admin Dashboard
 server.use('/api/lookup', authLimiter, require('./server_api/routes/lookup')); // Code Lookup Tool (Strict Limit)
 
-// ...
+
+// Next.js Route Handler (must be AFTER API routes)
+server.all('*', (req, res) => {
+    return handle(req, res);
+});
 
 // Global Error Handler
 server.use((err, req, res, next) => {
@@ -132,6 +136,29 @@ server.use((err, req, res, next) => {
     res.status(500).json(response);
 });
 
+// Start Server (with Next.js preparation)
+app.prepare().then(() => {
+    // Connect to MongoDB
+    mongoose.connect(process.env.MONGO_URI)
+        .then(() => {
+            console.log('[MongoDB] Connected successfully');
+
+            // Start HTTP server
+            const httpServer = server.listen(PORT, '0.0.0.0', () => {
+                console.log(`[Server] Running on http://0.0.0.0:${PORT}`);
+                console.log(`[Mode] ${process.env.NODE_ENV || 'development'}`);
+            });
+
+            // Timeouts to mitigate Slowloris attacks
+            httpServer.keepAliveTimeout = 65000; // 65 seconds
+            httpServer.headersTimeout = 66000; // Slightly more than keepAliveTimeout
+        })
+        .catch((err) => {
+            console.error('[MongoDB] Connection failed:', err);
+            process.exit(1);
+        });
+});
+
 // Process-level Error Handling (Safety Net)
 process.on('unhandledRejection', (err) => {
     console.error('[UNHANDLED REJECTION] Shutting down...', err);
@@ -142,5 +169,3 @@ process.on('uncaughtException', (err) => {
     console.error('[UNCAUGHT EXCEPTION] Shutting down...', err);
     process.exit(1);
 });
-
-module.exports = server;
