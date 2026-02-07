@@ -30,8 +30,8 @@ export default function SellCarsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full mb-12">
                     <FeatureCard
                         icon={<DollarSign className="text-green-400" />}
-                        title="Giá Cao Hơn"
-                        desc="Thu mua cao hơn giá trị thường 10-20%."
+                        title="Giá Tốt Hơn"
+                        desc="Thu mua tốt hơn giá thị trường."
                     />
                     <FeatureCard
                         icon={<Zap className="text-yellow-400" />}

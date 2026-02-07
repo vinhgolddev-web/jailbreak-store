@@ -32,7 +32,7 @@ export default function ProductCard({ product, disabled }) {
             className="group relative flex flex-col rounded-lg bg-surface border border-white/10 overflow-hidden transition-all duration-300 hover:border-white/30 hover:-translate-y-1"
         >
             {/* Image Container */}
-            <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-6 group-hover:bg-black/80 transition-colors">
+            <div className="relative aspect-[16/10] bg-black/50 border-b border-white/5 flex items-center justify-center p-10 group-hover:bg-black/80 transition-colors">
                 <Image
                     src={imgSrc}
                     alt={product.name}
