@@ -77,10 +77,14 @@ export default function GachaPage() {
 
         try {
             const res = await api.post('/gacha/roll', { caseId: selectedCase._id });
-            const { wonItem, newBalance } = res.data;
+            const { wonItem, visualItem, newBalance } = res.data;
 
-            // Generate the strip
-            const strip = generateRollItems(selectedCase, wonItem);
+            // Generate the strip using the Visual Item (what the spinner lands on)
+            // If normal item, visualItem should vary or be equal to wonItem.
+            // Backend should ensure visualItem is present. Fallback to wonItem if not.
+            const targetItem = visualItem || wonItem;
+
+            const strip = generateRollItems(selectedCase, targetItem);
             setRollItems(strip);
 
             // Calculate Target Offset
@@ -271,7 +275,8 @@ function getRarityBorderColor(rarity) {
         'Epic': 'border-purple-500',
         'Legendary': 'border-yellow-500',
         'HyperChrome': 'border-red-600',
-        'Godly': 'border-rose-500'
+        'Godly': 'border-rose-500',
+        'Secret': 'border-red-900 shadow-[0_0_15px_rgba(255,0,0,0.5)]'
     };
     return colors[rarity] || 'border-gray-500';
 }
@@ -284,7 +289,8 @@ function getRarityTextColor(rarity) {
         'Epic': 'text-purple-400',
         'Legendary': 'text-yellow-400',
         'HyperChrome': 'text-red-500',
-        'Godly': 'text-rose-500'
+        'Godly': 'text-rose-500',
+        'Secret': 'text-red-600 animate-pulse'
     };
     return colors[rarity] || 'text-gray-400';
 }

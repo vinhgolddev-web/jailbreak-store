@@ -191,6 +191,6 @@ exports.verifyPayment = async (req, res) => {
 
     } catch (error) {
         console.error('Verify Payment Error:', error);
-        res.status(500).json({ message: 'Internal verification error' });
+        res.status(500).json({ message: 'Internal verification error', error: error.message });
     }
 };

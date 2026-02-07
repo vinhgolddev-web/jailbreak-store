@@ -20,7 +20,7 @@ const GachaCaseSchema = new mongoose.Schema({
         image: { type: String, required: true },
         rarity: {
             type: String,
-            enum: ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'HyperChrome', 'Godly'],
+            enum: ['Common', 'Uncommon', 'Rare', 'Epic', 'Legendary', 'HyperChrome', 'Godly', 'Secret'],
             default: 'Common'
         },
         probability: { type: Number, required: true } // Percentage (0-100)

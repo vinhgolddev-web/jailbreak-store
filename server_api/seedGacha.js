@@ -6,9 +6,12 @@ const connectDB = require('./config/db');
 dotenv.config();
 connectDB();
 
+const SecretItem = require('./models/SecretItem');
+
 const seedGacha = async () => {
     try {
         await GachaCase.deleteMany();
+        await SecretItem.deleteMany();
 
         await GachaCase.create([
             {
@@ -29,13 +32,21 @@ const seedGacha = async () => {
                 items: [
                     { name: '50,000 Cash', image: 'https://tr.rbxcdn.com/7d363b36449171728109d437ce21c322/150/150/Image/Png', rarity: 'Common', probability: 40 },
                     { name: 'BlackHawk', image: 'https://static.wikia.nocookie.net/jailbreak/images/6/6f/BlackHawk.png', rarity: 'Epic', probability: 30 },
-                    { name: 'Concept Car', image: 'https://static.wikia.nocookie.net/jailbreak/images/0/07/Concept.png', rarity: 'Legendary', probability: 20 },
-                    { name: 'HyperChrome Lvl 5', image: 'https://tr.rbxcdn.com/186ace805174092408b49dbb4e54826b/420/420/Image/Png', rarity: 'HyperChrome', probability: 10 }
+                    { name: 'Concept Car', image: 'https://static.wikia.nocookie.net/jailbreak/images/0/07/Concept.png', rarity: 'Legendary', probability: 19.5 },
+                    { name: 'HyperChrome Lvl 5', image: 'https://tr.rbxcdn.com/186ace805174092408b49dbb4e54826b/420/420/Image/Png', rarity: 'HyperChrome', probability: 10 },
+                    { name: 'VOID RIM (Secret)', image: 'https://static.wikia.nocookie.net/jailbreak/images/d/d4/VoidRim.png', rarity: 'Secret', probability: 0.5 }
                 ]
             }
         ]);
 
-        console.log('Gacha Data Seeded!');
+        await SecretItem.create([
+            { name: 'Torpedo', image: 'https://static.wikia.nocookie.net/jailbreak/images/c/c3/Torpedo.png', rarity: 'Godly' },
+            { name: 'Arachnid', image: 'https://static.wikia.nocookie.net/jailbreak/images/0/05/Arachnid.png', rarity: 'Godly' },
+            { name: 'Beam Hybrid', image: 'https://static.wikia.nocookie.net/jailbreak/images/3/30/Beam.png', rarity: 'Godly' },
+            { name: 'Spinner Rims', image: 'https://static.wikia.nocookie.net/jailbreak/images/d/d6/Spinner.png', rarity: 'Godly' }
+        ]);
+
+        console.log('Gacha Data & Secret Items Seeded!');
         process.exit();
     } catch (err) {
         console.error(err);
