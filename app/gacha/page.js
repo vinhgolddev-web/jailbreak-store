@@ -256,9 +256,25 @@ export default function GachaPage() {
                                     <Image src={wonItem.image} alt={wonItem.name} fill className="object-contain relative z-10 drop-shadow-2xl" />
                                 </div>
 
-                                <div className={`text-2xl font-bold mb-8 ${getRarityColor(wonItem.rarity)}`}>
+                                <div className={`text-2xl font-bold mb-4 ${getRarityColor(wonItem.rarity)}`}>
                                     {wonItem.name}
                                 </div>
+
+                                {wonItem.secretCode && (
+                                    <div className="bg-white/10 p-4 rounded-xl border border-yellow-500/30 w-full mb-6 relative overflow-hidden group cursor-pointer"
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(wonItem.secretCode);
+                                            addToast("Đã sao chép mã Secret!", "success");
+                                        }}
+                                    >
+                                        <div className="absolute inset-0 bg-yellow-500/5 group-hover:bg-yellow-500/10 transition" />
+                                        <p className="text-[10px] text-yellow-500 mb-1 uppercase tracking-widest font-bold">Mã Nhận Thưởng Đặc Biệt</p>
+                                        <div className="text-xl font-mono font-black text-white tracking-widest drop-shadow-md">
+                                            {wonItem.secretCode}
+                                        </div>
+                                        <p className="text-[10px] text-gray-500 mt-1 italic">(Chụp ảnh hoặc copy mã này gửi Admin)</p>
+                                    </div>
+                                )}
 
                                 <div className="flex gap-3">
                                     <Button onClick={() => setShowResult(false)} className="flex-1">
