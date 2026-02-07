@@ -45,7 +45,7 @@ const GachaSpinner = memo(({ rollItems, activeCase }) => {
     }, [rollItems]);
 
     return (
-        <div className="relative h-48 bg-[#0a0a0a] rounded-xl border border-primary/30 overflow-hidden mb-8 shadow-[0_0_50px_rgba(255,159,10,0.1)]">
+        <div className="relative h-48 bg-[#0a0a0a] rounded-xl border border-primary/30 overflow-hidden mb-8 shadow-[0_0_50px_rgba(255,159,10,0.1)] max-w-[100vw]">
             <div className="absolute top-0 bottom-0 left-1/2 w-1 bg-primary z-20 shadow-[0_0_15px_rgba(255,159,10,1)]" />
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-primary rotate-45 z-20" />
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-4 h-4 bg-primary rotate-45 z-20" />

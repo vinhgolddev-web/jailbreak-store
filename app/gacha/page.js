@@ -203,31 +203,33 @@ export default function GachaPage() {
                     </div>
 
                     <div className="bg-surface rounded-2xl border border-white/5 overflow-hidden">
-                        <table className="w-full text-left">
-                            <thead className="bg-white/5 text-gray-400">
-                                <tr>
-                                    <th className="p-4 font-medium">Vật Phẩm</th>
-                                    <th className="p-4 font-medium">Độ Hiếm</th>
-                                    {historyTab === 'global' && <th className="p-4 font-medium">Người Chơi</th>}
-                                    <th className="p-4 font-medium text-right">Thời Gian</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/5">
-                                {(historyTab === 'global' ? globalHistory : myHistory).map((h, i) => (
-                                    <tr key={i} className="hover:bg-white/5 transition-colors">
-                                        <td className="p-4 font-bold text-white">{h.itemName}</td>
-                                        <td className={`p-4 font-bold ${getRarityColor(h.rarity)}`}>{h.rarity}</td>
-                                        {historyTab === 'global' && <td className="p-4 text-gray-400">{h.username}</td>}
-                                        <td className="p-4 text-gray-500 text-right">{new Date(h.rolledAt).toLocaleTimeString()}</td>
-                                    </tr>
-                                ))}
-                                {(historyTab === 'global' ? globalHistory : myHistory).length === 0 && (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left min-w-[600px]">
+                                <thead className="bg-white/5 text-gray-400">
                                     <tr>
-                                        <td colSpan={5} className="p-8 text-center text-gray-500">Chưa có dữ liệu</td>
+                                        <th className="p-4 font-medium whitespace-nowrap">Vật Phẩm</th>
+                                        <th className="p-4 font-medium whitespace-nowrap">Độ Hiếm</th>
+                                        {historyTab === 'global' && <th className="p-4 font-medium whitespace-nowrap">Người Chơi</th>}
+                                        <th className="p-4 font-medium text-right whitespace-nowrap">Thời Gian</th>
                                     </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="divide-y divide-white/5">
+                                    {(historyTab === 'global' ? globalHistory : myHistory).map((h, i) => (
+                                        <tr key={i} className="hover:bg-white/5 transition-colors">
+                                            <td className="p-4 font-bold text-white whitespace-nowrap">{h.itemName}</td>
+                                            <td className={`p-4 font-bold whitespace-nowrap ${getRarityColor(h.rarity)}`}>{h.rarity}</td>
+                                            {historyTab === 'global' && <td className="p-4 text-gray-400 whitespace-nowrap">{h.username}</td>}
+                                            <td className="p-4 text-gray-500 text-right whitespace-nowrap">{new Date(h.rolledAt).toLocaleTimeString()}</td>
+                                        </tr>
+                                    ))}
+                                    {(historyTab === 'global' ? globalHistory : myHistory).length === 0 && (
+                                        <tr>
+                                            <td colSpan={5} className="p-8 text-center text-gray-500">Chưa có dữ liệu</td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
