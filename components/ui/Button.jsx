@@ -18,9 +18,10 @@ export default function Button({
     };
 
     const { playClick } = useSoundSystem();
+    const { sound = true } = props;
 
     const handleClick = (e) => {
-        playClick();
+        if (sound) playClick();
         if (props.onClick) props.onClick(e);
     };
 

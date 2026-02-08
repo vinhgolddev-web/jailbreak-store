@@ -43,7 +43,10 @@ export default function Home() {
             className="flex flex-col sm:flex-row gap-5 justify-center items-center pt-8"
           >
             <Link href="/shop" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto px-12 py-4 text-lg shadow-[0_0_20px_rgba(255,159,10,0.4)]">
+              <Button
+                onClick={() => window.dispatchEvent(new Event('close-notifications'))}
+                className="w-full sm:w-auto px-12 py-4 text-lg shadow-[0_0_20px_rgba(255,159,10,0.4)]"
+              >
                 Khám Phá Store <ArrowRight size={20} className="ml-2" />
               </Button>
             </Link>

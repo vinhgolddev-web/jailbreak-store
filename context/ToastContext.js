@@ -9,12 +9,16 @@ export const ToastProvider = ({ children }) => {
     const [toasts, setToasts] = useState([]);
     const { playSuccess, playError } = useSoundSystem();
 
-    const addToast = useCallback((message, type = 'info') => {
-        // Play sound based on type
-        if (type === 'success') {
-            playSuccess();
-        } else if (type === 'error') {
-            playError();
+    const addToast = useCallback((message, type = 'info', options = {}) => {
+        // Play sound based on type (unless silent)
+        if (!options.silent) {
+            if (type === 'success') {
+                console.log('🔔 Toast: Playing success sound');
+                playSuccess();
+            } else if (type === 'error') {
+                console.log('🔔 Toast: Playing error sound');
+                playError();
+            }
         }
 
         const id = Date.now();

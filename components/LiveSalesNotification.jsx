@@ -56,6 +56,13 @@ export default function LiveSalesNotification() {
         };
     }, [recentOrders]);
 
+    // Listen for custom close event (e.g. from "Khám phá store" button)
+    useEffect(() => {
+        const handleClose = () => setNotification(null);
+        window.addEventListener('close-notifications', handleClose);
+        return () => window.removeEventListener('close-notifications', handleClose);
+    }, []);
+
     return (
         <AnimatePresence>
             {notification && (

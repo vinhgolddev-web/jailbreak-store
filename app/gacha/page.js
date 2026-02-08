@@ -305,11 +305,11 @@ export default function GachaPage() {
                                 )}
 
                                 <div className="flex gap-3">
-                                    <Button onClick={() => setShowResult(false)} className="flex-1">
-                                        Nhận Quà
-                                    </Button>
-                                    <Button variant="secondary" onClick={() => { setShowResult(false); handleSpin(); }}>
+                                    <Button onClick={() => { setShowResult(false); handleSpin(); }} className="flex-1">
                                         Quay Tiếp
+                                    </Button>
+                                    <Button variant="secondary" onClick={() => setShowResult(false)}>
+                                        Huỷ
                                     </Button>
                                 </div>
                             </div>

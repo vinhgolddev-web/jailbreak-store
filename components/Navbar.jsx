@@ -120,10 +120,10 @@ export default function Navbar() {
                             ) : (
                                 <div className="hidden md:flex items-center gap-2">
                                     <Link href="/login">
-                                        <Button variant="ghost" size="sm">Login</Button>
+                                        <Button variant="ghost" size="sm" sound={false}>Login</Button>
                                     </Link>
                                     <Link href="/register">
-                                        <Button size="sm">Register</Button>
+                                        <Button size="sm" sound={false}>Register</Button>
                                     </Link>
                                 </div>
                             )}
