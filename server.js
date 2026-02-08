@@ -114,7 +114,7 @@ server.use('/api/wallet', require('./server_api/routes/wallet'));
 server.use('/api/card', require('./server_api/routes/card'));
 server.use('/api/gacha', require('./server_api/routes/gacha')); // Gacha System
 server.use('/api/admin', require('./server_api/routes/admin')); // Admin Dashboard
-server.use('/api/lookup', authLimiter, require('./server_api/routes/lookup')); // Code Lookup Tool (Strict Limit)
+server.use('/api/lookup', require('./server_api/routes/lookup')); // Code Lookup Tool
 
 
 // Next.js Route Handler (must be AFTER API routes)
