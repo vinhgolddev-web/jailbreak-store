@@ -1,4 +1,4 @@
-
+"use client";
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import useSound from 'use-sound';
 
