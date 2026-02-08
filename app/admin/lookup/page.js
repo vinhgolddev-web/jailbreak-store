@@ -163,7 +163,7 @@ export default function AdminLookup() {
                                                 </div>
                                                 <div>
                                                     <p className="font-bold text-white text-sm">{item.productName}</p>
-                                                    <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
+                                                    <p className="text-xs text-gray-400">Số lượng: {item.quantity}</p>
                                                 </div>
                                             </div>
                                         ))}

@@ -45,12 +45,12 @@ export default function AdminOrders() {
                         {orders.map(order => (
                             <tr key={order._id} className="hover:bg-white/5 transition-colors">
                                 <td className="py-4 pl-6 font-mono text-gray-500">#{order._id.slice(-6)}</td>
-                                <td className="py-4 font-mono font-bold text-yellow-500 select-all">{order.secretCode || '-'}</td>
+                                <td className="py-4 font-mono font-bold text-yellow-500 select-all">{order.code || '-'}</td>
                                 <td className="py-4 font-medium text-white">
                                     {order.userId?.username || 'Deleted User'}
                                 </td>
                                 <td className="py-4 text-gray-400">
-                                    {order.items.map(item => item.productId?.name || 'Unknown Item').join(', ')}
+                                    {order.items.map(item => `${item.productId?.name || 'Unknown'} (x${item.quantity})`).join(', ')}
                                 </td>
                                 <td className="py-4 font-bold text-green-400">{order.totalAmount.toLocaleString()} VNĐ</td>
                                 <td className="py-4">

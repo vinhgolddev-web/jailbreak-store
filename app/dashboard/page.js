@@ -92,7 +92,7 @@ export default function Dashboard() {
                             orders.map(order => (
                                 <tr key={order._id} className="hover:bg-white/5 transition">
                                     <td className="p-4 font-medium text-white">
-                                        {order.items[0]?.productId?.name || 'Vật phẩm ẩn'}
+                                        {order.items.map(item => `${item.productId?.name || 'Unknown'} (x${item.quantity})`).join(', ')}
                                     </td>
                                     <td className="p-4 font-mono text-primary font-bold tracking-wider select-all cursor-pointer" title="Bấm để copy" onClick={() => navigator.clipboard.writeText(order.code || 'ĐANG XỬ LÝ')}>
                                         {order.code || 'ĐANG XỬ LÝ'}
