@@ -42,10 +42,17 @@ export const SoundProvider = ({ children }) => {
     // Actually, useSound might return nulls during SSR?
     // Let's keep it simple for now, just fixing the createContext error.
 
-    const [playClick] = useSound('/sounds/click.mp3', { volume: isMuted ? 0 : volume });
-    const [playHover] = useSound('/sounds/hover.mp3', { volume: isMuted ? 0 : volume * 0.2 }); // Quieter hover
-    const [playSuccess] = useSound('/sounds/success.mp3', { volume: isMuted ? 0 : volume });
-    const [playError] = useSound('/sounds/error.mp3', { volume: isMuted ? 0 : volume });
+    const soundOptions = {
+        volume: isMuted ? 0 : volume,
+        onload: () => console.log('Sound loaded'),
+        onloaderror: (id, err) => console.error('Sound load error:', err),
+        onplayerror: (id, err) => console.error('Sound play error:', err),
+    };
+
+    const [playClick] = useSound('/sounds/click.mp3', soundOptions);
+    const [playHover] = useSound('/sounds/hover.mp3', { ...soundOptions, volume: isMuted ? 0 : volume * 0.2 });
+    const [playSuccess] = useSound('/sounds/success.mp3', soundOptions);
+    const [playError] = useSound('/sounds/error.mp3', soundOptions);
 
     // Gacha Sounds
     const [playSpin, { stop: stopSpin }] = useSound('/sounds/spin.mp3', { volume: isMuted ? 0 : volume, loop: true });
