@@ -9,9 +9,9 @@ const SecretItem = require('./models/SecretItem');
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('MongoDB Connected');
+        console.info('✅ MongoDB Connected');
     } catch (err) {
-        console.error('DB Error:', err);
+        console.error('❌ DB Error:', err);
         process.exit(1);
     }
 };
@@ -33,17 +33,17 @@ const importData = async () => {
         const casesData = JSON.parse(fs.readFileSync(path.join(rootDir, 'gachacases.json'), 'utf-8'));
         const secretData = JSON.parse(fs.readFileSync(path.join(rootDir, 'secretitems.json'), 'utf-8'));
 
-        console.log('Clearing old data...');
+        console.info('🧹 Clearing old data...');
         await GachaCase.deleteMany({});
         await SecretItem.deleteMany({});
 
-        console.log('Importing Gacha Cases...');
+        console.info('📦 Importing Gacha Cases...');
         await GachaCase.insertMany(casesData);
 
-        console.log('Importing Secret Items...');
+        console.info('💎 Importing Secret Items...');
         await SecretItem.insertMany(secretData);
 
-        console.log('✅ Data Imported Successfully!');
+        console.info('✅ Data Imported Successfully!');
         process.exit();
     } catch (err) {
         console.error('Error with data import:', err);
