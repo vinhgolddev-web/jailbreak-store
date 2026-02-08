@@ -253,7 +253,7 @@ export default function GachaPage() {
                                                 </td>
                                             )}
                                             {historyTab === 'global' && <td className="p-4 text-gray-400 whitespace-nowrap">{h.username}</td>}
-                                            <td className="p-4 text-gray-500 text-right whitespace-nowrap">{new Date(h.rolledAt).toLocaleTimeString()}</td>
+                                            <td className="p-4 text-gray-500 text-right whitespace-nowrap">{new Date(h.createdAt || h.rolledAt).toLocaleTimeString()}</td>
                                         </tr>
                                     ))}
                                     {(historyTab === 'global' ? globalHistory : myHistory).length === 0 && (
