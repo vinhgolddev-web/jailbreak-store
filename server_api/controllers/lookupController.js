@@ -60,7 +60,8 @@ exports.searchCode = async (req, res) => {
                 items: orderResult.items.map(i => ({
                     productName: i.productId?.name,
                     image: i.productId?.image,
-                    rarity: i.productId?.rarity
+                    rarity: i.productId?.rarity,
+                    quantity: i.quantity
                 })),
                 user: {
                     username: orderResult.userId?.username,

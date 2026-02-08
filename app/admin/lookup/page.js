@@ -124,15 +124,11 @@ export default function AdminLookup() {
                                 <div className="bg-black/30 rounded-xl p-4 space-y-2">
                                     <div className="flex justify-between">
                                         <span className="text-gray-500">Username:</span>
-                                        <span className="text-white font-medium">{result.data.userId?.username || 'Unknown'}</span>
+                                        <span className="text-white font-medium">{result.data.user?.username || 'Unknown'}</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <span className="text-gray-500">Email:</span>
-                                        <span className="text-white font-medium">{result.data.userId?.email || 'Unknown'}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-gray-500">User ID:</span>
-                                        <span className="text-gray-600 font-mono text-xs">{result.data.userId?._id || result.data.userId}</span>
+                                        <span className="text-white font-medium">{result.data.user?.email || 'Unknown'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -163,10 +159,10 @@ export default function AdminLookup() {
                                             <div key={idx} className="flex gap-3 items-center border-b border-white/5 last:border-0 pb-2 last:pb-0">
                                                 <div className="w-10 h-10 bg-white/5 rounded-lg p-1">
                                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                                    <img src={item.productId?.image} alt={item.productId?.name} className="w-full h-full object-contain" />
+                                                    <img src={item.image} alt={item.productName} className="w-full h-full object-contain" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-white text-sm">{item.productId?.name}</p>
+                                                    <p className="font-bold text-white text-sm">{item.productName}</p>
                                                     <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
                                                 </div>
                                             </div>
