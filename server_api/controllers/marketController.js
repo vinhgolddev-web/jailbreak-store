@@ -109,8 +109,13 @@ exports.purchaseListing = async (req, res) => {
         );
 
         // 4. Update Listing
+        const generateUniqueCode = require('../utils/codeGenerator');
+        const code = await generateUniqueCode(MarketListing, 'code', 8);
+
         listing.status = 'sold';
         listing.buyerId = buyer._id;
+        listing.code = code;
+        listing.soldAt = Date.now();
         await listing.save({ session });
 
         // 5. Create Transaction Logs
@@ -141,6 +146,7 @@ exports.purchaseListing = async (req, res) => {
         res.json({
             message: 'Giao dịch thành công!',
             sellerFacebook: seller.facebookLink,
+            code: code,
             newBalance: buyer.balance
         });
 
@@ -153,12 +159,24 @@ exports.purchaseListing = async (req, res) => {
     }
 };
 
-// Get My Listings
+// Get My Listings (Sold/Active)
 exports.getMyListings = async (req, res) => {
     try {
         const listings = await MarketListing.find({ sellerId: req.user.id })
             .sort({ createdAt: -1 });
         res.json(listings);
+    } catch (err) {
+        res.status(500).json({ message: 'Lỗi server' });
+    }
+};
+
+// Get My Purchases
+exports.getMyPurchases = async (req, res) => {
+    try {
+        const purchases = await MarketListing.find({ buyerId: req.user.id, status: 'sold' })
+            .sort({ soldAt: -1 })
+            .populate('sellerId', 'username avatar facebookLink');
+        res.json(purchases);
     } catch (err) {
         res.status(500).json({ message: 'Lỗi server' });
     }

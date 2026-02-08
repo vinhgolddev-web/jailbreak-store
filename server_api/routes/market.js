@@ -13,6 +13,11 @@ router.get('/', marketController.getListings);
 // @access  Private
 router.get('/me', verifyToken, marketController.getMyListings);
 
+// @route   GET /api/market/purchased
+// @desc    Get my purchased items
+// @access  Private
+router.get('/purchased', verifyToken, marketController.getMyPurchases);
+
 // @route   POST /api/market/register
 // @desc    Register as seller
 // @access  Private
