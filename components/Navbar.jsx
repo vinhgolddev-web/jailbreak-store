@@ -95,9 +95,7 @@ export default function Navbar() {
                             {/* Auth */}
                             {user ? (
                                 <div className="hidden md:flex items-center gap-3 pl-3 border-l border-white/10">
-                                    import {formatCurrency} from '@/lib/utils'; // Add to imports (I will handle import separately or merging relies on snippet context)
 
-                                    // Inside component
                                     <div className="text-right hidden lg:block">
                                         <div className="text-xs text-gray-400">Balance</div>
                                         <div className="text-sm font-bold text-primary truncate max-w-[120px]" title={formatCurrency(user.balance)}>

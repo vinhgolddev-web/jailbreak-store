@@ -94,15 +94,15 @@ export default function Dashboard() {
                                     <td className="p-4 font-medium text-white">
                                         {order.items[0]?.productId?.name || 'Vật phẩm ẩn'}
                                     </td>
-                                    <td className="p-4 font-mono text-primary font-bold tracking-wider select-all cursor-pointer" title="Bấm để copy" onClick={() => navigator.clipboard.writeText(order.secretCode || 'ĐANG XỬ LÝ')}>
-                                        {order.secretCode || 'ĐANG XỬ LÝ'}
+                                    <td className="p-4 font-mono text-primary font-bold tracking-wider select-all cursor-pointer" title="Bấm để copy" onClick={() => navigator.clipboard.writeText(order.code || 'ĐANG XỬ LÝ')}>
+                                        {order.code || 'ĐANG XỬ LÝ'}
                                     </td>
                                     <td className="p-4 text-gray-400 text-sm">
                                         {new Date(order.createdAt).toLocaleDateString()}
                                     </td>
                                     <td className="p-4">
-                                        <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-bold">
-                                            {order.status === 'completed' ? 'Thành công' : order.status}
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${order.status === 'completed' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+                                            {order.status === 'completed' ? 'Thành công' : 'Đang xử lý'}
                                         </span>
                                     </td>
                                     <td className="p-4 text-right font-mono text-gray-300">
@@ -164,7 +164,7 @@ function GachaHistorySection() {
                                         {item.itemName}
                                     </td>
                                     <td className="p-4 font-mono text-yellow-400 font-bold tracking-wider select-all cursor-pointer" title="Bấm để copy">
-                                        {item.secretCode}
+                                        {item.code}
                                     </td>
                                     <td className="p-4">
                                         <span className={`px-2 py-1 rounded text-xs font-bold border ${getRarityStyle(item.rarity)}`}>
