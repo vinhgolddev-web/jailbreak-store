@@ -106,8 +106,8 @@ export default function AdminLookup() {
                                 </div>
                             </div>
                             <span className={`px-3 py-1 rounded-full text-xs font-bold border ${result.type === 'GACHA'
-                                    ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
-                                    : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                ? 'bg-purple-500/10 text-purple-400 border-purple-500/20'
+                                : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
                                 }`}>
                                 {result.type === 'GACHA' ? 'GACHA SYSTEM' : 'SHOP SYSTEM'}
                             </span>
@@ -180,8 +180,8 @@ export default function AdminLookup() {
                                 <div className="bg-white/5 p-4 rounded-xl text-center">
                                     <span className="block text-gray-500 text-xs mb-1">Status</span>
                                     <span className={`font-bold ${result.data.status === 'claimed' || result.data.status === 'completed'
-                                            ? 'text-green-500'
-                                            : 'text-yellow-500'
+                                        ? 'text-green-500'
+                                        : 'text-yellow-500'
                                         }`}>
                                         {result.data.status ? result.data.status.toUpperCase() : 'UNKNOWN'}
                                     </span>
@@ -195,7 +195,7 @@ export default function AdminLookup() {
                                 <div className="bg-white/5 p-4 rounded-xl text-center md:col-span-2">
                                     <span className="block text-gray-500 text-xs mb-1">Validation Code</span>
                                     <span className="font-mono text-yellow-500 font-bold select-all">
-                                        {result.data.secretCode || 'N/A'}
+                                        {result.data.code || 'N/A'}
                                     </span>
                                 </div>
                             </div>

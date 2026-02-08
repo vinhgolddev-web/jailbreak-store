@@ -12,7 +12,7 @@ exports.searchCode = async (req, res) => {
         const cleanCode = code.trim();
 
         // 1. Search in Gacha History
-        const gachaResult = await GachaHistory.findOne({ secretCode: cleanCode })
+        const gachaResult = await GachaHistory.findOne({ code: cleanCode })
             .populate('userId', 'username email')
             .lean();
 
@@ -38,8 +38,8 @@ exports.searchCode = async (req, res) => {
             });
         }
 
-        // 2. Search in Orders (Secret Code or Order ID)
-        let orderResult = await Order.findOne({ secretCode: cleanCode })
+        // 2. Search in Orders (Code or Order ID)
+        let orderResult = await Order.findOne({ code: cleanCode })
             .populate('userId', 'username email')
             .populate('items.productId', 'name image rarity')
             .lean();
@@ -66,7 +66,8 @@ exports.searchCode = async (req, res) => {
                     username: orderResult.userId?.username,
                     email: orderResult.userId?.email ? orderResult.userId.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : '***' // Mask email
                 },
-                createdAt: orderResult.createdAt
+                createdAt: orderResult.createdAt,
+                code: orderResult.code
             };
 
             return res.json({
