@@ -52,10 +52,10 @@ export const SoundProvider = ({ children }) => {
     const [playReveal] = useSound('/sounds/reveal.mp3', { volume: isMuted ? 0 : volume });
 
     // Win Sounds
-    const [playWinCommon] = useSound('/sounds/win-common.mp3', { volume: isMuted ? 0 : volume });
-    const [playWinRare] = useSound('/sounds/win-rare.mp3', { volume: isMuted ? 0 : volume });
-    const [playWinGodly] = useSound('/sounds/win-godly.mp3', { volume: isMuted ? 0 : volume });
-    const [playWinSecret] = useSound('/sounds/win-secret.mp3', { volume: isMuted ? 0 : volume });
+    const [playWinCommon] = useSound('/sounds/win.mp3', { volume: isMuted ? 0 : volume });
+    const [playWinRare] = useSound('/sounds/win.mp3', { volume: isMuted ? 0 : volume });
+    const [playWinGodly] = useSound('/sounds/win.mp3', { volume: isMuted ? 0 : volume });
+    const [playWinSecret] = useSound('/sounds/win.mp3', { volume: isMuted ? 0 : volume });
 
     const playWinSound = useCallback((rarity) => {
         switch (rarity) {
