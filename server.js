@@ -81,15 +81,16 @@ server.use(express.static(path.join(__dirname, 'public')));
 server.use('/sounds', express.static(path.join(__dirname, 'public/sounds')));
 
 // Rate Limiters
-windowMs: 15 * 60 * 1000, // 15 minutes
+const globalLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
     max: 1000, // Relaxed limit: 1000 requests per IP per 15 mins (approx 66/min)
-        standardHeaders: true,
-            legacyHeaders: false,
-                message: { message: "Too many requests from this IP, please try again later." },
-validate: {
-    xForwardedForHeader: false, // Disable strict validation for proxies/IPv6
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { message: "Too many requests from this IP, please try again later." },
+    validate: {
+        xForwardedForHeader: false, // Disable strict validation for proxies/IPv6
         default: true
-}
+    }
 });
 
 const authLimiter = rateLimit({

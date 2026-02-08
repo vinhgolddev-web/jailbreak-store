@@ -159,6 +159,7 @@ function GachaHistorySection() {
                                     <td className="p-4 text-gray-300">{item.caseName}</td>
                                     <td className="p-4 font-bold text-white flex items-center gap-2">
                                         <div className="w-8 h-8 relative rounded overflow-hidden border border-white/10">
+                                            {/* eslint-disable-next-line @next/next/no-img-element */}
                                             <img src={item.itemImage} alt="" className="object-cover w-full h-full" />
                                         </div>
                                         {item.itemName}

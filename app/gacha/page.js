@@ -30,15 +30,6 @@ export default function GachaPage() {
 
     const spinnerRef = useRef(null);
 
-    useEffect(() => {
-        fetchCases();
-        fetchGlobalHistory();
-    }, []);
-
-    useEffect(() => {
-        if (user) fetchMyHistory();
-    }, [user]);
-
     const fetchCases = async () => {
         try {
             const res = await api.get('/gacha');
@@ -51,6 +42,7 @@ export default function GachaPage() {
     const fetchGlobalHistory = async () => {
         // Placeholder for now as backend is not ready
         // In real imp, fetch from /api/gacha/recent
+        await new Promise(resolve => setTimeout(resolve, 0)); // Ensure async behavior
         setGlobalHistory([
             { itemName: 'Torpedo', rarity: 'Secret', username: 'Vin***', rolledAt: new Date().toISOString() },
             { itemName: 'Beignet', rarity: 'Godly', username: 'Gam***', rolledAt: new Date().toISOString() },
@@ -65,6 +57,21 @@ export default function GachaPage() {
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        const init = async () => {
+            await fetchCases();
+            await fetchGlobalHistory();
+        };
+        init();
+    }, []);
+
+    useEffect(() => {
+        const initMyHistory = async () => {
+            if (user) await fetchMyHistory();
+        };
+        initMyHistory();
+    }, [user]);
 
     const getRarityColor = (rarity) => {
         switch (rarity) {
