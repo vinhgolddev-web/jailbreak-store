@@ -26,7 +26,7 @@ exports.searchCode = async (req, res) => {
                 code: gachaResult.code,
                 user: {
                     username: gachaResult.userId?.username,
-                    email: gachaResult.userId?.email ? gachaResult.userId.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : '***'
+                    email: gachaResult.userId?.email || 'Unknown'
                 },
                 createdAt: gachaResult.createdAt
             };
@@ -65,7 +65,7 @@ exports.searchCode = async (req, res) => {
                 })),
                 user: {
                     username: orderResult.userId?.username,
-                    email: orderResult.userId?.email ? orderResult.userId.email.replace(/(.{2})(.*)(@.*)/, '$1***$3') : '***' // Mask email
+                    email: orderResult.userId?.email || 'Unknown' // No mask
                 },
                 createdAt: orderResult.createdAt,
                 code: orderResult.code
