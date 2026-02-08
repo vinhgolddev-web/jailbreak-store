@@ -40,13 +40,12 @@ export default function GachaPage() {
     };
 
     const fetchGlobalHistory = async () => {
-        // Placeholder for now as backend is not ready
-        // In real imp, fetch from /api/gacha/recent
-        await new Promise(resolve => setTimeout(resolve, 0)); // Ensure async behavior
-        setGlobalHistory([
-            { itemName: 'Torpedo', rarity: 'Secret', username: 'Vin***', rolledAt: new Date().toISOString() },
-            { itemName: 'Beignet', rarity: 'Godly', username: 'Gam***', rolledAt: new Date().toISOString() },
-        ]);
+        try {
+            const res = await api.get('/gacha/recent');
+            setGlobalHistory(res.data);
+        } catch (error) {
+            console.error("Failed to fetch global history:", error);
+        }
     };
 
     const fetchMyHistory = async () => {

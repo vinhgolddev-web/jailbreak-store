@@ -34,4 +34,9 @@ router.get('/history', verifyToken, gachaController.getHistory);
 // @access  Private (Admin)
 router.get('/history/all', isAdmin, gachaController.getAllHistory);
 
+// @route   GET /api/gacha/recent
+// @desc    Get recent wins (Public)
+// @access  Public
+router.get('/recent', gachaController.getRecentWins);
+
 module.exports = router;
