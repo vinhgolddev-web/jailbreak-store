@@ -45,4 +45,16 @@ const isAdmin = (req, res, next) => {
     }
 };
 
-module.exports = { verifyToken, isAdmin };
+const isSeller = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (user.role !== 'seller' && user.role !== 'admin') {
+            return res.status(403).json({ message: 'Access denied. Sellers only.' });
+        }
+        next();
+    } catch (err) {
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = { verifyToken, isAdmin, isSeller };

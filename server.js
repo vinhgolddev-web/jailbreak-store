@@ -120,6 +120,7 @@ server.use('/api/card', require('./server_api/routes/card'));
 server.use('/api/gacha', require('./server_api/routes/gacha')); // Gacha System
 server.use('/api/admin', require('./server_api/routes/admin')); // Admin Dashboard
 server.use('/api/lookup', require('./server_api/routes/lookup')); // Code Lookup Tool
+server.use('/api/market', require('./server_api/routes/market')); // Marketplace System
 
 
 // Next.js Route Handler (must be AFTER API routes)

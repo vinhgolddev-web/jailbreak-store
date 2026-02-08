@@ -6,7 +6,8 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     balance: { type: Number, default: 0, min: 0 },
     totalDeposited: { type: Number, default: 0, min: 0 },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' },
+    role: { type: String, enum: ['user', 'admin', 'seller'], default: 'user' },
+    facebookLink: { type: String, default: '' },
     avatar: { type: String, default: '' },
     cart: [
         {

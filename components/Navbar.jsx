@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
-import { ShoppingCart, User, LogOut, Menu, X, Box, Tag, Home, Search, Package, Crown } from 'lucide-react';
+import { ShoppingCart, User, LogOut, Menu, X, Box, Tag, Home, Search, Package, Crown, Store } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
