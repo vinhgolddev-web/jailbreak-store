@@ -1,7 +1,5 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-import { useToast } from './ToastContext';
 import { useToast } from './ToastContext';
 import { useAuth } from './AuthContext';
 import { useSoundSystem } from './SoundContext';

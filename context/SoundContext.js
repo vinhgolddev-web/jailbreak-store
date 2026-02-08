@@ -8,15 +8,14 @@ export const useSoundSystem = () => useContext(SoundContext);
 
 export const SoundProvider = ({ children }) => {
     // Persist mute state
-    const [isMuted, setIsMuted] = useState(false);
-    const [volume, setVolume] = useState(0.5); // Default 50%
-
-    useEffect(() => {
-        const savedMute = localStorage.getItem('sfx_muted');
-        if (savedMute !== null) {
-            setIsMuted(JSON.parse(savedMute));
+    const [isMuted, setIsMuted] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const savedMute = localStorage.getItem('sfx_muted');
+            return savedMute !== null ? JSON.parse(savedMute) : false;
         }
-    }, []);
+        return false;
+    });
+    const [volume, setVolume] = useState(0.5); // Default 50%
 
     const toggleMute = () => {
         setIsMuted(prev => {
