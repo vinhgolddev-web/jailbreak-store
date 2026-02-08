@@ -45,9 +45,9 @@ exports.getAllUsers = async (req, res) => {
 exports.getLeaderboard = async (req, res) => {
     try {
         const users = await User.find()
-            .sort({ balance: -1 })
+            .sort({ totalDeposited: -1 })
             .limit(10)
-            .select('username balance avatar') // Public info only
+            .select('username balance totalDeposited avatar') // Public info only
             .lean();
         res.json(users);
     } catch (err) {

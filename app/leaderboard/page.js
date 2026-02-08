@@ -82,7 +82,7 @@ export default function LeaderboardPage() {
                                 <div className="font-bold text-lg">{user.username}</div>
                             </div>
                             <div className="font-mono font-bold text-primary text-xl">
-                                {user.balance.toLocaleString()} VNĐ
+                                {(user.totalDeposited || 0).toLocaleString()} VNĐ
                             </div>
                         </motion.div>
                     ))}
@@ -123,7 +123,7 @@ const PodiumUser = ({ user, rank, color, border, bg, height, mb, isChamp, delay 
                 {user.username}
             </h3>
             <p className="font-mono font-bold text-white text-lg mt-1 opacity-90">
-                {user.balance.toLocaleString()} VNĐ
+                Đã nạp: {(user.totalDeposited || 0).toLocaleString()} VNĐ
             </p>
         </div>
     </motion.div>

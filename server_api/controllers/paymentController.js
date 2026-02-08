@@ -82,7 +82,12 @@ exports.handleWebhook = async (req, res) => {
             // Credit User
             const user = await User.findByIdAndUpdate(
                 transaction.userId,
-                { $inc: { balance: amount } },
+                {
+                    $inc: {
+                        balance: amount,
+                        totalDeposited: amount
+                    }
+                },
                 { new: true }
             );
 
@@ -177,7 +182,12 @@ exports.verifyPayment = async (req, res) => {
             // Now Credit User (Safe to do because we own the Transaction Lock via the atomic update above)
             const user = await User.findByIdAndUpdate(
                 transaction.userId,
-                { $inc: { balance: transaction.amount } },
+                {
+                    $inc: {
+                        balance: transaction.amount,
+                        totalDeposited: transaction.amount
+                    }
+                },
                 { new: true }
             );
 
