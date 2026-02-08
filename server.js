@@ -75,6 +75,11 @@ server.use((req, res, next) => {
 
 server.use(morgan('dev'));
 
+// Serve Static Files (Explicitly for Custom Server)
+// This fixes 404 errors for sounds/images when using a custom server in production
+server.use(express.static(path.join(__dirname, 'public')));
+server.use('/sounds', express.static(path.join(__dirname, 'public/sounds')));
+
 // Rate Limiters
 const globalLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
