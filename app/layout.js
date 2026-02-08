@@ -2,6 +2,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import { AuthProvider } from '@/context/AuthContext';
 import { ToastProvider } from '@/context/ToastContext';
 import { CartProvider } from '@/context/CartContext';
+import { SoundProvider } from '@/context/SoundContext';
 import Navbar from '@/components/Navbar';
 import CartDrawer from '@/components/CartDrawer';
 import LiveSalesNotification from '@/components/LiveSalesNotification';
@@ -66,18 +67,20 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <ToastProvider>
             <CartProvider>
-              <div className="flex flex-col min-h-screen">
-                <Navbar />
-                <CartDrawer />
-                <LiveSalesNotification />
-                <div id="cart-drawer-root" /> {/* Portal target if needed */}
-                <main className="flex-grow pt-20 relative">
-                  {/* Global Ambient Glow - Removed for performance/cleanliness */}
+              <SoundProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Navbar />
+                  <CartDrawer />
+                  <LiveSalesNotification />
+                  <div id="cart-drawer-root" /> {/* Portal target if needed */}
+                  <main className="flex-grow pt-20 relative">
+                    {/* Global Ambient Glow - Removed for performance/cleanliness */}
 
-                  {children}
-                </main>
-                <Footer />
-              </div>
+                    {children}
+                  </main>
+                  <Footer />
+                </div>
+              </SoundProvider>
             </CartProvider>
           </ToastProvider>
         </AuthProvider>

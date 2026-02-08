@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/context/ToastContext';
+import { useSoundSystem } from '@/context/SoundContext';
 import api from '@/lib/axios';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
@@ -14,6 +15,7 @@ import GachaCaseList from '@/components/GachaCaseList';
 export default function GachaPage() {
     const { user, refreshUser } = useAuth();
     const { addToast } = useToast();
+    const { playSpin, stopSpin, playReveal, playWinSound } = useSoundSystem();
     const [cases, setCases] = useState([]);
     const [selectedCase, setSelectedCase] = useState(null);
     const [isRolling, setIsRolling] = useState(false);
@@ -125,6 +127,9 @@ export default function GachaPage() {
             const rollSequence = generateRollItems(selectedCase, realItem);
             console.log('Winner Item in Sequence (index 45):', rollSequence[45]);
 
+            // Play spin sound loop
+            playSpin();
+
             setRollItems(rollSequence);
             setSpinKey(prev => prev + 1); // Force remount to reset animation perfectly
             refreshUser(); // Update balance immediately in UI
@@ -133,6 +138,10 @@ export default function GachaPage() {
 
             // Show Result after spin
             setTimeout(() => {
+                stopSpin(); // Stop spin sound
+                playReveal(); // Play reveal thud
+                playWinSound(realItem.rarity); // Play win fanfare
+
                 setWonItem(realItem); // Show actual item (revealed)
                 setShowResult(true);
                 setIsRolling(false);
@@ -150,6 +159,7 @@ export default function GachaPage() {
             }, 6500); // 6s spin + 0.5s buffer
 
         } catch (error) {
+            stopSpin(); // Ensure sound stops on error
             setIsRolling(false);
             addToast(error.response?.data?.message || 'Có lỗi xảy ra', 'error');
         }

@@ -2,7 +2,9 @@
 
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useToast } from './ToastContext';
+import { useToast } from './ToastContext';
 import { useAuth } from './AuthContext';
+import { useSoundSystem } from './SoundContext';
 import api from '@/lib/axios';
 
 const CartContext = createContext();
@@ -10,8 +12,10 @@ const CartContext = createContext();
 export function CartProvider({ children }) {
     const [cart, setCart] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
     const { addToast } = useToast();
     const { user } = useAuth();
+    const { playSuccess } = useSoundSystem();
 
     // Flag to prevent initial sync from overwriting local changes if needed, 
     // but here we just want to merge or replace.
@@ -106,64 +110,70 @@ export function CartProvider({ children }) {
             }
             return [...prev, { ...product, quantity: 1 }];
         });
-        // setIsOpen(true); // Auto-open disabled
-    }, [cart, user, addToast]);
+        return [...prev, { ...product, quantity: 1 }];
+    });
 
-    const removeFromCart = useCallback((productId) => {
-        setCart(prev => prev.filter(item => item._id !== productId));
-    }, []);
+    // Play success sound
+    playSuccess();
 
-    const updateQuantity = useCallback((productId, delta) => {
-        if (delta > 0) {
-            const item = cart.find(i => i._id === productId);
-            if (item && item.quantity >= item.stock) {
-                addToast('Max stock reached', 'error');
-                return;
-            }
+    // setIsOpen(true); // Auto-open disabled
+}, [cart, user, addToast, playSuccess]);
+
+const removeFromCart = useCallback((productId) => {
+    setCart(prev => prev.filter(item => item._id !== productId));
+}, []);
+
+const updateQuantity = useCallback((productId, delta) => {
+    if (delta > 0) {
+        const item = cart.find(i => i._id === productId);
+        if (item && item.quantity >= item.stock) {
+            addToast('Max stock reached', 'error');
+            return;
         }
+    }
 
-        setCart(prev => prev.map(item => {
-            if (item._id === productId) {
-                const newQty = item.quantity + delta;
-                if (newQty < 1) return item;
-                if (newQty > item.stock) return item;
-                return { ...item, quantity: newQty };
-            }
-            return item;
-        }));
-    }, [cart, addToast]);
-
-    const clearCart = useCallback(async () => {
-        setCart([]);
-        localStorage.removeItem('jb_cart');
-
-        if (user) {
-            try {
-                await api.post('/cart/sync', { cart: [] });
-            } catch (e) {
-                console.error('Failed to clear server cart', e);
-            }
+    setCart(prev => prev.map(item => {
+        if (item._id === productId) {
+            const newQty = item.quantity + delta;
+            if (newQty < 1) return item;
+            if (newQty > item.stock) return item;
+            return { ...item, quantity: newQty };
         }
-    }, [user]);
+        return item;
+    }));
+}, [cart, addToast]);
 
-    const totalAmount = useMemo(() => cart.reduce((sum, item) => sum + (item.price * item.quantity), 0), [cart]);
-    const totalItems = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
+const clearCart = useCallback(async () => {
+    setCart([]);
+    localStorage.removeItem('jb_cart');
 
-    return (
-        <CartContext.Provider value={{
-            cart,
-            addToCart,
-            removeFromCart,
-            updateQuantity,
-            clearCart,
-            isOpen,
-            setIsOpen,
-            totalAmount,
-            totalItems
-        }}>
-            {children}
-        </CartContext.Provider>
-    );
+    if (user) {
+        try {
+            await api.post('/cart/sync', { cart: [] });
+        } catch (e) {
+            console.error('Failed to clear server cart', e);
+        }
+    }
+}, [user]);
+
+const totalAmount = useMemo(() => cart.reduce((sum, item) => sum + (item.price * item.quantity), 0), [cart]);
+const totalItems = useMemo(() => cart.reduce((sum, item) => sum + item.quantity, 0), [cart]);
+
+return (
+    <CartContext.Provider value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        isOpen,
+        setIsOpen,
+        totalAmount,
+        totalItems
+    }}>
+        {children}
+    </CartContext.Provider>
+);
 }
 
 export const useCart = () => useContext(CartContext);

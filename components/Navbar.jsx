@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
 import Image from 'next/image';
 import { formatCurrency } from '@/lib/utils';
+import SoundToggle from './SoundToggle';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
@@ -74,6 +75,9 @@ export default function Navbar() {
                             <button className="p-2 text-gray-400 hover:text-white hover:bg-white/5 rounded-full transition-colors">
                                 <Search size={20} />
                             </button>
+
+                            {/* Sound Toggle */}
+                            <SoundToggle />
 
                             {/* Cart */}
                             <button

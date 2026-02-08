@@ -1,4 +1,5 @@
 import { twMerge } from 'tailwind-merge';
+import { useSoundSystem } from '@/context/SoundContext';
 
 export default function Button({
     children,
@@ -16,11 +17,19 @@ export default function Button({
         danger: "bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white"
     };
 
+    const { playClick } = useSoundSystem();
+
+    const handleClick = (e) => {
+        playClick();
+        if (props.onClick) props.onClick(e);
+    };
+
     return (
         <button
             type="button"
             aria-pressed={props["aria-pressed"]}
             className={twMerge(baseStyles, variants[variant], className)}
+            onClick={handleClick}
             {...props}
         >
             {children}
