@@ -2,7 +2,7 @@
 'use client';
 import { useSoundSystem } from '../context/SoundContext';
 import { Volume2, VolumeX } from 'lucide-react';
-import { Button } from '@/components/ui/button'; // Adjust import based on your UI lib
+import Button from './ui/Button';
 
 export default function SoundToggle() {
     const { isMuted, toggleMute } = useSoundSystem();

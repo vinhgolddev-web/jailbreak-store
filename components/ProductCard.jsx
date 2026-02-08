@@ -77,7 +77,6 @@ const ProductCard = memo(({ product, disabled }) => {
             </div>
         </motion.div>
     );
-    );
 });
 
 ProductCard.displayName = 'ProductCard';
